@@ -179,8 +179,8 @@ function initDomePoke(frontierPoke, level) {
 	// Correct the level if it mismatches with the supplied level
 	// Calc the stats if they're missing, or if we had to change/assign the level
 	if (!Object.hasOwn(frontierPoke, "stats") || 
-		!Object.hasOwn(frontierPoke, "level") ||
-		frontierPoke.level !== level
+	    !Object.hasOwn(frontierPoke, "level") ||
+	    frontierPoke.level !== level
 	) {
 		frontierPoke.level = level;
 		calcPokeSetStats(frontierPoke);
@@ -240,7 +240,7 @@ function patchHiddenPower(move, ivs) {
 function calcDamageReport(defenderPoke, attackerPoke) {
 	// Reject invalid poke
 	if (defenderPoke.species === undefined ||
-		attackerPoke.species === undefined
+	    attackerPoke.species === undefined
 	) {
 		return [ null, null, null, null ];
 	}
@@ -456,7 +456,7 @@ function calcDamageReport(defenderPoke, attackerPoke) {
 			
 			// Cubone/Marowak + Thick Club 2x attack boost
 			if ((attackerPoke.species.name === "Marowak" || attackerPoke.species.name === "Cubone") &&
-				attackerPoke.item === "Thick Club"
+			    attackerPoke.item === "Thick Club"
 			) {
 				effectiveAttack <<= 1;
 			}
@@ -468,7 +468,7 @@ function calcDamageReport(defenderPoke, attackerPoke) {
 			
 			// Pure Power/Huge Power 2x attack boost
 			if (attackerPoke.ability === "Huge Power" ||
-				attackerPoke.ability === "Pure Power"
+			    attackerPoke.ability === "Pure Power"
 			) {
 				effectiveAttack <<= 1;
 			}
@@ -517,8 +517,8 @@ function calcDamageReport(defenderPoke, attackerPoke) {
 		
 		// Calculate crit level
 		if (defenderPoke.ability === "Shell Armor"  || 
-			defenderPoke.ability === "Battle Armor" || 
-			moveHasFlag(move.name, "cannotCrit")
+		    defenderPoke.ability === "Battle Armor" || 
+		    moveHasFlag(move.name, "cannotCrit")
 		) {
 			moveReport.critProb = 0;
 		} else {
