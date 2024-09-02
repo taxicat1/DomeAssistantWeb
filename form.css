@@ -1,0 +1,368 @@
+.srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+section, header {
+	box-sizing: border-box;
+	flex: 0 0 100%;
+	background: #f8f8f8;
+	border-radius: 4px;
+	border: 2px solid #272733;
+	padding: 1em;
+}
+
+.formPageContainer {
+	width: 100%;
+	min-width: 1500px;
+	max-width: 115em;
+	
+	display: grid;
+	
+	--page-panel-gap: 0.5em;
+	
+	gap: var(--page-panel-gap);
+	grid-template-columns: calc(35% - (var(--page-panel-gap) / 2)) calc(65% - (var(--page-panel-gap) / 2));
+	
+	margin: 0 auto;
+}
+
+.formNavContainer {
+	--panel-gap: 1em;
+	
+	overflow: hidden;
+	position: relative;
+	display: flex;
+	align-items: flex-start;
+	gap: var(--panel-gap);
+}
+
+.formNavContainer section {
+	position: relative;
+	top: 0;
+	left: 0;
+	transition: left 0.25s;
+}
+
+.formNavContainer[data-da-active-panel="1"] section {
+	left: calc(-100% - var(--panel-gap));
+}
+
+.formNavContainer[data-da-active-panel="2"] section {
+	left: calc(-200% - var(--panel-gap) - var(--panel-gap));
+}
+
+.playerPokeEntryTable select {
+	width: 100%;
+}
+
+.playerPokeEntryTable th:first-child {
+	text-align: right;
+}
+
+.outputContainer {
+/*	min-height: 50%;	*/
+}
+
+.outputHeader {
+	border: 2px solid #aaa;
+	min-height: 1em;
+	padding: 6px;
+	border-radius: 4px;
+	margin-bottom: 1em;
+}
+
+#outputEntryContainer {
+	padding: 2px;
+	border: 1px solid #ddd;
+	min-height: 25em;
+	max-height: 53em;
+	overflow-y: scroll;
+}
+
+.outputSummaryTable {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	margin-bottom: 0.52em;
+}
+
+.outputSummaryTable th,
+.outputSummaryTable td {
+	border: 1px solid #999;
+}
+
+.outputTableTitle {
+	font-size: 160%;
+	margin: 0.2em;
+}
+
+.outputTable caption {
+	font-size: 107%;
+	font-weight: 600;
+	margin-bottom: 0.2em;
+}
+
+.outputTable {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0.2em 0 1em 0;
+}
+
+.outputTable th,
+.outputTable td {
+	border: 1px solid #999;
+}
+
+.outputSummaryTable td,
+.outputTable td {
+	font-size: 92%;
+}
+
+.damageTable {
+	margin-bottom: 0.6em;
+}
+
+.damageTable td {
+	padding: 0;
+}
+
+.damageTable th {
+	background-color: #c8c8c8;
+	padding: 3px;
+}
+
+.damageLine {
+	color: black;
+	text-align: center;
+	margin: 0.35em 0;
+}
+
+.damageLine.highDanger {
+	color: #a00000;
+	font-weight: 600;
+}
+
+.damageLine.subBreak {
+	opacity: 0.79;
+	font-size: 90%;
+}
+
+th.minColumn {
+	width: 0.01%;
+	white-space: nowrap;
+}
+
+.shedAlarm {
+	color: #a00000;
+	position: relative;
+	bottom: 0.4ch;
+}
+
+details {
+	border: 2px solid #333;
+	border-radius: 4px;
+	padding: 4px;
+	background: #dedede;
+}
+
+details[open] {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+details summary {
+	user-select: none;
+	font-size: 125%;
+}
+
+h1 {
+	font-size: 135%;
+	margin: 3px 0;
+}
+
+details summary,
+label,
+select:not([disabled]),
+button:not([disabled]),
+input[type="submit"]:not([disabled]),
+input[type="radio"]:not([disabled]),
+input[type="button"]:not([disabled]) {
+	cursor: pointer;
+}
+
+input.statInput {
+	width: 3.5em;
+}
+
+input:invalid {
+	outline: 2px solid #f11e;
+	outline-offset: 1px;
+}
+
+h1.banner {
+	font-weight: 300;
+	font-size: 275%;
+	margin: 0 4px;
+}
+
+fieldset {
+	margin: 0.7em 0;
+	padding: 0.4em 1em 0.6em 1em;
+	border: 2px solid #aaa;
+	border-top-left-radius: 4px;
+	border-bottom-width: 0;
+	border-right-width: 0;
+}
+
+fieldset legend {
+	font-size: 125%;
+	font-weight: 400;
+	padding: 0 0.35em;
+	margin: 0 -0.25em -0.2em -0.25em;
+}
+
+.subLegend {
+	font-size: 125%;
+	font-weight: 400;
+	padding-top: 0.2em;
+}
+
+input[type="text"] {
+	width: 10em;
+}
+
+::placeholder {
+	color: #444;
+}
+
+input[type="radio"] {
+	margin-top: 0;
+}
+
+.formExtraInfo {
+	margin: 0.46em 0;
+}
+
+.formGroup {
+	margin: 0.31em 0;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.6ch;
+}
+
+.formGroup.sparse {
+	gap: 3ch;
+}
+
+.formGroup.condensed {
+	gap: 0.1ch;
+}
+
+.formGroup.inline {
+	display: inline-flex;
+}
+
+.formGroup.center {
+	justify-content: center;
+}
+
+
+.submitButton {
+	background: #5858f9;
+	color: #f8f8f8;
+	padding: 4px 8px;
+	border: 2px solid #0004;
+	border-radius: 4px;
+	font-size: 115%;
+}
+
+.submitButton:not([disabled]):hover {
+	background: #7878f0;
+}
+
+.submitButton:not([disabled]):active {
+	background: #3535cc;
+}
+
+.submitButton[disabled] {
+/*	background: #5c5c99;
+	color: #efefef; */
+	background: #ababd9;
+	color: #353535;
+}
+
+
+.resetButton {
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	
+	background: #f95858;
+	color: #010101;
+	padding: 4px 8px;
+	border: 2px solid #0004;
+	border-radius: 4px;
+	font-size: 90%;
+}
+
+.resetButton:not([disabled]):hover {
+	background: #f07878;
+}
+
+.resetButton:not([disabled]):active {
+	background: #cc3535;
+}
+
+/*
+.resetButton[disabled] {
+}
+*/
+
+.navButton {
+	background: #d5dce3;
+	color: #222;
+	padding: 4px 8px;
+	border: 2px solid #0004;
+	border-radius: 4px;
+}
+
+.navButton:not([disabled]):hover {
+	background: #bec8d2;
+}
+
+.navButton:not([disabled]):active {
+	background: #a0a9b3;
+}
+
+.navButton[disabled] {
+	background: #e7ecf0;
+	color: #5b5b5b;
+}
+
+
+a.pokeSet {
+	text-decoration: underline;
+	color: inherit;
+	cursor: pointer;
+}
+
+a.pokeSet:hover {
+	opacity: 0.71;
+}
+
+.appearanceLeadPercents {
+	cursor: help;
+}
+
+.appearanceLeadPercents:hover {
+	text-decoration: underline;
+}

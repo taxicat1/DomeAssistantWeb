@@ -1,0 +1,19 @@
+.pokeIconSprite {
+	width: 32px;
+	height: 32px;
+	flex-shrink: 0;
+	margin-top: -8px; /* Top 8px are unused */
+	display: inline-block;
+	background-image: url(pokeIconSprite.png);
+}
+
+.pokeIconSprite.unknown {
+	background-position: -96px -768px;
+}
+
+.pokeIconSprite.heightless {
+	--y-offset: 8px;
+	
+	margin-top: -32px;
+	transform: translateY(var(--y-offset));
+}

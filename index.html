@@ -1,0 +1,4244 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>DomeAssistant Web</title>
+		<meta name="description" content="A tool capable of predicting opponent trainer's teams and Pokémon in the Emerald Battle Dome. Developed in collaboration with Actaeon." />
+		<meta name="keywords" content="Pokemon,Pokémon,Emerald,Battle,Frontier,Dome,DomeAssistant,Smogon,Ruby,Sapphire,GBA,AGB,Game Boy,Game Boy Advance" />
+		
+		<link rel="icon" href="/favicon.png" />
+		
+		<meta name="viewport" content="width=1500, user-scalable=yes">
+		
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-G0QW4DNH27"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-G0QW4DNH27');
+		</script>
+		
+		<link rel="stylesheet" href="sprites/sprite.css">
+		<link rel="stylesheet" href="sprites/pokeIconSprite.css">
+		<link rel="stylesheet" href="sprites/heldItemSprite.css">
+		
+		<script src="data/types.js"></script>
+		<script src="data/natures.js"></script>
+		<script src="data/items.js"></script>
+		<script src="data/pokemon.js"></script>
+		<script src="data/abilities.js"></script>
+		<script src="data/moves.js"></script>
+		<script src="data/frontierPokemon.js"></script>
+		<script src="data/rosters.js"></script>
+		<script src="data/trainers.js"></script>
+		
+		<script src="sprites/spriteUtil.js"></script>
+		<script src="sprites/pokeIconSprite.js"></script>
+		<script src="sprites/heldItemSprite.js"></script>
+		
+		<script src="formUtil.js"></script>
+		<script src="instantiateTemplate.js"></script>
+		<script src="pokeStr.js"></script>
+		<script src="trainerTeam.js"></script>
+		<script src="DAform.js"></script>
+		<script src="modal.js"></script>
+		<script src="tabMenu.js"></script>
+		<script src="DAcore.js"></script>
+		<script src="battleCalc.js"></script>
+		
+		<link rel="stylesheet" href="form.css">
+		<link rel="stylesheet" href="typeTable.css">
+		<link rel="stylesheet" href="tabMenu.css">
+		<link rel="stylesheet" href="modal.css">
+		<style>
+			body {
+				font: 400 13px   arial, sans-serif;
+				font: 400 9.75pt arial, sans-serif;
+				line-height: 1.1;
+				color: #222;
+				background: #888;
+				margin: 0;
+				padding: 0.7em;
+			}
+			
+			table td, table th {
+				padding: 2px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class="formPageContainer">
+			<header style="grid-column:span 2">
+				<h1 class="banner" style="display:contents">
+					<div class="srOnly" id="bannerLabel">DomeAssistant</div>
+					<img style="height:1.3em" src="domeassistant_banner.svg" alt="DomeAssistant" aria-labelledby="bannerLabel"/>
+				</h1>
+			</header>
+			
+			<div class="form">
+				<div class="formNavContainer" id="formPanelContainer" role="presentation">
+					<section id="prelimPanel">
+						<h1>Preliminary</h1>
+						
+						<fieldset>
+							<legend>Player Team</legend>
+							
+							<ul class="tabMenu" id="playerPokeTabMenu">
+								<li class="tabItem active" data-tab-menu-link="playerPokeTab1">
+									<button id="playerPokeTabButton1">First Pokémon</button>
+								</li>
+								
+								<li class="tabItem" data-tab-menu-link="playerPokeTab2">
+									<button id="playerPokeTabButton2">Second Pokémon</button>
+								</li>
+								
+								<li class="tabItem" data-tab-menu-link="playerPokeTab3">
+									<button tabindex="0" id="playerPokeTabButton3">Third Pokémon</button>
+								</li>
+							</ul>
+							
+							<div class="tabBox">
+								<div id="playerPokeTab1">
+									<div class="formGroup">
+										<table class="playerPokeEntryTable">
+											<tr>
+												<th id="playerPokeLabel1">Species:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeText1"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel1"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeSelect1"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel1"
+														data-alphabetized="true"
+														data-da-type="pokemon"
+														data-da-linked-text="playerPokeText1"
+														data-da-save-local-storage="true"
+														data-da-linked-sprite="playerPokeSprite1 playerTeam2PokeSprite1 playerTeam3PokeSprite1"
+													></select>
+												</td>
+											
+												<td style="text-align:center">
+													<span class="pokeIconSprite heightless" id="playerPokeSprite1"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeHeldItemLabel1">Held item:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeHeldItemText1"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel1"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeHeldItemSelect1"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel1"
+														data-alphabetized="true"
+														data-da-type="item"
+														data-da-linked-text="playerPokeHeldItemText1"
+														data-da-linked-sprite="playerPokeHeldItemSprite1"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+												
+												<td style="text-align:center">
+													<span class="heldItemSprite heightless" id="playerPokeHeldItemSprite1"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeNatureLabel1">Nature:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerNatureText1"
+														autocomplete="off"
+														aria-labelledby="playerPokeNatureLabel1"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeNatureSelect1"
+														aria-labelledby="playerPokeNatureLabel1"
+														data-da-type="nature"
+														data-da-linked-text="playerNatureText1"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeAbilityLabel1">Ability:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerAbilityText1"
+														autocomplete="off"
+														aria-labelledby="playerPokeAbilityLabel1"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeAbilitySelect1"
+														aria-labelledby="playerPokeAbilityLabel1"
+														data-da-type="ability"
+														data-da-linked-text="playerAbilityText1"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<table>
+											<tr>
+												<th style="visibility:hidden"></th>
+												<th>HP</th>
+												<th>Atk</th>
+												<th>Def</th>
+												<th>SpA</th>
+												<th>SpD</th>
+												<th>Spe</th>
+											</tr>
+											
+											<tr>
+												<th>EVs:</th>
+												
+												<td>
+													<label for="playerPokeHpEv1"><span class="srOnly">HP EV</span></label>
+													
+													<input
+														id="playerPokeHpEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkEv1"><span class="srOnly">Attack EV</span></label>
+													
+													<input
+														id="playerPokeAtkEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefEv1"><span class="srOnly">Defense EV</span></label>
+													
+													<input
+														id="playerPokeDefEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAEv1"><span class="srOnly">Special Attack EV</span></label>
+													
+													<input
+														id="playerPokeSpAEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDEv1"><span class="srOnly">Special Defense EV</span></label>
+														
+													<input
+														id="playerPokeSpDEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeEv1"><span class="srOnly">Speed EV</span></label>
+													
+													<input
+														id="playerPokeSpeEv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+											
+											<tr>
+												<th>IVs:</th>
+												
+												<td>
+													<label for="playerPokeHpIv1"><span class="srOnly">HP IV</span></label>
+													
+													<input
+														id="playerPokeHpIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkIv1"><span class="srOnly">Attack IV</span></label>
+													
+													<input
+														id="playerPokeAtkIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefIv1"><span class="srOnly">Defense IV</span></label>
+													
+													<input
+														id="playerPokeDefIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAIv1"><span class="srOnly">Special Attack IV</span></label>
+													
+													<input
+														id="playerPokeSpAIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDIv1"><span class="srOnly">Special Defense IV</span></label>
+													
+													<input
+														id="playerPokeSpDIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeIv1"><span class="srOnly">Speed IV</span></label>
+													
+													<input
+														id="playerPokeSpeIv1"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<strong>Moves:</strong>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove1Label1">First move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove1Text1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label1"
+										/>
+										
+										<select
+											id="playerPokeMove1Select1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label1"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove1Text1"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove2Label1">Second move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove2Text1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label1"
+										/>
+										
+										<select
+											id="playerPokeMove2Select1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label1"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove2Text1"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove3Label1">Third move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove3Text1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label1"
+										/>
+										
+										<select
+											id="playerPokeMove3Select1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label1"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove3Text1"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove4Label1">Fourth move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove4Text1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label1"
+										/>
+										
+										<select
+											id="playerPokeMove4Select1"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label1"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove4Text1"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="subLegend" id="playerPokeImportLabel1">Or import set:</div>
+										
+										<textarea
+											id="playerPokeImportTextarea1"
+											rows="7"
+											cols="50"
+											style="resize:none"
+											spellcheck="false"
+											autocomplete="off"
+											aria-labelledby="playerPokeImportLabel1"
+										></textarea>
+									</div>
+									
+									<div class="formGroup">
+										<input id="playerPokeImportButton1" type="button" value="Import" />
+									</div>
+								</div>
+								
+								<div id="playerPokeTab2" style="display:none">
+									<div class="formGroup">
+										<table class="playerPokeEntryTable">
+											<tr>
+												<th id="playerPokeLabel2">Species:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeText2"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel2"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeSelect2"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel2"
+														data-alphabetized="true"
+														data-da-type="pokemon"
+														data-da-linked-text="playerPokeText2"
+														data-da-save-local-storage="true"
+														data-da-linked-sprite="playerPokeSprite2 playerTeam1PokeSprite2 playerTeam3PokeSprite2"
+													></select>
+												</td>
+											
+												<td style="text-align:center">
+													<span class="pokeIconSprite heightless" id="playerPokeSprite2"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeHeldItemLabel2">Held item:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeHeldItemText2"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel2"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeHeldItemSelect2"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel2"
+														data-alphabetized="true"
+														data-da-type="item"
+														data-da-linked-text="playerPokeHeldItemText2"
+														data-da-linked-sprite="playerPokeHeldItemSprite2"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+												
+												<td style="text-align:center">
+													<span class="heldItemSprite heightless" id="playerPokeHeldItemSprite2"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeNatureLabel2">Nature:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerNatureText2"
+														autocomplete="off"
+														aria-labelledby="playerPokeNatureLabel2"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeNatureSelect2"
+														aria-labelledby="playerPokeNatureLabel2"
+														data-da-type="nature"
+														data-da-linked-text="playerNatureText2"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeAbilityLabel2">Ability:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerAbilityText2"
+														autocomplete="off"
+														aria-labelledby="playerPokeAbilityLabel2"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeAbilitySelect2"
+														aria-labelledby="playerPokeAbilityLabel2"
+														data-da-type="ability"
+														data-da-linked-text="playerAbilityText2"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<table>
+											<tr>
+												<th style="visibility:hidden"></th>
+												<th>HP</th>
+												<th>Atk</th>
+												<th>Def</th>
+												<th>SpA</th>
+												<th>SpD</th>
+												<th>Spe</th>
+											</tr>
+											
+											<tr>
+												<th>EVs:</th>
+												
+												<td>
+													<label for="playerPokeHpEv2"><span class="srOnly">HP EV</span></label>
+													
+													<input
+														id="playerPokeHpEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkEv2"><span class="srOnly">Attack EV</span></label>
+													
+													<input
+														id="playerPokeAtkEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefEv2"><span class="srOnly">Defense EV</span></label>
+													
+													<input
+														id="playerPokeDefEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAEv2"><span class="srOnly">Special Attack EV</span></label>
+													
+													<input
+														id="playerPokeSpAEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDEv2"><span class="srOnly">Special Defense EV</span></label>
+													
+													<input
+														id="playerPokeSpDEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeEv2"><span class="srOnly">Speed EV</span></label>
+													
+													<input
+														id="playerPokeSpeEv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+											
+											<tr>
+												<th>IVs:</th>
+												
+												<td>
+													<label for="playerPokeHpIv2"><span class="srOnly">HP IV</span></label>
+													
+													<input
+														id="playerPokeHpIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkIv2"><span class="srOnly">Attack IV</span></label>
+													
+													<input
+														id="playerPokeAtkIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefIv2"><span class="srOnly">Defense IV</span></label>
+													
+													<input
+														id="playerPokeDefIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAIv2"><span class="srOnly">Special Attack IV</span></label>
+													
+													<input
+														id="playerPokeSpAIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDIv2"><span class="srOnly">Special Defense IV</span></label>
+													
+													<input
+														id="playerPokeSpDIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeIv2"><span class="srOnly">Speed IV</span></label>
+													
+													<input
+														id="playerPokeSpeIv2"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<strong>Moves:</strong>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove1Label2">First move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove1Text2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label2"
+										/>
+										
+										<select
+											id="playerPokeMove1Select2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label2"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove1Text2"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove2Label2">Second move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove2Text2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label2"
+										/>
+										
+										<select
+											id="playerPokeMove2Select2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label2"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove2Text2"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove3Label2">Third move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove3Text2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label2"
+										/>
+										
+										<select
+											id="playerPokeMove3Select2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label2"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove3Text2"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove4Label2">Fourth move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove4Text2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label2"
+										/>
+										
+										<select
+											id="playerPokeMove4Select2"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label2"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove4Text2"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="subLegend" id="playerPokeImportLabel2">Or import set:</div>
+										
+										<textarea
+											id="playerPokeImportTextarea2"
+											rows="7"
+											cols="50"
+											style="resize:none"
+											spellcheck="false"
+											autocomplete="off"
+											aria-labelledby="playerPokeImportLabel2"
+										></textarea>
+									</div>
+									
+									<div class="formGroup">
+										<input id="playerPokeImportButton2" type="button" value="Import" />
+									</div>
+								</div>
+								
+								<div id="playerPokeTab3" style="display:none">
+									<div class="formGroup">
+										<table class="playerPokeEntryTable">
+											<tr>
+												<th id="playerPokeLabel3">Species:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeText3"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel3"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeSelect3"
+														autocomplete="off"
+														aria-labelledby="playerPokeLabel3"
+														data-alphabetized="true"
+														data-da-type="pokemon"
+														data-da-linked-text="playerPokeText3"
+														data-da-save-local-storage="true"
+														data-da-linked-sprite="playerPokeSprite3 playerTeam1PokeSprite3 playerTeam2PokeSprite3"
+													></select>
+												</td>
+											
+												<td style="text-align:center">
+													<span class="pokeIconSprite heightless" id="playerPokeSprite3"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeHeldItemLabel3">Held item:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerPokeHeldItemText3"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel3"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeHeldItemSelect3"
+														autocomplete="off"
+														aria-labelledby="playerPokeHeldItemLabel3"
+														data-alphabetized="true"
+														data-da-type="item"
+														data-da-linked-text="playerPokeHeldItemText3"
+														data-da-linked-sprite="playerPokeHeldItemSprite3"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+												
+												<td style="text-align:center">
+													<span class="heldItemSprite heightless" id="playerPokeHeldItemSprite3"></span>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeNatureLabel3">Nature:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerNatureText3"
+														autocomplete="off"
+														aria-labelledby="playerPokeNatureLabel3"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeNatureSelect3"
+														aria-labelledby="playerPokeNatureLabel3"
+														data-da-type="nature"
+														data-da-linked-text="playerNatureText3"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+											
+											<tr>
+												<th id="playerPokeAbilityLabel3">Ability:</th>
+												
+												<td>
+													<input
+														type="text"
+														id="playerAbilityText3"
+														autocomplete="off"
+														aria-labelledby="playerPokeAbilityLabel3"
+													/>
+												</td>
+												
+												<td>
+													<select
+														id="playerPokeAbilitySelect3"
+														aria-labelledby="playerPokeAbilityLabel3"
+														data-da-type="ability"
+														data-da-linked-text="playerAbilityText3"
+														data-da-save-local-storage="true"
+													></select>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<table>
+											<tr>
+												<th style="visibility:hidden"></th>
+												<th>HP</th>
+												<th>Atk</th>
+												<th>Def</th>
+												<th>SpA</th>
+												<th>SpD</th>
+												<th>Spe</th>
+											</tr>
+											
+											<tr>
+												<th>EVs:</th>
+												
+												<td>
+													<label for="playerPokeHpEv3"><span class="srOnly">HP EV</span></label>
+													
+													<input
+														id="playerPokeHpEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkEv3"><span class="srOnly">Attack EV</span></label>
+													
+													<input
+														id="playerPokeAtkEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefEv3"><span class="srOnly">Defense EV</span></label>
+													
+													<input
+														id="playerPokeDefEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAEv3"><span class="srOnly">Special Attack EV</span></label>
+													
+													<input
+														id="playerPokeSpAEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDEv3"><span class="srOnly">Special Defense EV</span></label>
+													
+													<input
+														id="playerPokeSpDEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeEv3"><span class="srOnly">Speed EV</span></label>
+													
+													<input
+														id="playerPokeSpeEv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="255"
+														value="0"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+											
+											<tr>
+												<th>IVs:</th>
+												<td>
+													<label for="playerPokeHpIv3"><span class="srOnly">HP IV</span></label>
+													
+													<input
+														id="playerPokeHpIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeAtkIv3"><span class="srOnly">Attack IV</span></label>
+													
+													<input
+														id="playerPokeAtkIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeDefIv3"><span class="srOnly">Defense IV</span></label>
+													
+													<input
+														id="playerPokeDefIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpAIv3"><span class="srOnly">Special Attack IV</span></label>
+													
+													<input
+														id="playerPokeSpAIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpDIv3"><span class="srOnly">Special Defense IV</span></label>
+													
+													<input
+														id="playerPokeSpDIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+												
+												<td>
+													<label for="playerPokeSpeIv3"><span class="srOnly">Speed IV</span></label>
+													
+													<input
+														id="playerPokeSpeIv3"
+														type="number"
+														inputmode="numeric"
+														class="statInput"
+														min="0" max="31"
+														value="31"
+														data-da-save-local-storage="true"
+													/>
+												</td>
+											</tr>
+										</table>
+									</div>
+									
+									<div class="formGroup">
+										<strong>Moves:</strong>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove1Label3">First move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove1Text3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label3"
+										/>
+										
+										<select
+											id="playerPokeMove1Select3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove1Label3"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove1Text3"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove2Label3">Second move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove2Text3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label3"
+										/>
+										
+										<select
+											id="playerPokeMove2Select3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove2Label3"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove2Text3"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove3Label3">Third move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove3Text3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label3"
+										/>
+										
+										<select
+											id="playerPokeMove3Select3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove3Label3"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove3Text3"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="srOnly" id="playerPokeMove4Label3">Fourth move</div>
+										
+										<input
+											type="text"
+											id="playerPokeMove4Text3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label3"
+										/>
+										
+										<select
+											id="playerPokeMove4Select3"
+											autocomplete="off"
+											aria-labelledby="playerPokeMove4Label3"
+											data-alphabetized="true"
+											data-da-type="move"
+											data-da-linked-text="playerPokeMove4Text3"
+											data-da-save-local-storage="true"
+										></select>
+									</div>
+									
+									<div class="formGroup">
+										<div class="subLegend" id="playerPokeImportLabel3">Or import set:</div>
+										
+										<textarea
+											id="playerPokeImportTextarea3"
+											rows="7"
+											cols="50"
+											style="resize:none"
+											spellcheck="false"
+											autocomplete="off"
+											aria-labelledby="playerPokeImportLabel3"
+										></textarea>
+									</div>
+									
+									<div class="formGroup">
+										<input id="playerPokeImportButton3" type="button" value="Import" />
+									</div>
+								</div>
+							</div>
+							
+							<script> // Init tab menu functionality
+								"use strict";
+								tabMenuInit("playerPokeTabMenu");
+							</script>
+						</fieldset>
+						
+						<fieldset>
+							<legend>Challenge level</legend>
+							
+							<div class="formExtraInfo"></div>
+							
+							<div class="formGroup">
+								<input
+									type="radio"
+									id="challengeLevel50"
+									name="challengeLevelRadio"
+									checked
+								/>
+								
+								<label for="challengeLevel50">Level 50</label>
+							</div>
+							
+							<div class="formGroup">
+								<input
+									type="radio"
+									id="challengeLevelOpen"
+									name="challengeLevelRadio"
+								/>
+								
+								<label for="challengeLevelOpen">Open Level:</label>
+								
+								<input id="challengeLevelNumber" type="number" inputmode="numeric" class="statInput" min="60" max="100" value="100" disabled />
+								
+								<label for="challengeLevelNumber"><span class="srOnly">Open level value</span></label>
+							</div>
+						</fieldset>
+						
+						<div class="formGroup center">
+							<input type="button" class="navButton" id="toOpponentNavButton" disabled value="Start &rarr;" />
+						</div>
+					</section>
+					
+					<section id="preBattlePanel">
+						<h1>Pre-Battle</h1>
+						<input type="button" value="Reset" class="resetButton" id="preBattleResetButton" />
+						
+						<fieldset>
+							<legend>Opponent name</legend>
+							<div class="formExtraInfo">Only the name is needed, trainer class can be ignored.</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentNameLabel">Opponent trainer name</div>
+								
+								<input
+									type="text"
+									id="opponentNameText"
+									autocomplete="off"
+									aria-labelledby="opponentNameLabel"
+								/>
+								
+								<select
+									id="opponentNameSelect"
+									autocomplete="off"
+									aria-labelledby="opponentNameLabel"
+									data-alphabetized="true"
+									data-da-type="trainer"
+									data-da-linked-text="opponentNameText"
+								></select>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend>Opponent Pokémon</legend>
+							<div class="formExtraInfo">Enter the species on the trainer card from top to bottom; the order is important.</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentPokeLabel1">Opponent first Pokémon</div>
+								
+								<input
+									type="text"
+									id="opponentPokeText1"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel1"
+								/>
+								
+								<select
+									id="opponentPokeSelect1"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel1"
+									data-alphabetized="true"
+									data-da-type="pokemon"
+									data-da-linked-text="opponentPokeText1"
+									data-da-linked-sprite="opponentPokeSprite1 opponentPoke1Sprite1 opponentPoke2Sprite1"
+								></select>
+								
+								<span class="pokeIconSprite" id="opponentPokeSprite1"></span>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentPokeLabel2">Opponent second Pokémon</div>
+								
+								<input
+									type="text"
+									id="opponentPokeText2"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel2"
+								/>
+								
+								<select
+									id="opponentPokeSelect2"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel2"
+									data-alphabetized="true"
+									data-da-type="pokemon"
+									data-da-linked-text="opponentPokeText2"
+									data-da-linked-sprite="opponentPokeSprite2 opponentPoke1Sprite2 opponentPoke2Sprite2"
+								></select>
+								
+								<span class="pokeIconSprite" id="opponentPokeSprite2"></span>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentPokeLabel3">Opponent third Pokémon</div>
+								
+								<input
+									type="text"
+									id="opponentPokeText3"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel3"
+								/>
+								
+								<select
+									id="opponentPokeSelect3"
+									autocomplete="off"
+									aria-labelledby="opponentPokeLabel3"
+									data-alphabetized="true"
+									data-da-type="pokemon"
+									data-da-linked-text="opponentPokeText3"
+									data-da-linked-sprite="opponentPokeSprite3 opponentPoke1Sprite3 opponentPoke2Sprite3"
+								></select>
+								
+								<span class="pokeIconSprite" id="opponentPokeSprite3"></span>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend>Opponent battle style</legend>
+							<div class="formExtraInfo">Located on the second line of their trainer card.</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentBattleStyleLabel">Opponent battle style</div>
+								
+								<input
+									type="text"
+									id="opponentBattleStyleText"
+									autocomplete="off"
+									aria-labelledby="opponentBattleStyleLabel"
+								/>
+								
+								<select
+									id="opponentBattleStyleSelect"
+									autocomplete="off"
+									aria-labelledby="opponentBattleStyleLabel"
+									data-alphabetized="true"
+									data-da-type="battlestyle"
+									data-da-linked-text="opponentBattleStyleText"
+								></select>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend>Opponent stat emphasis</legend>
+							<div class="formExtraInfo">Located on the third line of their trainer card. Leave the second stat blank if only one stat is mentioned.</div>
+							
+							<div class="formGroup sparse">
+								<label for="statEmphasisEmphasizes">
+									<input
+										type="radio"
+										autocomplete="off"
+										name="statEmphasisRadio"
+										id="statEmphasisEmphasizes"
+									/>
+									Emphasizes
+								</label>
+								
+								<label for="statEmphasisNeglects">
+									<input
+										type="radio"
+										autocomplete="off"
+										name="statEmphasisRadio"
+										id="statEmphasisNeglects"
+									/>
+									Neglects
+								</label>
+								
+								<label for="statEmphasisBalanced">
+									<input
+										type="radio"
+										autocomplete="off"
+										name="statEmphasisRadio"
+										id="statEmphasisBalanced"
+									/>
+									Well-balanced
+								</label>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="statEmphasisLabel1">Emphasized or neglected first stat</div>
+								
+								<input
+									id="statEmphasisText1"
+									type="text"
+									disabled
+									autocomplete="off"
+									aria-labelledby="statEmphasisLabel1"
+								/>
+								
+								<select
+									id="statEmphasisSelect1"
+									disabled
+									autocomplete="off"
+									aria-labelledby="statEmphasisLabel1"
+									data-da-type="stat"
+									data-da-linked-text="statEmphasisText1"
+								></select>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="statEmphasisLabel2">Emphasized or neglected second stat</div>
+								
+								<input
+									id="statEmphasisText2"
+									type="text"
+									disabled
+									autocomplete="off"
+									aria-labelledby="statEmphasisLabel2"
+								/>
+								
+								<select
+									id="statEmphasisSelect2"
+									disabled
+									autocomplete="off"
+									aria-labelledby="statEmphasisLabel2"
+									data-da-type="stat"
+									data-da-linked-text="statEmphasisText2"
+									data-da-linked-clear="statEmphasisClear2"
+								></select>
+								
+								<input
+									type="button"
+									id="statEmphasisClear2"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear emphasized or neglected second stat"
+								/>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend>Opponent known moves</legend>
+							<div class="formExtraInfo">Up to three moves can be known from the tournament tree. Leave any unknown moves blank.</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="knownMovesLabel1">Opponent first known move</div>
+								
+								<input
+									type="text"
+									id="knownMovesText1"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel1"
+								/>
+								
+								<select
+									id="knownMovesSelect1"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel1"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="knownMovesText1"
+									data-da-linked-clear="knownMovesClear1"
+								></select>
+								
+								<input
+									type="button"
+									id="knownMovesClear1"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first known move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="knownMovesLabel2">Opponent second known move</div>
+								
+								<input
+									type="text"
+									id="knownMovesText2"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel2"
+								/>
+								
+								<select
+									id="knownMovesSelect2"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel2"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="knownMovesText2"
+									data-da-linked-clear="knownMovesClear2"
+								></select>
+								
+								<input
+									type="button"
+									id="knownMovesClear2"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second known move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="knownMovesLabel3">Opponent third known move</div>
+								
+								<input
+									type="text"
+									id="knownMovesText3"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel3"
+								/>
+								
+								<select
+									id="knownMovesSelect3"
+									autocomplete="off"
+									aria-labelledby="knownMovesLabel3"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="knownMovesText3"
+									data-da-linked-clear="knownMovesClear3"
+								></select>
+								
+								<input
+									type="button"
+									id="knownMovesClear3"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent third known move"
+								/>
+							</div>
+						</fieldset>
+						
+						<div class="formGroup center">
+							<input type="button" disabled class="submitButton" id="preBattleSubmitButton" value="Calculate possible teams" />
+						</div>
+						
+						<div class="formExtraInfo">If you need more information on the opponent's possible Pokémon, make your team selection and proceed to <strong>On to battle</strong>.</div>
+						
+						<div class="formGroup center">
+							<input type="button" class="navButton" id="backToTeamNavButton" value="&larr; Back to preliminary" />
+							<input type="button" class="navButton" disabled id="onToBattleNavButton" value="On to battle &rarr;" />
+						</div>
+						
+					</section>
+					
+					<section id="midBattlePanel">
+						<h1>Mid-Battle</h1>
+						<input type="button" value="Reset" class="resetButton" id="midBattleResetButton" />
+						
+						<fieldset>
+							<legend>Player team</legend>
+							<div class="formExtraInfo">Which Pokémon is sent out first is not important.</div>
+							
+							<div class="formGroup sparse">
+								<label class="formGroup inline condensed" for="playerTeam1">
+									<div class="srOnly">Player team option 1</div>
+									
+									<input
+										type="radio"
+										id="playerTeam1"
+										name="playerTeamRadio"
+										autocomplete="off"
+									/>
+									
+									<span class="pokeIconSprite" id="playerTeam1PokeSprite2"></span>
+									
+									<span class="pokeIconSprite" id="playerTeam1PokeSprite3"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="playerTeam2">
+									<div class="srOnly">Player team option 2</div>
+									
+									<input
+										type="radio"
+										id="playerTeam2"
+										name="playerTeamRadio"
+										autocomplete="off"
+									/>
+									
+									<span class="pokeIconSprite" id="playerTeam2PokeSprite1"></span>
+									
+									<span class="pokeIconSprite" id="playerTeam2PokeSprite3"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="playerTeam3">
+									<div class="srOnly">Player team option 3</div>
+									
+									<input
+										type="radio"
+										id="playerTeam3"
+										name="playerTeamRadio"
+										autocomplete="off"
+									/>
+									
+									<span class="pokeIconSprite" id="playerTeam3PokeSprite1"></span>
+									
+									<span class="pokeIconSprite" id="playerTeam3PokeSprite2"></span>
+								</label>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend id="opponentFirstPokeLabel">Opponent first Pokémon</legend>
+							<div class="formExtraInfo">Leave any unknown info blank.</div>
+							
+							<div class="formGroup sparse">
+								<label class="formGroup inline condensed" for="opponentFirstPoke1">
+									<input
+										type="radio"
+										id="opponentFirstPoke1"
+										name="opponentFirstPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentFirstPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke1Sprite1"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="opponentFirstPoke2">
+									<input
+										type="radio"
+										id="opponentFirstPoke2"
+										name="opponentFirstPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentFirstPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke1Sprite2"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="opponentFirstPoke3">
+									<input
+										type="radio"
+										id="opponentFirstPoke3"
+										name="opponentFirstPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentFirstPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke1Sprite3"></span>
+								</label>
+							</div>
+							
+							<div class="subLegend">Moves</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentFirstPokeMovesLabel1">Opponent first Pokémon, first move</div>
+								
+								<input
+									type="text"
+									id="opponentFirstPokeMovesText1"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel1"
+								/>
+								
+								<select
+									id="opponentFirstPokeMovesSelect1"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel1"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentFirstPokeMovesText1"
+									data-da-linked-clear="opponentFirstPokeMovesClear1"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentFirstPokeMovesClear1"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first Pokémon, first move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentFirstPokeMovesLabel2">Opponent first Pokémon, second move</div>
+								
+								<input
+									type="text"
+									id="opponentFirstPokeMovesText2"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel2"
+								/>
+								
+								<select
+									id="opponentFirstPokeMovesSelect2"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel2"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentFirstPokeMovesText2"
+									data-da-linked-clear="opponentFirstPokeMovesClear2"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentFirstPokeMovesClear2"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first Pokémon, second move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentFirstPokeMovesLabel3">Opponent first Pokémon, third move</div>
+								
+								<input
+									type="text"
+									id="opponentFirstPokeMovesText3"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel3"
+								/>
+								
+								<select
+									id="opponentFirstPokeMovesSelect3"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel3"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentFirstPokeMovesText3"
+									data-da-linked-clear="opponentFirstPokeMovesClear3"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentFirstPokeMovesClear3"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first Pokémon, third move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentFirstPokeMovesLabel4">Opponent first Pokémon, fourth move</div>
+								
+								<input
+									type="text"
+									id="opponentFirstPokeMovesText4"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel4"
+								/>
+								
+								<select
+									id="opponentFirstPokeMovesSelect4"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeMovesLabel4"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentFirstPokeMovesText4"
+									data-da-linked-clear="opponentFirstPokeMovesClear4"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentFirstPokeMovesClear4"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first Pokémon, fourth move"
+								/>
+							</div>
+							
+							<div class="subLegend">Held item</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentFirstPokeHeldItemLabel">Opponent first Pokémon held item</div>
+								
+								<input
+									type="text"
+									id="opponentFirstPokeHeldItemText"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeHeldItemLabel"
+								/>
+								
+								<select
+									id="opponentFirstPokeHeldItemSelect"
+									autocomplete="off"
+									aria-labelledby="opponentFirstPokeHeldItemLabel"
+									data-alphabetized="true"
+									data-da-type="item"
+									data-da-linked-text="opponentFirstPokeHeldItemText"
+									data-da-linked-clear="opponentFirstPokeHeldItemClear"
+									data-da-linked-sprite="opponentFirstPokeHeldItem"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentFirstPokeHeldItemClear"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent first Pokémon held item"
+								/>
+								
+								<span class="heldItemSprite" id="opponentFirstPokeHeldItem"></span>
+							</div>
+						</fieldset>
+						
+						<fieldset>
+							<legend id="opponentSecondPokeLabel">Opponent second Pokémon</legend>
+							<div class="formExtraInfo">Leave any unknown info blank; mark <strong>?</strong> if the second Pokémon is not yet known.</div>
+							
+							<div class="formGroup sparse">
+								<label class="formGroup inline condensed" for="opponentSecondPoke1">
+									<input
+										type="radio"
+										id="opponentSecondPoke1"
+										name="opponentSecondPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentSecondPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke2Sprite1"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="opponentSecondPoke2">
+									<input
+										type="radio"
+										id="opponentSecondPoke2"
+										name="opponentSecondPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentSecondPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke2Sprite2"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="opponentSecondPoke3">
+									<input
+										type="radio"
+										id="opponentSecondPoke3"
+										name="opponentSecondPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentSecondPokeLabel"
+									/>
+									
+									<span class="pokeIconSprite" id="opponentPoke2Sprite3"></span>
+								</label>
+								
+								<label class="formGroup inline condensed" for="opponentSecondPokeUnknown">
+									<input
+										type="radio"
+										checked
+										id="opponentSecondPokeUnknown"
+										name="opponentSecondPokeRadio"
+										autocomplete="off"
+										aria-labelledby="opponentSecondPokeLabel"
+									/>
+									
+									<!-- static sprite without dynamic alt text -->
+									<span class="pokeIconSprite unknown" role="image" title="Unknown Pokémon" aria-label="Unknown Pokémon"></span>
+								</label>
+							</div>
+							
+							<div class="subLegend">Moves</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentSecondPokeMovesLabel1">Opponent second Pokémon, first move</div>
+								
+								<input
+									type="text"
+									id="opponentSecondPokeMovesText1"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel1"
+								/>
+								
+								<select
+									id="opponentSecondPokeMovesSelect1"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel1"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentSecondPokeMovesText1"
+									data-da-linked-clear="opponentSecondPokeMovesClear1"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentSecondPokeMovesClear1"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second Pokémon, first move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentSecondPokeMovesLabel2">Opponent second Pokémon, second move</div>
+								
+								<input
+									type="text"
+									id="opponentSecondPokeMovesText2"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel2"
+								/>
+								
+								<select
+									id="opponentSecondPokeMovesSelect2"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel2"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentSecondPokeMovesText2"
+									data-da-linked-clear="opponentSecondPokeMovesClear2"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentSecondPokeMovesClear2"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second Pokémon, second move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentSecondPokeMovesLabel3">Opponent second Pokémon, third move</div>
+								
+								<input
+									type="text"
+									id="opponentSecondPokeMovesText3"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel3"
+								/>
+								
+								<select
+									id="opponentSecondPokeMovesSelect3"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel3"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentSecondPokeMovesText3"
+									data-da-linked-clear="opponentSecondPokeMovesClear3"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentSecondPokeMovesClear3"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second Pokémon, third move"
+								/>
+							</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentSecondPokeMovesLabel4">Opponent second Pokémon, fourth move</div>
+								
+								<input
+									type="text"
+									id="opponentSecondPokeMovesText4"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel4"
+								/>
+								
+								<select
+									id="opponentSecondPokeMovesSelect4"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeMovesLabel4"
+									data-alphabetized="true"
+									data-da-type="move"
+									data-da-linked-text="opponentSecondPokeMovesText4"
+									data-da-linked-clear="opponentSecondPokeMovesClear4"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentSecondPokeMovesClear4"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second Pokémon, fourth move"
+								/>
+							</div>
+							
+							<div class="subLegend">Held item</div>
+							
+							<div class="formGroup">
+								<div class="srOnly" id="opponentSecondPokeHeldItemLabel">Opponent second Pokémon held item</div>
+								
+								<input
+									type="text"
+									id="opponentSecondPokeHeldItemText"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeHeldItemLabel"
+								/>
+								
+								<select
+									id="opponentSecondPokeHeldItemSelect"
+									autocomplete="off"
+									aria-labelledby="opponentSecondPokeHeldItemLabel"
+									data-alphabetized="true"
+									data-da-type="item"
+									data-da-linked-text="opponentSecondPokeHeldItemText"
+									data-da-linked-clear="opponentSecondPokeHeldItemClear"
+									data-da-linked-sprite="opponentSecondPokeHeldItem"
+								></select>
+								
+								<input
+									type="button"
+									id="opponentSecondPokeHeldItemClear"
+									class="clearButton"
+									value="Clear"
+									aria-label="Clear opponent second Pokémon held item"
+								/>
+								
+								<span class="heldItemSprite" id="opponentSecondPokeHeldItem"></span>
+							</div>
+						</fieldset>
+						
+						<div class="formGroup center">
+							<input type="button" disabled class="submitButton" id="midBattleSubmitButton" value="Calculate possible Pokémon" />
+						</div>
+						
+						<div class="formGroup center">
+							<input type="button" class="navButton" id="backToOpponentNavButton" value="&larr; Back to opponent" />
+						</div>
+					</section>
+				</div>
+			</div>
+			
+			<div class="output">
+				<section class="outputContainer">
+					<div>
+						<div class="outputHeader" id="placeholderOutputHeader">
+							<h1>Welcome to DomeAssistant!</h1>
+							<div class="formExtraInfo">DomeAssistant is a tool capable of predicting opponent trainer's teams and Pokémon in the Emerald Battle Dome.</div>
+							<div class="formExtraInfo">Fill out the forms to the left to produce output.</div>
+							<div class="formExtraInfo">Developed in collaboration with Actaeon.</div>
+						</div>
+						
+						<div class="outputHeader" id="preBattleOutputHeader" style="display:none">
+							<h1>Possible Teams</h1>
+							<div class="formExtraInfo">Possible teams are listed below. Each team is equally likely, barring RNG bias.</div>
+							<div class="formExtraInfo">Click a set to view damage ranges and extra information.</div>
+							<div class="formExtraInfo">There is a 60% chance the opponent will send out their two Pokémon in order from top-to-bottom, and a 40% chance they will do so from bottom-to-top. (Except for Tucker, who always sends out his Pokémon from top-to-bottom.)</div>
+							
+							<div id="preBattleExtraSummaryHeaderPanel" style="display:none">
+								<div class="formExtraInfo">Because there are 8 or more possible teams, here is an extra summary to help:</div>
+								<details id="outputSummaryPanelDetails">
+									<summary>Summaries of Pokémon set probability</summary>
+									<div id="outputSummaryPanelContainer"></div>
+								</details>
+							</div>
+						</div>
+						
+						<div class="outputHeader" id="midBattleOutputHeader" style="display:none">
+							<h1>Possible Pokémon Sets</h1>
+							<div class="formExtraInfo">Specific possible sets and their respective likelihoods are listed below.</div>
+							<div class="formExtraInfo">Click a set to view damage ranges and extra information.</div>
+						</div>
+					</div>
+					
+					<div id="outputEntryContainer">
+						
+					</div>
+				</section>
+			</div>
+			
+			
+			<!-- Output templates -->
+			<template id="outputSummaryTableTemplate">
+				<div class="formExtraInfo spritesWithTextContainer">
+					With a player team of
+					<span class="pokeIconSprite" data-template-id="playerTeamPoke1Sprite"></span>
+					<strong data-template-id="playerTeamPoke1Name"></strong> 
+					and
+					<span class="pokeIconSprite" data-template-id="playerTeamPoke2Sprite"></span>
+					<span><strong data-template-id="playerTeamPoke2Name"></strong>:</span>
+				</div>
+				
+				<table class="outputSummaryTable">
+					<thead class="typeTable Dark">
+						<tr>
+							<th rowspan="2" class="minColumn">Species</th>
+							<th colspan="8">Set #</th>
+							<th rowspan="2" class="minColumn">Total</th>
+						</tr>
+						
+						<tr>
+							<th class="minColumn">1</th>
+							<th class="minColumn">2</th>
+							<th class="minColumn">3</th>
+							<th class="minColumn">4</th>
+							<th class="minColumn">5</th>
+							<th class="minColumn">6</th>
+							<th class="minColumn">7</th>
+							<th class="minColumn">8</th>
+						</tr>
+					</thead>
+					
+					<tbody data-template-id="tableBody"></tbody>
+				</table>
+			</template>
+			
+			<template id="outputSummaryTableRowTemplate">
+				<tr data-template-id="tableRow">
+					<td>
+						<div class="spritesWithTextContainer">
+							<span class="pokeIconSprite" data-template-id="pokeSprite"></span>
+						</div>
+					</td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><strong data-template-id="probTotal"></strong></td>
+				</tr>
+			</template>
+			
+			
+			<template id="outputSummaryExtendedTableTemplate">
+				<div class="formExtraInfo spritesWithTextContainer">
+					With a player team of
+					<span class="pokeIconSprite" data-template-id="playerTeamPoke1Sprite"></span>
+					<strong data-template-id="playerTeamPoke1Name"></strong> 
+					and
+					<span class="pokeIconSprite" data-template-id="playerTeamPoke2Sprite"></span>
+					<span><strong data-template-id="playerTeamPoke2Name"></strong>:</span>
+				</div>
+				
+				<table class="outputSummaryTable">
+					<thead class="typeTable Dark">
+						<tr>
+							<th rowspan="2" class="minColumn">Species</th>
+							<th colspan="10">Set #</th>
+							<th rowspan="2" class="minColumn">Total</th>
+						</tr>
+						
+						<tr>
+							<th class="minColumn">1</th>
+							<th class="minColumn">2</th>
+							<th class="minColumn">3</th>
+							<th class="minColumn">4</th>
+							<th class="minColumn">5</th>
+							<th class="minColumn">6</th>
+							<th class="minColumn">7</th>
+							<th class="minColumn">8</th>
+							<th class="minColumn">9</th>
+							<th class="minColumn">10</th>
+						</tr>
+					</thead>
+					
+					<tbody data-template-id="tableBody"></tbody>
+				</table>
+			</template>
+			
+			<template id="outputSummaryExtendedTableRowTemplate">
+				<tr data-template-id="tableRow">
+					<td>
+						<div class="spritesWithTextContainer">
+							<span class="pokeIconSprite" data-template-id="pokeSprite"></span>
+						</div>
+					</td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><div class="spritesWithTextContainer condensed" data-template-group="instanceCell"></div></td>
+					<td><strong data-template-id="probTotal"></strong></td>
+				</tr>
+			</template>
+			
+			
+			<template id="possibleTeamTableTemplate">
+				<div class="outputTableTitle">
+					<div data-template-id="tableTitle"></div>
+				</div>
+				
+				<table class="outputTable">
+					<thead>
+						<tr class="typeTable">
+							<th colspan="3">Pick rate by player pick</th>
+							<th colspan="8">Pokémon set</th>
+						</tr>
+						
+						<tr class="typeTable">
+							<th class="minColumn">
+								<span class="pokeIconSprite" data-template-group="playerPoke2Sprite"></span><span class="pokeIconSprite" data-template-group="playerPoke3Sprite"></span>
+							</th>
+							
+							<th class="minColumn">
+								<span class="pokeIconSprite" data-template-group="playerPoke1Sprite"></span><span class="pokeIconSprite" data-template-group="playerPoke3Sprite"></span>
+							</th>
+							
+							<th class="minColumn">
+								<span class="pokeIconSprite" data-template-group="playerPoke1Sprite"></span><span class="pokeIconSprite" data-template-group="playerPoke2Sprite"></span>
+							</th>
+							
+							<th>Name</th>
+							<th>Held item</th>
+							<th>Nature</th>
+							<th colspan="4">Moves</th>
+							<th>Speed</th>
+						</tr>
+					</thead>
+					
+					<tbody data-template-id="tableBody" style="text-align:center"></tbody>
+				</table>
+			</template>
+			
+			<template id="possibleTeamTableRowTemplate">
+				<tr data-template-id="pokeRow">
+					<td data-template-id="playerTeam1Cell" style="text-align:right"></td>
+					<td data-template-id="playerTeam2Cell" style="text-align:right"></td>
+					<td data-template-id="playerTeam3Cell" style="text-align:right"></td>
+					
+					<td style="text-align:left">
+						<div class="spritesWithTextContainer condensed">
+							<span class="pokeIconSprite" data-template-id="pokeIconSprite"></span>
+							<span data-template-id="pokeInstanceName"></span>
+						</div>
+					</td>
+					
+					<td style="text-align:left">
+						<div class="spritesWithTextContainer condensed">
+							<span class="heldItemSprite" data-template-id="heldItemSprite"></span>
+							<span data-template-id="heldItemName"></span>
+						</div>
+					</td>
+					
+					<td data-template-id="nature"></td>
+					
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					
+					<td data-template-id="speed"></td>
+				</tr>
+			</template>
+			
+			
+			<template id="possibleSetTableTemplate">
+				<div class="outputTableTitle spritesWithTextContainer" >
+					<span data-template-id="pokeSprite" class="pokeIconSprite"></span>
+					<span data-template-id="tableTitle"></span>
+				</div>
+				
+				<table class="outputTable" data-template-id="table">
+					<thead>
+						<tr>
+							<th class="minColumn">Likelihood</th>
+							<th>Set</th>
+							<th>Held item</th>
+							<th>Nature</th>
+							<th colspan="4">Moves</th>
+							<th>Speed</th>
+						</tr>
+					</thead>
+					
+					<tbody data-template-id="tableBody" style="text-align:center"></tbody>
+				</table>
+			</template>
+			
+			<template id="possibleSetTableRowTemplate">
+				<tr>
+					<td data-template-id="setProbability" style="text-align:right"></td>
+					
+					<td data-template-id="setName" style="text-align:center"></td>
+					
+					<td style="text-align:left">
+						<div class="spritesWithTextContainer condensed">
+							<span class="heldItemSprite" data-template-id="heldItemSprite"></span>
+							<span data-template-id="heldItemName"></span>
+						</div>
+					</td>
+					
+					<td data-template-id="nature"></td>
+					
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					<td data-template-group="moves"></td>
+					
+					<td data-template-id="speed" style="text-align:center"></td>
+				</tr>
+			</template>
+			
+			
+			<template id="defensiveDamageTableTemplate">
+				<table class="outputTable damageTable typeTable" data-template-id="table">
+					<caption>
+						<span data-template-id="caption"></span>
+						<span data-template-id="captionSprite" class="pokeIconSprite heightless" style="--y-offset:5px"></span>
+					</caption>
+					
+					<tr>
+						<th data-template-group="moveNames"></th>
+						<th data-template-group="moveNames"></th>
+						<th data-template-group="moveNames"></th>
+						<th data-template-group="moveNames"></th>
+					</tr>
+					
+					<tr>
+						<td data-template-group="moveCells"></td>
+						<td data-template-group="moveCells"></td>
+						<td data-template-group="moveCells"></td>
+						<td data-template-group="moveCells"></td>
+					</tr>
+				</table>
+			</template>
+		</div>
+		
+		<div id="modalContainer">
+			<div id="modalOverlay">
+				<div id="modalPopup" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+					<a role="button" id="modalTopX" aria-label="Close" tabindex="0">
+						<span>&times;</span>
+					</a>
+					
+					<h1 class="spritesWithTextContainer">
+						<span id="modalTitle"></span>
+						<span class="pokeIconSprite" id="modalTitleSprite"></span>
+					</h1>
+					
+					<div class="subLegend">Damage ranges (unboosted)</div>
+					
+					<div>Power-boosting held items are taken into account.</div>
+					<div>Player Pokémon abilities are taken into account, opponent's are not; except for <strong>Wonder Guard</strong> and <strong>Levitate</strong>.</div>
+					<div>Multi-hit moves are shown per hit. Moves that depend on current HP assume 100%.</div>
+					<div>Odds to KO or break substitutes are factoring in critical hits.</div>
+					
+					<table class="outputTable damageTable typeTable" id="modalOffsensiveDamageTable">
+						<caption>Offensive Ranges</caption>
+						
+						<tr>
+							<th class="minColumn">Target</th>
+							<th id="modalOpponentPokeMove1"></th>
+							<th id="modalOpponentPokeMove2"></th>
+							<th id="modalOpponentPokeMove3"></th>
+							<th id="modalOpponentPokeMove4"></th>
+						</tr>
+						
+						<tr>
+							<td style="text-align:center">
+								<span class="pokeIconSprite" id="modalPlayerPokeSprite1"></span>
+							</td>
+							<td id="modalDamagePoke1Move1"></td>
+							<td id="modalDamagePoke1Move2"></td>
+							<td id="modalDamagePoke1Move3"></td>
+							<td id="modalDamagePoke1Move4"></td>
+						</tr>
+						
+						<tr>
+							<td style="text-align:center">
+								<span class="pokeIconSprite" id="modalPlayerPokeSprite2"></span>
+							</td>
+							<td id="modalDamagePoke2Move1"></td>
+							<td id="modalDamagePoke2Move2"></td>
+							<td id="modalDamagePoke2Move3"></td>
+							<td id="modalDamagePoke2Move4"></td>
+						</tr>
+						
+						<tr>
+							<td style="text-align:center">
+								<span class="pokeIconSprite" id="modalPlayerPokeSprite3"></span>
+							</td>
+							<td id="modalDamagePoke3Move1"></td>
+							<td id="modalDamagePoke3Move2"></td>
+							<td id="modalDamagePoke3Move3"></td>
+							<td id="modalDamagePoke3Move4"></td>
+						</tr>
+						
+					</table>
+					
+					<div id="defensiveRangesTableContainer" style="display:contents"></div>
+					
+					<div class="subLegend" id="exportSetLabel">Export set</div>
+					
+					<textarea
+						id="exportSetTextArea"
+						spellcheck="false"
+						autocomplete="off"
+						aria-labelledby="exportSetLabel"
+						onclick="this.select()"
+						rows="6"
+						readonly="true"
+						style="resize:none"
+					></textarea>
+					
+					<div>
+						<input type="button" id="copyExportSet" arial-label="Copy text export of Pokémon set" value="Copy" />
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script> // Init page form
+			"use strict";
+			formBoilerPlate();
+		</script>
+		
+		<script> // Basic form functionality; validation, buttons, and navigation
+			"use strict";
+			
+			const panelContainer = document.getElementById("formPanelContainer");
+			
+			function gatherIdsToObject(obj, id) {
+				obj[id] = document.getElementById(id);
+				return obj;
+			}
+			
+			// List all important elements
+			
+			const prelimPanel = {
+				self : document.getElementById("prelimPanel"),
+				el : [
+					"playerPokeTabButton1", "playerPokeTabButton2", "playerPokeTabButton3",
+					"playerPokeSelect1",
+					"playerPokeHpEv1", "playerPokeAtkEv1", "playerPokeDefEv1", "playerPokeSpAEv1", "playerPokeSpDEv1", "playerPokeSpeEv1",
+					"playerPokeHpIv1", "playerPokeAtkIv1", "playerPokeDefIv1", "playerPokeSpAIv1", "playerPokeSpDIv1", "playerPokeSpeIv1",
+					"playerPokeNatureSelect1",
+					"playerPokeHeldItemSelect1",
+					"playerPokeAbilitySelect1",
+					"playerPokeMove1Select1", "playerPokeMove2Select1", "playerPokeMove3Select1", "playerPokeMove4Select1",
+					"playerPokeImportTextarea1", "playerPokeImportButton1",
+					
+					"playerPokeSelect2",
+					"playerPokeHpEv2", "playerPokeAtkEv2", "playerPokeDefEv2", "playerPokeSpAEv2", "playerPokeSpDEv2", "playerPokeSpeEv2",
+					"playerPokeHpIv2", "playerPokeAtkIv2", "playerPokeDefIv2", "playerPokeSpAIv2", "playerPokeSpDIv2", "playerPokeSpeIv2",
+					"playerPokeNatureSelect2",
+					"playerPokeHeldItemSelect2",
+					"playerPokeAbilitySelect2",
+					"playerPokeMove1Select2", "playerPokeMove2Select2", "playerPokeMove3Select2", "playerPokeMove4Select2",
+					"playerPokeImportTextarea2", "playerPokeImportButton2",
+					
+					"playerPokeSelect3",
+					"playerPokeHpEv3", "playerPokeAtkEv3", "playerPokeDefEv3", "playerPokeSpAEv3", "playerPokeSpDEv3", "playerPokeSpeEv3",
+					"playerPokeHpIv3", "playerPokeAtkIv3", "playerPokeDefIv3", "playerPokeSpAIv3", "playerPokeSpDIv3", "playerPokeSpeIv3",
+					"playerPokeNatureSelect3",
+					"playerPokeHeldItemSelect3",
+					"playerPokeAbilitySelect3",
+					"playerPokeMove1Select3", "playerPokeMove2Select3", "playerPokeMove3Select3", "playerPokeMove4Select3",
+					"playerPokeImportTextarea3", "playerPokeImportButton3",
+					
+					"challengeLevel50", "challengeLevelOpen", "challengeLevelNumber",
+					
+					"toOpponentNavButton"
+				].reduce(gatherIdsToObject, {})
+			};
+			
+			const preBattlePanel = {
+				self : document.getElementById("preBattlePanel"),
+				el : [
+					"preBattleResetButton",
+					
+					"opponentNameSelect",
+					
+					"opponentPokeSelect1",
+					"opponentPokeSelect2",
+					"opponentPokeSelect3",
+					
+					"opponentBattleStyleSelect",
+					
+					"statEmphasisEmphasizes", "statEmphasisNeglects", "statEmphasisBalanced",
+					"statEmphasisSelect1",
+					"statEmphasisSelect2",
+					
+					"knownMovesSelect1",
+					"knownMovesSelect2",
+					"knownMovesSelect3",
+					
+					"preBattleSubmitButton",
+					
+					"backToTeamNavButton", "onToBattleNavButton"
+				].reduce(gatherIdsToObject, {})
+			};
+			
+			const midBattlePanel = {
+				self : document.getElementById("midBattlePanel"),
+				el : [
+					"midBattleResetButton",
+					
+					"playerTeam1", "playerTeam2", "playerTeam3",
+					
+					"opponentFirstPoke1", "opponentFirstPoke2", "opponentFirstPoke3",
+					
+					"opponentFirstPokeMovesSelect1",
+					"opponentFirstPokeMovesSelect2",
+					"opponentFirstPokeMovesSelect3",
+					"opponentFirstPokeMovesSelect4",
+					"opponentFirstPokeHeldItemSelect",
+					
+					"opponentSecondPoke1", "opponentSecondPoke2", "opponentSecondPoke3", "opponentSecondPokeUnknown",
+					"opponentSecondPokeMovesSelect1",
+					"opponentSecondPokeMovesSelect2",
+					"opponentSecondPokeMovesSelect3",
+					"opponentSecondPokeMovesSelect4",
+					"opponentSecondPokeHeldItemSelect",
+					
+					"midBattleSubmitButton",
+					
+					"backToOpponentNavButton"
+				].reduce(gatherIdsToObject, {})
+			};
+			
+			
+			// ========== Preliminary panel functionality ========== //
+			
+			
+			// Valid checking-- 3 species + EV sets + IV sets + nature
+			prelimPanel.isValid = function() {
+				if (prelimPanel.el.playerPokeSelect1.selectedIndex === -1 ||
+				    prelimPanel.el.playerPokeSelect2.selectedIndex === -1 ||
+				    prelimPanel.el.playerPokeSelect3.selectedIndex === -1
+				) {
+					return false;
+				}
+				
+				if (prelimPanel.el.playerPokeNatureSelect1.selectedIndex === -1 ||
+				    prelimPanel.el.playerPokeNatureSelect2.selectedIndex === -1 ||
+				    prelimPanel.el.playerPokeNatureSelect3.selectedIndex === -1
+				) {
+					return false;
+				}
+				
+				let evIvEls = [
+					prelimPanel.el.playerPokeHpEv1, 
+					prelimPanel.el.playerPokeAtkEv1,
+					prelimPanel.el.playerPokeDefEv1,
+					prelimPanel.el.playerPokeSpAEv1,
+					prelimPanel.el.playerPokeSpDEv1,
+					prelimPanel.el.playerPokeSpeEv1,
+					
+					prelimPanel.el.playerPokeHpIv1, 
+					prelimPanel.el.playerPokeAtkIv1,
+					prelimPanel.el.playerPokeDefIv1,
+					prelimPanel.el.playerPokeSpAIv1,
+					prelimPanel.el.playerPokeSpDIv1,
+					prelimPanel.el.playerPokeSpeIv1,
+					
+					prelimPanel.el.playerPokeHpEv2, 
+					prelimPanel.el.playerPokeAtkEv2,
+					prelimPanel.el.playerPokeDefEv2,
+					prelimPanel.el.playerPokeSpAEv2,
+					prelimPanel.el.playerPokeSpDEv2,
+					prelimPanel.el.playerPokeSpeEv2,
+					
+					prelimPanel.el.playerPokeHpIv2, 
+					prelimPanel.el.playerPokeAtkIv2,
+					prelimPanel.el.playerPokeDefIv2,
+					prelimPanel.el.playerPokeSpAIv2,
+					prelimPanel.el.playerPokeSpDIv2,
+					prelimPanel.el.playerPokeSpeIv2,
+					
+					prelimPanel.el.playerPokeHpEv3, 
+					prelimPanel.el.playerPokeAtkEv3,
+					prelimPanel.el.playerPokeDefEv3,
+					prelimPanel.el.playerPokeSpAEv3,
+					prelimPanel.el.playerPokeSpDEv3,
+					prelimPanel.el.playerPokeSpeEv3,
+					
+					prelimPanel.el.playerPokeHpIv3, 
+					prelimPanel.el.playerPokeAtkIv3,
+					prelimPanel.el.playerPokeDefIv3,
+					prelimPanel.el.playerPokeSpAIv3,
+					prelimPanel.el.playerPokeSpDIv3,
+					prelimPanel.el.playerPokeSpeIv3
+				];
+				
+				for (let i = 0; i < evIvEls.length; i++) {
+					if (evIvEls[i].validity.valid !== true) {
+						return false;
+					}
+				}
+				
+				if (prelimPanel.el.challengeLevelOpen.checked && 
+				    prelimPanel.el.challengeLevelNumber.validity.valid !== true
+				) {
+					return false;
+				}
+				
+				return true;
+			}
+			
+			// Update-- enable/disable the nav button
+			prelimPanel.update = function() {
+				if (prelimPanel.isValid()) {
+					unfreezeFormEl(prelimPanel.el.toOpponentNavButton);
+				} else {
+					freezeFormEl(prelimPanel.el.toOpponentNavButton);
+				}
+				
+				if (prelimPanel.el.challengeLevelOpen.checked) {
+					unfreezeFormEl(prelimPanel.el.challengeLevelNumber);
+				} else {
+					freezeFormEl(prelimPanel.el.challengeLevelNumber);
+				}
+			}
+			
+			// Hook all inputs to update
+			for (let el of Object.values(prelimPanel.el)) {
+				el.addEventListener("input", prelimPanel.update);
+				el.addEventListener("change", prelimPanel.update);
+			};
+			
+			// Call update now too
+			prelimPanel.update();
+			
+			// Slide this panel to active
+			prelimPanel.switchTo = function() {
+				for (let el of Object.values(prelimPanel.el)) {
+					unfreezeFormEl(el);
+				}
+				prelimPanel.self.ariaHidden = false;
+				
+				prelimPanel.update();
+				panelContainer.dataset.daActivePanel = 0;
+			}
+			
+			// Add functionality to nav button
+			prelimPanel.el.toOpponentNavButton.addEventListener("click", function() {
+				for (let el of Object.values(prelimPanel.el)) {
+					freezeFormEl(el);
+				}
+				prelimPanel.self.ariaHidden = true;
+				
+				preBattlePanel.switchTo();
+			});
+			
+			
+			// ========== Pre-battle panel functionality ========== //
+			
+			
+			// Valid checking-- must have trainer name, 3 pokemon, and battle style filled out
+			//                  if stat emphasis is not "well-balanced", must have at least one stat filled out
+			preBattlePanel.isValid = function() {
+				if (preBattlePanel.el.opponentNameSelect.selectedIndex === -1) {
+					return false;
+				}
+				
+				if (preBattlePanel.el.opponentPokeSelect1.selectedIndex === -1 ||
+				    preBattlePanel.el.opponentPokeSelect2.selectedIndex === -1 ||
+				    preBattlePanel.el.opponentPokeSelect3.selectedIndex === -1
+				) {
+					return false;
+				}
+				
+				if (preBattlePanel.el.opponentBattleStyleSelect.selectedIndex === -1) {
+					return false;
+				}
+				
+				if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
+				    preBattlePanel.el.statEmphasisNeglects.checked
+				) {
+					if (preBattlePanel.el.statEmphasisSelect1.selectedIndex === -1 &&
+					    preBattlePanel.el.statEmphasisSelect2.selectedIndex === -1
+					) {
+						return false;
+					}
+				}
+				
+				return true;
+			}
+			
+			// Update-- enabled/disable the "calculate" button and the "on to battle" nav,
+			//          also enable/disable stat selection if "well-balanced" or emphasize/neglect
+			preBattlePanel.update = function() {
+				if (preBattlePanel.isValid()) {
+					unfreezeFormEl(preBattlePanel.el.preBattleSubmitButton);
+					unfreezeFormEl(preBattlePanel.el.onToBattleNavButton);
+				} else {
+					freezeFormEl(preBattlePanel.el.preBattleSubmitButton);
+					freezeFormEl(preBattlePanel.el.onToBattleNavButton);
+				}
+				
+				if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
+				    preBattlePanel.el.statEmphasisNeglects.checked
+				) {
+					unfreezeFormEl(preBattlePanel.el.statEmphasisSelect1);
+					unfreezeFormEl(preBattlePanel.el.statEmphasisSelect2);
+				} else {
+					freezeFormEl(preBattlePanel.el.statEmphasisSelect1);
+					freezeFormEl(preBattlePanel.el.statEmphasisSelect2);
+				}
+			}
+			
+			// Hook all inputs to update
+			for (let el of Object.values(preBattlePanel.el)) {
+				el.addEventListener("input", preBattlePanel.update);
+				el.addEventListener("change", preBattlePanel.update);
+			};
+			
+			// Call update now too
+			preBattlePanel.update();
+			
+			// Slide this panel to active
+			preBattlePanel.switchTo = function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					unfreezeFormEl(el);
+				}
+				preBattlePanel.self.ariaHidden = false;
+				
+				preBattlePanel.update();
+				panelContainer.dataset.daActivePanel = 1;
+			}
+			
+			// This panel starts frozen
+			for (let el of Object.values(preBattlePanel.el)) {
+				freezeFormEl(el);
+			}
+			preBattlePanel.self.ariaHidden = true;
+			
+			// Add functionality to nav buttons
+			preBattlePanel.el.backToTeamNavButton.addEventListener("click", function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					freezeFormEl(el);
+				}
+				preBattlePanel.self.ariaHidden = true;
+				
+				prelimPanel.switchTo();
+			});
+			
+			preBattlePanel.el.onToBattleNavButton.addEventListener("click", function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					freezeFormEl(el);
+				}
+				preBattlePanel.self.ariaHidden = true;
+				
+				midBattlePanel.switchTo();
+			});
+			
+			// Add functionality to reset button
+			preBattlePanel.el.preBattleResetButton.addEventListener("click", function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					clearFormEl(el);
+				}
+				
+				preBattlePanel.update();
+			});
+			
+			// Extra QOL feature: changing the opponent pokemon resets the mid-battle panel
+			(function() {
+				function _clearMidBattlePanel() {
+					for (let el of Object.values(midBattlePanel.el)) {
+						clearFormEl(el);
+					}
+				}
+				
+				preBattlePanel.el.opponentPokeSelect1.addEventListener("change", _clearMidBattlePanel);
+				preBattlePanel.el.opponentPokeSelect2.addEventListener("change", _clearMidBattlePanel);
+				preBattlePanel.el.opponentPokeSelect3.addEventListener("change", _clearMidBattlePanel);
+			})();
+			
+			
+			// ========== Mid-battle panel functionality ========== //
+			
+			
+			// Valid checking-- radio fields for player team and opponent lead must have a selection
+			midBattlePanel.isValid = function() {
+				if (!midBattlePanel.el.playerTeam1.checked &&
+				    !midBattlePanel.el.playerTeam2.checked &&
+				    !midBattlePanel.el.playerTeam3.checked
+				) {
+					return false;
+				}
+				
+				if (!midBattlePanel.el.opponentFirstPoke1.checked &&
+				    !midBattlePanel.el.opponentFirstPoke2.checked &&
+				    !midBattlePanel.el.opponentFirstPoke3.checked
+				) {
+					return false;
+				}
+				
+				return true;
+			}
+			
+			// Update-- controls the 'calculate' button and disables the second poke fields if it's unknown
+			midBattlePanel.update = function() {
+				if (midBattlePanel.isValid()) {
+					unfreezeFormEl(midBattlePanel.el.midBattleSubmitButton);
+				} else {
+					freezeFormEl(midBattlePanel.el.midBattleSubmitButton);
+				}
+				
+				const secondPokeFields = [
+					midBattlePanel.el.opponentSecondPokeMovesSelect1,
+					midBattlePanel.el.opponentSecondPokeMovesSelect2,
+					midBattlePanel.el.opponentSecondPokeMovesSelect3,
+					midBattlePanel.el.opponentSecondPokeMovesSelect4,
+					midBattlePanel.el.opponentSecondPokeHeldItemSelect
+				];
+				
+				if (!midBattlePanel.el.opponentSecondPoke1.checked &&
+				    !midBattlePanel.el.opponentSecondPoke2.checked &&
+				    !midBattlePanel.el.opponentSecondPoke3.checked
+				) {
+					for (let i = 0; i < secondPokeFields.length; i++) {
+						freezeFormEl(secondPokeFields[i]);
+					}
+				} else {
+					for (let i = 0; i < secondPokeFields.length; i++) {
+						unfreezeFormEl(secondPokeFields[i]);
+					}
+				}
+			}
+			
+			// Hook all inputs to update
+			for (let el of Object.values(midBattlePanel.el)) {
+				el.addEventListener("input", midBattlePanel.update);
+				el.addEventListener("change", midBattlePanel.update);
+			};
+			
+			// Call update now too
+			midBattlePanel.update();
+			
+			// Slide this panel to active
+			midBattlePanel.switchTo = function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					unfreezeFormEl(el);
+				}
+				midBattlePanel.self.ariaHidden = false;
+				
+				midBattlePanel.update();
+				panelContainer.dataset.daActivePanel = 2;
+			}
+			
+			// This panel starts frozen
+			for (let el of Object.values(midBattlePanel.el)) {
+				freezeFormEl(el);
+			}
+			midBattlePanel.self.ariaHidden = true;
+			
+			// Add functionality to nav buttons
+			midBattlePanel.el.backToOpponentNavButton.addEventListener("click", function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					freezeFormEl(el);
+				}
+				midBattlePanel.self.ariaHidden = true;
+				
+				preBattlePanel.switchTo();
+			});
+			
+			// Add functionality to reset button
+			midBattlePanel.el.midBattleResetButton.addEventListener("click", function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					clearFormEl(el);
+				}
+				
+				midBattlePanel.update();
+			});
+		</script>
+		
+		<script> // Advanced and higher order form functionality
+			"use strict";
+			
+			function pokeSpeciesToColor(species) {
+				if (species.type1.name === "Normal" && species.type2 !== null) {
+					return species.type2.name;
+				}
+				
+				return species.type1.name;
+			}
+			
+			prelimPanel.getPlayerPokeSpecies = function() {
+				return [
+					prelimPanel.el.playerPokeSelect1.value,
+					prelimPanel.el.playerPokeSelect2.value,
+					prelimPanel.el.playerPokeSelect3.value
+				];
+			}
+			
+			prelimPanel.getChallengeLevel = function() {
+				if (prelimPanel.el.challengeLevel50.checked) {
+					return 50;
+				}
+				
+				let level = parseInt(prelimPanel.el.challengeLevelNumber.value);
+				if (isNaN(level) || level > 100 || level < 60) {
+					return 50;
+				}
+				
+				return level;
+			}
+			
+			prelimPanel.getPlayerPokeSet = function(playerPokeIdx) {
+				// Big ugly code to read out all the EV and IV fields and build something useful
+				let playerPokeSet = {};
+				
+				playerPokeSet.level = prelimPanel.getChallengeLevel();
+				
+				switch (playerPokeIdx) {
+					case 0:
+						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect1.value ];
+						playerPokeSet.evs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpEv1.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkEv1.value),
+							def : parseInt(prelimPanel.el.playerPokeDefEv1.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAEv1.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDEv1.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeEv1.value)
+						};
+						
+						playerPokeSet.ivs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpIv1.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkIv1.value),
+							def : parseInt(prelimPanel.el.playerPokeDefIv1.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAIv1.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDIv1.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeIv1.value)
+						};
+						
+						playerPokeSet.nature  = natures[ prelimPanel.el.playerPokeNatureSelect1.value ];
+						playerPokeSet.ability = prelimPanel.el.playerPokeAbilitySelect1.value;
+						playerPokeSet.item    = prelimPanel.el.playerPokeHeldItemSelect1.value;
+						playerPokeSet.moves = [
+							prelimPanel.el.playerPokeMove1Select1.value,
+							prelimPanel.el.playerPokeMove2Select1.value,
+							prelimPanel.el.playerPokeMove3Select1.value,
+							prelimPanel.el.playerPokeMove4Select1.value
+						].filter(removeInvalid);
+						
+						break;
+					
+					case 1:
+						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect2.value ];
+						playerPokeSet.evs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpEv2.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkEv2.value),
+							def : parseInt(prelimPanel.el.playerPokeDefEv2.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAEv2.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDEv2.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeEv2.value)
+						};
+						
+						playerPokeSet.ivs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpIv2.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkIv2.value),
+							def : parseInt(prelimPanel.el.playerPokeDefIv2.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAIv2.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDIv2.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeIv2.value)
+						};
+						
+						playerPokeSet.nature = natures[ prelimPanel.el.playerPokeNatureSelect2.value ];
+						playerPokeSet.ability = prelimPanel.el.playerPokeAbilitySelect2.value;
+						playerPokeSet.item    = prelimPanel.el.playerPokeHeldItemSelect2.value;
+						playerPokeSet.moves = [
+							prelimPanel.el.playerPokeMove1Select2.value,
+							prelimPanel.el.playerPokeMove2Select2.value,
+							prelimPanel.el.playerPokeMove3Select2.value,
+							prelimPanel.el.playerPokeMove4Select2.value
+						].filter(removeInvalid);
+						
+						break;
+					
+					case 2:
+						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect3.value ];
+						playerPokeSet.evs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpEv3.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkEv3.value),
+							def : parseInt(prelimPanel.el.playerPokeDefEv3.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAEv3.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDEv3.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeEv3.value)
+						};
+						
+						playerPokeSet.ivs = {
+							hp  : parseInt( prelimPanel.el.playerPokeHpIv3.value),
+							atk : parseInt(prelimPanel.el.playerPokeAtkIv3.value),
+							def : parseInt(prelimPanel.el.playerPokeDefIv3.value),
+							spa : parseInt(prelimPanel.el.playerPokeSpAIv3.value),
+							spd : parseInt(prelimPanel.el.playerPokeSpDIv3.value),
+							spe : parseInt(prelimPanel.el.playerPokeSpeIv3.value)
+						};
+						
+						playerPokeSet.nature = natures[ prelimPanel.el.playerPokeNatureSelect3.value ];
+						playerPokeSet.ability = prelimPanel.el.playerPokeAbilitySelect3.value;
+						playerPokeSet.item    = prelimPanel.el.playerPokeHeldItemSelect3.value;
+						playerPokeSet.moves = [
+							prelimPanel.el.playerPokeMove1Select3.value,
+							prelimPanel.el.playerPokeMove2Select3.value,
+							prelimPanel.el.playerPokeMove3Select3.value,
+							prelimPanel.el.playerPokeMove4Select3.value
+						].filter(removeInvalid);
+						
+						break;
+				}
+				
+				// Ensure valid ability, item, and moves, else make null
+				if (!items.includes(playerPokeSet.item)) {
+					playerPokeSet.item = null;
+				}
+				
+				if (!abilities.includes(playerPokeSet.ability)) {
+					playerPokeSet.ability = null;
+				}
+				
+				playerPokeSet.moves = playerPokeSet.moves.map(move => moves[move]).filter(removeInvalid);
+				
+				
+				playerPokeSet.stats = {};
+				
+				// If invalid species, no stats
+				if (playerPokeSet.species === undefined) {
+					return playerPokeSet;
+				}
+				
+				calcPokeSetStats(playerPokeSet);
+				
+				return playerPokeSet;
+			}
+			
+			prelimPanel.doImport = function(playerPokeIdx) {
+				// Big ugly stupid code to do imports for each panel
+				let species, heldItem, nature, ability,
+				    hpEv, atkEv, defEv, spaEv, spdEv, speEv,
+				    hpIv, atkIv, defIv, spaIv, spdIv, speIv,
+					move1, move2, move3, move4, importText;
+				
+				switch (playerPokeIdx) {
+					case 0:
+						species    = prelimPanel.el.playerPokeSelect1;
+						heldItem   = prelimPanel.el.playerPokeHeldItemSelect1;
+						nature     = prelimPanel.el.playerPokeNatureSelect1;
+						ability    = prelimPanel.el.playerPokeAbilitySelect1;
+						hpEv       = prelimPanel.el.playerPokeHpEv1;
+						atkEv      = prelimPanel.el.playerPokeAtkEv1;
+						defEv      = prelimPanel.el.playerPokeDefEv1;
+						spaEv      = prelimPanel.el.playerPokeSpAEv1;
+						spdEv      = prelimPanel.el.playerPokeSpDEv1;
+						speEv      = prelimPanel.el.playerPokeSpeEv1;
+						hpIv       = prelimPanel.el.playerPokeHpIv1;
+						atkIv      = prelimPanel.el.playerPokeAtkIv1;
+						defIv      = prelimPanel.el.playerPokeDefIv1;
+						spaIv      = prelimPanel.el.playerPokeSpAIv1;
+						spdIv      = prelimPanel.el.playerPokeSpDIv1;
+						speIv      = prelimPanel.el.playerPokeSpeIv1;
+						move1      = prelimPanel.el.playerPokeMove1Select1;
+						move2      = prelimPanel.el.playerPokeMove2Select1;
+						move3      = prelimPanel.el.playerPokeMove3Select1;
+						move4      = prelimPanel.el.playerPokeMove4Select1;
+						importText = prelimPanel.el.playerPokeImportTextarea1;
+						break;
+					
+					case 1:
+						species    = prelimPanel.el.playerPokeSelect2;
+						heldItem   = prelimPanel.el.playerPokeHeldItemSelect2;
+						nature     = prelimPanel.el.playerPokeNatureSelect2;
+						ability    = prelimPanel.el.playerPokeAbilitySelect2;
+						hpEv       = prelimPanel.el.playerPokeHpEv2;
+						atkEv      = prelimPanel.el.playerPokeAtkEv2;
+						defEv      = prelimPanel.el.playerPokeDefEv2;
+						spaEv      = prelimPanel.el.playerPokeSpAEv2;
+						spdEv      = prelimPanel.el.playerPokeSpDEv2;
+						speEv      = prelimPanel.el.playerPokeSpeEv2;
+						hpIv       = prelimPanel.el.playerPokeHpIv2;
+						atkIv      = prelimPanel.el.playerPokeAtkIv2;
+						defIv      = prelimPanel.el.playerPokeDefIv2;
+						spaIv      = prelimPanel.el.playerPokeSpAIv2;
+						spdIv      = prelimPanel.el.playerPokeSpDIv2;
+						speIv      = prelimPanel.el.playerPokeSpeIv2;
+						move1      = prelimPanel.el.playerPokeMove1Select2;
+						move2      = prelimPanel.el.playerPokeMove2Select2;
+						move3      = prelimPanel.el.playerPokeMove3Select2;
+						move4      = prelimPanel.el.playerPokeMove4Select2;
+						importText = prelimPanel.el.playerPokeImportTextarea2;
+						break;
+					
+					case 2:
+						species    = prelimPanel.el.playerPokeSelect3;
+						heldItem   = prelimPanel.el.playerPokeHeldItemSelect3;
+						nature     = prelimPanel.el.playerPokeNatureSelect3;
+						ability    = prelimPanel.el.playerPokeAbilitySelect3;
+						hpEv       = prelimPanel.el.playerPokeHpEv3;
+						atkEv      = prelimPanel.el.playerPokeAtkEv3;
+						defEv      = prelimPanel.el.playerPokeDefEv3;
+						spaEv      = prelimPanel.el.playerPokeSpAEv3;
+						spdEv      = prelimPanel.el.playerPokeSpDEv3;
+						speEv      = prelimPanel.el.playerPokeSpeEv3;
+						hpIv       = prelimPanel.el.playerPokeHpIv3;
+						atkIv      = prelimPanel.el.playerPokeAtkIv3;
+						defIv      = prelimPanel.el.playerPokeDefIv3;
+						spaIv      = prelimPanel.el.playerPokeSpAIv3;
+						spdIv      = prelimPanel.el.playerPokeSpDIv3;
+						speIv      = prelimPanel.el.playerPokeSpeIv3;
+						move1      = prelimPanel.el.playerPokeMove1Select3;
+						move2      = prelimPanel.el.playerPokeMove2Select3;
+						move3      = prelimPanel.el.playerPokeMove3Select3;
+						move4      = prelimPanel.el.playerPokeMove4Select3;
+						importText = prelimPanel.el.playerPokeImportTextarea3;
+						break;
+				}
+				
+				let pokeImport = pokeStrImportSet(importText.value);
+				
+				species.value  = pokeImport.species;
+				heldItem.value = pokeImport.item;
+				nature.value   = pokeImport.nature;
+				ability.value  = pokeImport.ability;
+				hpEv.value     = pokeImport.evs.hp;
+				atkEv.value    = pokeImport.evs.atk;
+				defEv.value    = pokeImport.evs.def;
+				spaEv.value    = pokeImport.evs.spa;
+				spdEv.value    = pokeImport.evs.spd;
+				speEv.value    = pokeImport.evs.spe;
+				hpIv.value     = pokeImport.ivs.hp;
+				atkIv.value    = pokeImport.ivs.atk;
+				defIv.value    = pokeImport.ivs.def;
+				spaIv.value    = pokeImport.ivs.spa;
+				spdIv.value    = pokeImport.ivs.spd;
+				speIv.value    = pokeImport.ivs.spe;
+				
+				let moves = [ move1, move2, move3, move4 ];
+				for (let m = 0; m < moves.length; m++) {
+					if (m >= pokeImport.moves.length) {
+						moves[m].value = null;
+					} else {
+						moves[m].value = pokeImport.moves[m];
+					}
+				}
+				
+				// Extra feature: Auto-fill ability
+				if (pokeImport.ability === null && pokeImport.species !== null) {
+					ability.value = pokemon[pokeImport.species].ability1;
+				}
+				
+				// Dispatch updates for any event listeners
+				let updateList = [
+					species, heldItem, nature, ability,
+				    hpEv, atkEv, defEv, spaEv, spdEv, speEv,
+				    hpIv, atkIv, defIv, spaIv, spdIv, speIv,
+					move1, move2, move3, move4, importText
+				];
+				
+				for (let u = 0; u < updateList.length; u++) {
+					updateList[u].dispatchEvent(new Event("change"));
+				}
+			}
+			
+			prelimPanel.el.playerPokeImportButton1.addEventListener("click", function() { prelimPanel.doImport(0); });
+			prelimPanel.el.playerPokeImportButton2.addEventListener("click", function() { prelimPanel.doImport(1); });
+			prelimPanel.el.playerPokeImportButton3.addEventListener("click", function() { prelimPanel.doImport(2); });
+			
+			
+			preBattlePanel.getOpponentPokeSpecies = function() {
+				return [
+					preBattlePanel.el.opponentPokeSelect1.value,
+					preBattlePanel.el.opponentPokeSelect2.value,
+					preBattlePanel.el.opponentPokeSelect3.value
+				];
+			};
+			
+			preBattlePanel.getOpponentBattleStyle = function() {
+				let battleStyle = false;
+				if (preBattlePanel.el.opponentBattleStyleSelect.selectIndex !== -1) {
+					battleStyle = preBattlePanel.el.opponentBattleStyleSelect.value;
+				}
+				
+				return battleStyle;
+			}
+			
+			preBattlePanel.getOpponentEvStyle = function() {
+				let statEmphasis = false;
+				let evStyle = false;
+				if (preBattlePanel.el.statEmphasisEmphasizes.checked) {
+					statEmphasis = "Emphasizes";
+				} else if (preBattlePanel.el.statEmphasisNeglects.checked) {
+					statEmphasis = "Neglects";
+				} else if (preBattlePanel.el.statEmphasisBalanced.checked) {
+					statEmphasis = "Well-Balanced";
+				}
+				
+				if (statEmphasis) {
+					evStyle = new EvStyle(
+						statEmphasis,
+						[
+							preBattlePanel.el.statEmphasisSelect1.value,
+							preBattlePanel.el.statEmphasisSelect2.value
+						].filter(removeInvalid)
+					);
+				}
+				
+				return evStyle;
+			}
+			
+			preBattlePanel.getOpponentTeamMoveNames = function() {
+				let moveNames = [
+					preBattlePanel.el.knownMovesSelect1.value,
+					preBattlePanel.el.knownMovesSelect2.value,
+					preBattlePanel.el.knownMovesSelect3.value
+				].filter(removeInvalid);
+				
+				if (moveNames.length === 0) {
+					moveNames = false;
+				}
+				
+				return moveNames;
+			};
+			
+			
+			midBattlePanel.getPlayerPickedPokes = function() {
+				let playerTeamNames = prelimPanel.getPlayerPokeSpecies();
+				
+				if (midBattlePanel.el.playerTeam1.checked) {
+					return [ playerTeamNames[1], playerTeamNames[2] ];
+				}
+				
+				if (midBattlePanel.el.playerTeam2.checked) {
+					return [ playerTeamNames[0], playerTeamNames[2] ];
+				}
+				
+				if (midBattlePanel.el.playerTeam3.checked) {
+					return [ playerTeamNames[0], playerTeamNames[1] ];
+				}
+				
+				return false;
+			};
+			
+			midBattlePanel.getOpponentKnownPickedPokes = function() {
+				let teamSpeciesNames = preBattlePanel.getOpponentPokeSpecies();
+				
+				let firstPokeName = false;
+				if (midBattlePanel.el.opponentFirstPoke1.checked) {
+					firstPokeName = teamSpeciesNames[0];
+				} else if (midBattlePanel.el.opponentFirstPoke2.checked) {
+					firstPokeName = teamSpeciesNames[1];
+				} else if (midBattlePanel.el.opponentFirstPoke3.checked) {
+					firstPokeName = teamSpeciesNames[2];
+				}
+				
+				let secondPokeName = false;
+				if (midBattlePanel.el.opponentSecondPoke1.checked) {
+					secondPokeName = teamSpeciesNames[0];
+				} else if (midBattlePanel.el.opponentSecondPoke2.checked) {
+					secondPokeName = teamSpeciesNames[1];
+				} else if (midBattlePanel.el.opponentSecondPoke3.checked) {
+					secondPokeName = teamSpeciesNames[2];
+				}
+				
+				return [ firstPokeName, secondPokeName ].filter(removeInvalid);
+			};
+			
+			midBattlePanel.getOpponentFirstPokeKnownMoves = function() {
+				return [
+					midBattlePanel.el.opponentFirstPokeMovesSelect1.value,
+					midBattlePanel.el.opponentFirstPokeMovesSelect2.value,
+					midBattlePanel.el.opponentFirstPokeMovesSelect3.value,
+					midBattlePanel.el.opponentFirstPokeMovesSelect4.value
+				].filter(removeInvalid);
+			};
+			
+			midBattlePanel.getOpponentSecondPokeKnownMoves = function() {
+				return [
+					midBattlePanel.el.opponentSecondPokeMovesSelect1.value,
+					midBattlePanel.el.opponentSecondPokeMovesSelect2.value,
+					midBattlePanel.el.opponentSecondPokeMovesSelect3.value,
+					midBattlePanel.el.opponentSecondPokeMovesSelect4.value
+				].filter(removeInvalid);
+			};
+		</script>
+		
+		<script> // Submit buttons functionality + helpers
+			"use strict";
+			
+			function makeShedinjaDangerEl(dangerLevel) {
+				let dangerEl = document.createElement("span");
+				dangerEl.className = "shedAlarm";
+				
+				switch (dangerLevel) {
+					// TODO: Modify this maybe with its own sprite or something?
+					case 1:
+						dangerEl.textContent = '!';
+						dangerEl.title = "Able to damage Shedinja";
+						dangerEl.ariaLabel = dangerEl.title;
+						break;
+					
+					case 2:
+						dangerEl.textContent = '!!';
+						dangerEl.title = "Able to attack Shedinja";
+						dangerEl.ariaLabel = dangerEl.title;
+						break;
+				}
+				
+				return dangerEl;
+			}
+			
+			function makeSetEl(pokeSet) {
+				let a = document.createElement("a");
+				a.className = "pokeSet";
+				a.textContent = pokeSet.name;
+				
+				a.tabIndex = 0;
+				a.role = "button";
+				a.ariaLabel = `Show more information about ${pokeSet.name}`;
+				
+				a.dataset.daSetName = pokeSet.name;
+				a.addEventListener("click", pokeSetOpenModal);
+				
+				return a;
+			}
+			
+			function makeProbabilityEl(appearProb, leadProb, pctDigits) {
+				let el = document.createElement("span");
+				el.className = "appearanceLeadPercents";
+				
+				el.textContent = fmtPct(appearProb, pctDigits);
+				el.title = `${fmtPct(leadProb, pctDigits)} to be the lead`;
+				
+				return el;
+			}
+			
+			function makeNoPossibleTeamsDoc() {
+				let doc = document.createDocumentFragment();
+				
+				let h = document.createElement("h1");
+				let b = document.createElement("p");
+				
+				h.textContent = "No possible teams or Pokémon found!";
+				b.textContent = "Check your input and try again.";
+				
+				doc.append(h, b);
+				return doc;
+			}
+			
+			function quickCalcDomeSpeed(frontierPoke) {
+				let iv;
+				switch (frontierPoke.instance) {
+					case "TS":  iv = 20;  break;
+					case "TG":  iv = 31;  break;
+					default:    iv =  3;  break;
+				}
+				
+				let level = prelimPanel.getChallengeLevel();
+				return quickCalcStat(
+					level,
+					frontierPoke.nature.multipliers.spe,
+					frontierPoke.species.baseStats.spe,
+					frontierPoke.evs.spe,
+					iv
+				);
+			}
+			
+			function fmtPct(n, digits) {
+				digits = digits ?? 2;
+				let pct = (n * 100).toFixed(digits);
+				
+				// Tested: doing string manipulation by hand is SIGNIFICANTLY faster than toLocaleString()
+				// The docs warned of that, and they were right. Shame, toLocaleString() is better
+				if (digits > 0) {
+					// Strip trailing 0s
+					while (pct.endsWith("0")) {
+						pct = pct.slice(0, -1);
+					}
+					
+					// Strip decimal separator if no more decimal digits
+					// Note no locale variance here, it is always a "." decimal sep char.
+					// EMCA 262 spec 15.7.4.5
+					if (pct.endsWith(".")) {
+						pct = pct.slice(0, -1);
+					}
+				}
+				
+				return `${pct}%`;
+			}
+			
+			function runTeamSearch(processMidBattleInfo) {
+				let challengeLevel           = prelimPanel.getChallengeLevel();
+				let trainerName              = preBattlePanel.el.opponentNameSelect.value;
+				let opponentPokeSpeciesNames = preBattlePanel.getOpponentPokeSpecies();
+				let battleStyle              = preBattlePanel.getOpponentBattleStyle();
+				let evStyle                  = preBattlePanel.getOpponentEvStyle();
+				let teamMoveNames            = preBattlePanel.getOpponentTeamMoveNames();
+				
+				let speciesMoveNames = false;
+				let speciesItemNames = false;
+				
+				// Handle conditional initialization of speciesMoveNames and speciesItemNames
+				if (processMidBattleInfo) {
+					
+					let [ firstPokeName, secondPokeName ] = midBattlePanel.getOpponentKnownPickedPokes();
+					
+					if (firstPokeName) {
+						// Handle known moves first
+						let firstPokeKnownMoves = midBattlePanel.getOpponentFirstPokeKnownMoves();
+						
+						if (firstPokeKnownMoves.length !== 0) {
+							// Initialize this if not already
+							speciesMoveNames = speciesMoveNames || {};
+							speciesMoveNames[firstPokeName] = firstPokeKnownMoves;
+						}
+						
+						// Next handling held items
+						if (midBattlePanel.el.opponentFirstPokeHeldItemSelect.selectedIndex !== -1) {
+							// Initialize this if not already
+							speciesItemNames = speciesItemNames || {};
+							speciesItemNames[firstPokeName] = midBattlePanel.el.opponentFirstPokeHeldItemSelect.value;
+						}
+					}
+					
+					
+					if (secondPokeName) {
+						// Handle known moves first
+						let secondPokeKnownMoves = midBattlePanel.getOpponentSecondPokeKnownMoves();
+						
+						if (secondPokeKnownMoves.length !== 0) {
+							// Initialize this if not already
+							speciesMoveNames = speciesMoveNames || {};
+							speciesMoveNames[secondPokeName] = secondPokeKnownMoves;
+						}
+						
+						// Next handling held items
+						if (midBattlePanel.el.opponentSecondPokeHeldItemSelect.selectedIndex !== -1) {
+							// Initialize this if not already
+							speciesItemNames = speciesItemNames || {};
+							speciesItemNames[secondPokeName] = midBattlePanel.el.opponentSecondPokeHeldItemSelect.value;
+						}
+					}
+					
+				}
+				
+				return possibleTeamSearch(
+					challengeLevel,
+					trainerName,
+					opponentPokeSpeciesNames,
+					battleStyle,
+					evStyle,
+					teamMoveNames,
+					speciesMoveNames,
+					speciesItemNames
+				);
+			}
+			
+			preBattlePanel.submit = function() {
+				const moreInfoThreshold = 8;
+				
+				let teams = runTeamSearch(false);
+				
+				let playerTeamSpeciesNames = prelimPanel.getPlayerPokeSpecies();
+				
+				if (teams.length >= moreInfoThreshold) {
+					setOutputPanelMode("preBattleMoreInfo");
+				} else {
+					setOutputPanelMode("preBattle");
+				}
+				
+				// If no teams, output error and return
+				if (teams.length === 0) {
+					document.getElementById("outputEntryContainer").append(makeNoPossibleTeamsDoc());
+					return;
+				}
+				
+				if (teams.length >= moreInfoThreshold) {
+					
+					// Detect if we need to use the extended table with more columns (open level only)
+					let challengeLevel = prelimPanel.getChallengeLevel();
+					let useExtended = false;
+					if (challengeLevel !== 50 && challengeLevel !== 20) {
+						for (let t = 0; t < teams.length; t++) {
+							let team = teams[t];
+							for (let p = 0; p < team.pokes.length; p++) {
+								let poke = team.pokes[p];
+								if (poke.instance > 8) {
+									useExtended = true;
+									break;
+								}
+							}
+							
+							if (useExtended) {
+								break;
+							}
+						}
+					}
+					
+					let tableTemplateId = "outputSummaryTableTemplate";
+					let rowTemplateId   = "outputSummaryTableRowTemplate";
+					if (useExtended) {
+						tableTemplateId = "outputSummaryExtendedTableTemplate";
+						rowTemplateId   = "outputSummaryExtendedTableRowTemplate";
+					}
+					
+					// Generate 3 summary tables
+					for (let t = 0; t < 3; t++) {
+						
+						// Pick a team leaving out index [t]
+						let pickedTeam = [];
+						for (let p = 0; p < 3; p++) {
+							if (p === t) {
+								continue;
+							}
+							
+							pickedTeam.push(playerTeamSpeciesNames[p]);
+						}
+						
+						let instanceProbabilities = calculateInstanceProbabilities(teams, [], pickedTeam);
+						
+						let summary = instantiateTemplate(document.getElementById(tableTemplateId));
+						
+						// Fill in player pokemon names in title
+						summary.elementId["playerTeamPoke1Name"].textContent = pickedTeam[0];
+						summary.elementId["playerTeamPoke2Name"].textContent = pickedTeam[1];
+						
+						// Set sprites in title
+						setPokeIconSprite(summary.elementId["playerTeamPoke1Sprite"], pickedTeam[0]);
+						setPokeIconSprite(summary.elementId["playerTeamPoke2Sprite"], pickedTeam[1]);
+						
+						// Object.keys(instanceProbabilities) has order issues
+						// Grab any team to get the order of the species
+						let speciesNames = teams[0].pokes.map(set => set.species.name);
+						
+						// Insert a table row for each species
+						for (let s = 0; s < speciesNames.length; s++) {
+							let speciesName = speciesNames[s];
+							
+							let tableRow = instantiateTemplate(document.getElementById(rowTemplateId));
+							
+							// Set row color
+							tableRow.elementId["tableRow"].classList.add("typeTable", pokeSpeciesToColor(pokemon[speciesName]));
+							
+							// Set species name and sprite
+							setPokeIconSprite(tableRow.elementId["pokeSprite"], speciesName);
+							
+							// Rare edge case: a given species may never be picked against this player team, 
+							// meaning it has no entry in the instance probability table. However, it still
+							// gets a blank row in the summary table
+							let speciesTotal = 0;
+							let speciesLeadTotal = 0;
+							if (Object.hasOwn(instanceProbabilities, speciesName)) {
+								let speciesProbabilities = instanceProbabilities[speciesName];
+								
+								speciesTotal = speciesProbabilities.total.appear;
+								speciesLeadTotal = speciesProbabilities.total.lead;
+								
+								// Sort instance names by instance number
+								let instanceNames = Object.keys(speciesProbabilities.instances);
+								instanceNames.sort((a, b) => frontierPokemon[a].instance - frontierPokemon[b].instance);
+								
+								// Fill in row cells
+								for (let i = 0; i < instanceNames.length; i++) {
+									let instance = instanceNames[i];
+									let probability = speciesProbabilities.instances[instance].appear;
+									
+									// Skip cell if probability == 0
+									if (probability === 0) {
+										continue;
+									}
+									
+									let lead = speciesProbabilities.instances[instance].lead;
+									
+									let pokeSet = frontierPokemon[instance];
+									let cell = tableRow.elementGroup["instanceCell"][pokeSet.instance - 1];
+									
+									// Make appearance + lead percentage element, append to cell
+									let probEl = makeProbabilityEl(probability, lead, 1);
+									cell.append(probEl);
+									
+									// Do Shedinja alarms
+									let shedinjaDanger = shedinjaDangerCheck(pokeSet, pickedTeam);
+									if (shedinjaDanger > 0) {
+										let dangerEl = makeShedinjaDangerEl(shedinjaDanger);
+										cell.append(dangerEl);
+									}
+									
+									// Do dangerous held items
+									if (dangerousItems.has(pokeSet.item)) {
+										let itemSprite = createSprite("heldItemSprite");
+										setHeldItemSprite(itemSprite, pokeSet.item);
+										cell.append(itemSprite);
+									}
+								}
+							}
+							
+							// Fill in row totals
+							let probTotalEl = makeProbabilityEl(speciesTotal, speciesLeadTotal, 1);
+							tableRow.elementId["probTotal"].append(probTotalEl);
+							
+							// Append row to table body
+							summary.elementId["tableBody"].append(tableRow.documentFragment);
+						}
+						
+						// Add sumary table to summary container
+						document.getElementById("outputSummaryPanelContainer").append(summary.documentFragment);
+					}
+				}
+				
+				// Produce a table for each possible team
+				for (let t = 0; t < teams.length; t++) {
+					let team = teams[t];
+					let appearanceTable = team.appearanceTable(playerTeamSpeciesNames);
+					
+					// Compute lead table on-the-fly
+					let leadTable = [
+						[ appearanceTable[0][0] * 0.6, null, appearanceTable[0][2] * 0.4 ],
+						[ appearanceTable[1][0] * 0.6, null, appearanceTable[1][2] * 0.4 ],
+						[ appearanceTable[2][0] * 0.6, null, appearanceTable[2][2] * 0.4 ]
+					];
+					
+					leadTable.forEach(row => row[1] = (1 - row[0] - row[2]));
+					
+					
+					let teamTable = instantiateTemplate(document.getElementById("possibleTeamTableTemplate"));
+					
+					// Table title
+					teamTable.elementId["tableTitle"].textContent = `Possible Team #${t+1}`;
+					
+					// Various sprites of player's pokemon
+					teamTable.elementGroup["playerPoke1Sprite"].forEach(el => setPokeIconSprite(el, playerTeamSpeciesNames[0]));
+					teamTable.elementGroup["playerPoke2Sprite"].forEach(el => setPokeIconSprite(el, playerTeamSpeciesNames[1]));
+					teamTable.elementGroup["playerPoke3Sprite"].forEach(el => setPokeIconSprite(el, playerTeamSpeciesNames[2]));
+					
+					// Add rows to the table (always 3)
+					for (let p = 0; p < team.pokes.length; p++) {
+						let poke = team.pokes[p];
+						
+						let tableRow = instantiateTemplate(document.getElementById("possibleTeamTableRowTemplate"));
+						
+						// Color the row
+						tableRow.elementId["pokeRow"].classList.add("typeTable", pokeSpeciesToColor(poke.species));
+						
+						// Appearance and lead percentages
+						tableRow.elementId["playerTeam1Cell"].append(makeProbabilityEl(appearanceTable[0][p], leadTable[0][p], 0));
+						tableRow.elementId["playerTeam2Cell"].append(makeProbabilityEl(appearanceTable[1][p], leadTable[1][p], 0));
+						tableRow.elementId["playerTeam3Cell"].append(makeProbabilityEl(appearanceTable[2][p], leadTable[2][p], 0));
+						
+						// Pokemon sprite
+						setPokeIconSprite(tableRow.elementId["pokeIconSprite"], poke.species.name);
+						
+						// Pokemon Name
+						tableRow.elementId["pokeInstanceName"].append(makeSetEl(poke));
+						let shedinjaDanger = shedinjaDangerCheck(poke, playerTeamSpeciesNames);
+						if (shedinjaDanger > 0) {
+							let dangerEl = makeShedinjaDangerEl(shedinjaDanger);
+							tableRow.elementId["pokeInstanceName"].append(dangerEl);
+						}
+						
+						// Item sprite
+						setHeldItemSprite(tableRow.elementId["heldItemSprite"], poke.item);
+						
+						// Item Name
+						tableRow.elementId["heldItemName"].textContent = poke.item;
+						
+						// Nature
+						tableRow.elementId["nature"].textContent = poke.nature.name;
+						
+						// Moves
+						for (let m = 0; m < poke.moves.length; m++) {
+							tableRow.elementGroup["moves"][m].textContent = poke.moves[m].name;
+						}
+						
+						// Speed
+						tableRow.elementId["speed"].textContent = quickCalcDomeSpeed(poke);
+						
+						// Add row to table body
+						teamTable.elementId["tableBody"].append(tableRow.documentFragment);
+					}
+					
+					// Add table to output container
+					document.getElementById("outputEntryContainer").append(teamTable.documentFragment);
+				}
+			}
+			
+			preBattlePanel.el.preBattleSubmitButton.addEventListener("click", preBattlePanel.submit);
+			
+			midBattlePanel.submit = function() {
+				let teams = runTeamSearch(true);
+				
+				let knownOpponentPokeSpeciesNames = midBattlePanel.getOpponentKnownPickedPokes();
+				
+				let playerPickSpeciesNames = midBattlePanel.getPlayerPickedPokes();
+				
+				// Calculate instance probabilities with form info
+				let instanceProbabilities = calculateInstanceProbabilities(teams, knownOpponentPokeSpeciesNames, playerPickSpeciesNames);
+				
+				// Create output
+				
+				setOutputPanelMode("midBattle");
+				
+				// Sort tables by likelihood, then by first poke
+				let speciesNames = Object.keys(instanceProbabilities);
+				speciesNames.sort((a, b) => {
+					let diff = instanceProbabilities[b].total.appear - instanceProbabilities[a].total.appear;
+					
+					// Stupid floating point
+					if (Math.abs(diff) < 1e-8) {
+						// Break tie by first known poke
+						if (a === knownOpponentPokeSpeciesNames[0]) {
+							return -1;
+						}
+						
+						return 1;
+					}
+					
+					return diff;
+				});
+				
+				
+				// Detect if this input was valid in the loop, easier than a separate valid-check
+				let valid = false;
+				for (let s = 0; s < speciesNames.length; s++) {
+					let speciesName = speciesNames[s];
+					let speciesProbTotal = instanceProbabilities[speciesName].total.appear;
+					
+					// Flag that we put at least one table in the output
+					valid = true;
+					
+					let speciesTable = instantiateTemplate(document.getElementById("possibleSetTableTemplate"));
+					
+					// Set title
+					// "Gengar - 62.14%"
+					setPokeIconSprite(speciesTable.elementId["pokeSprite"], speciesName);
+					const mdash = "\u2014";
+					speciesTable.elementId["tableTitle"].textContent = `${speciesName} ${mdash} ${fmtPct(speciesProbTotal)}`;
+					
+					// Set table styling to the poke
+					speciesTable.elementId["table"].classList.add("typeTable", pokeSpeciesToColor(pokemon[speciesName]));
+					
+					// Now add rows to the table body
+					let tableBody = speciesTable.elementId["tableBody"];
+					
+					// Sort table rows by likelihood
+					// Don't care about ties here really
+					let instanceNames = Object.keys(instanceProbabilities[speciesName].instances);
+					instanceNames.sort((a, b) => {
+						return instanceProbabilities[speciesName].instances[b].appear -
+						       instanceProbabilities[speciesName].instances[a].appear;
+					});
+					
+					for (let i = 0; i < instanceNames.length; i++) {
+						let instanceName = instanceNames[i];
+						
+						let row = instantiateTemplate(document.getElementById("possibleSetTableRowTemplate"));
+						
+						// Set probability
+						let instanceProbability = instanceProbabilities[speciesName].instances[instanceName].appear;
+						row.elementId["setProbability"].textContent = fmtPct(instanceProbability, 2);
+						
+						// Set name (clickable to trigger modal)
+						row.elementId["setName"].append(makeSetEl(frontierPokemon[instanceName]));
+						
+						// Shedinja alarm
+						let shedDanger = shedinjaDangerCheck(frontierPokemon[instanceName], playerPickSpeciesNames);
+						if (shedDanger > 0) {
+							row.elementId["setName"].append(makeShedinjaDangerEl(shedDanger));
+						}
+						
+						// Set held item
+						setHeldItemSprite(row.elementId["heldItemSprite"], frontierPokemon[instanceName].item);
+						row.elementId["heldItemName"].textContent = frontierPokemon[instanceName].item;
+						
+						// Set nature
+						row.elementId["nature"].textContent = frontierPokemon[instanceName].nature.name;
+						
+						// Move names
+						for (let m = 0; m < frontierPokemon[instanceName].moves.length; m++) {
+							row.elementGroup["moves"][m].textContent = frontierPokemon[instanceName].moves[m].name;
+						}
+						
+						// Speed stat
+						row.elementId["speed"].textContent = quickCalcDomeSpeed(frontierPokemon[instanceName]);
+						
+						// Add row to table body
+						tableBody.append(row.documentFragment);
+					}
+					
+					document.getElementById("outputEntryContainer").append(speciesTable.documentFragment);
+				}
+				
+				// If loop found this was invalid, show error
+				if (!valid) {
+					document.getElementById("outputEntryContainer").append(makeNoPossibleTeamsDoc());
+				}
+			}
+			
+			midBattlePanel.el.midBattleSubmitButton.addEventListener("click", midBattlePanel.submit);
+		</script>
+		
+		<script> // Output panel control
+			"use strict";
+			
+			function setOutputPanelMode(mode) {
+				// Hide placeholder if it wasn't already
+				document.getElementById("placeholderOutputHeader").style.display = "none";
+				
+				const outputSummaryPanelContainer = document.getElementById("outputSummaryPanelContainer");
+				const outputEntryContainer        = document.getElementById("outputEntryContainer");
+				
+				// Clear children of all output containers
+				while (outputEntryContainer.firstChild) {
+					outputEntryContainer.firstChild.remove();
+				}
+				
+				while (outputSummaryPanelContainer.firstChild) {
+					outputSummaryPanelContainer.firstChild.remove();
+				}
+				
+				// Close this if it was open before
+				document.getElementById("outputSummaryPanelDetails").open = false;
+				
+				// Scroll to the top of this if it was scrolled down before
+				outputEntryContainer.scroll({ top : 0 });
+				
+				const preBattleOutputHeader            = document.getElementById("preBattleOutputHeader");
+				const preBattleExtraSummaryHeaderPanel = document.getElementById("preBattleExtraSummaryHeaderPanel");
+				const midBattleOutputHeader            = document.getElementById("midBattleOutputHeader");
+				
+				switch (mode) {
+					case "preBattle":
+						preBattleOutputHeader.style.display = "block";
+						
+						preBattleExtraSummaryHeaderPanel.style.display = "none";
+						midBattleOutputHeader.style.display = "none";
+						break;
+					
+					case "preBattleMoreInfo":
+						preBattleOutputHeader.style.display = "block";
+						preBattleExtraSummaryHeaderPanel.style.display = "block";
+						
+						midBattleOutputHeader.style.display = "none";
+						break;
+					
+					case "midBattle":
+						midBattleOutputHeader.style.display = "block";
+						
+						preBattleOutputHeader.style.display = "none";
+						preBattleExtraSummaryHeaderPanel.style.display = "none";
+						break;
+				}
+			}
+		</script>
+		
+		<script> // Modal and assocatiated helpers
+			"use strict";
+			
+			const modal = modalInit();
+			
+			// Set up modal
+			modal.firstTab = modal.topX;
+			modal.lastTab = document.getElementById("copyExportSet");
+			
+			document.getElementById("copyExportSet").addEventListener("click", function() {
+				navigator.clipboard.writeText(document.getElementById("exportSetTextArea").value);
+			});
+			
+			function moveDamageInfoToDoc(moveDamage, defenderPoke) {
+				let ret = document.createDocumentFragment();
+				
+				// Skip empty move slot
+				if (moveDamage === null) {
+					return ret;
+				}
+				
+				// Nondamaging or unsupported move
+				if (moveDamage.dmgHp === null) {
+					return ret;
+				}
+				
+				// Replace 0s in the range with 1
+				// Note: It is important to leave the 0s in place, because crit x2 happens BEFORE rounding up to 1 if 0
+				//       Therefore, a crit can still do 1 damage rather than a minimum of 2
+				let hpRange = moveDamage.dmgHp.base;
+				let hpMin = hpRange[0];
+				let hpMax = hpRange[hpRange.length - 1];
+				
+				let pctMin = hpMin / defenderPoke.stats.hp;
+				let pctMax = hpMax / defenderPoke.stats.hp;
+				
+				// Skip cell for immunity
+				if (hpMax === 0) {
+					return ret;
+				}
+				
+				// After 3200% write 'OHKO'
+				// -6 atk, +6 def, and a screen cannot save you
+				// OHKO moves specifically generate this out at damage calc
+				if (pctMin >= 32) {
+					let d1 = document.createElement("div");
+					d1.className = "damageLine highDanger";
+					d1.textContent = "OHKO";
+					ret.append(d1);
+					
+					return ret;
+				}
+				
+				// Fill with two divs showing damage
+				// Show either a range or a single value for HP and percentage, if neccessary
+				let hpText;
+				if (hpMin !== hpMax) {
+					hpText = `${hpMin} - ${hpMax} HP`;
+				} else {
+					hpText = `${hpMin} HP`;
+				}
+				
+				let pctText;
+				if (pctMin !== pctMax) {
+					pctText = `${fmtPct(pctMin, 1)} - ${fmtPct(pctMax, 1)}`;
+				} else {
+					pctText = `${fmtPct(pctMin, 1)}`;
+				}
+				
+				
+				let highDangerThreshold = 1/2;
+				if (defenderPoke.item === "Leftovers") {
+					highDangerThreshold += 1/16;
+				}
+				
+				// Classes for text lines in this cell
+				let lineClass = "damageLine";
+				if (pctMin >= highDangerThreshold) {
+					lineClass = "damageLine highDanger";
+				}
+				
+				let d1 = document.createElement("div");
+				d1.className = lineClass;
+				d1.textContent = hpText;
+				
+				let d2 = document.createElement("div");
+				d2.className = lineClass;
+				d2.textContent = pctText;
+				
+				ret.append(d1, d2);
+				
+				let defenderPokeHasSub = defenderPoke.moves.some(move => move.name === "Substitute");
+				if (defenderPokeHasSub) {
+					let subHealth = defenderPoke.stats.hp >>> 2;
+					let subBreakProb = subBreakAnalysis(moveDamage, subHealth);
+					
+					if (subBreakProb !== 1 && subBreakProb !== 0) {
+						let d3 = document.createElement("div");
+						d3.className = lineClass;
+						d3.classList.add("subBreak");
+						d3.textContent = `${fmtPct(subBreakProb, 1)} to break Sub.`;
+						ret.append(d3);
+					}
+				}
+				
+				let koProb = subBreakAnalysis(moveDamage, defenderPoke.stats.hp);
+				if (koProb !== 0 && koProb !== 1) {
+					let d3 = document.createElement("div");
+					d3.className = lineClass;
+					d3.classList.add("subBreak");
+					d3.textContent = `${fmtPct(koProb, 1)} KO`;
+					ret.append(d3);
+				}
+				
+				return ret;
+			}
+			
+			function pokeSetOpenModal(clickEvent) {
+				// Reject invalid trigger
+				if (!(clickEvent?.target?.dataset?.daSetName)) {
+					return;
+				}
+				
+				let opponentPokeSet = frontierPokemon[clickEvent.target.dataset.daSetName];
+				if (!opponentPokeSet) {
+					return;
+				}
+				
+				clickEvent.preventDefault();
+				clickEvent.stopPropagation();
+				
+				modal.open();
+				
+				// Set up stats and such for this dome poke
+				let level = prelimPanel.getChallengeLevel();
+				initDomePoke(opponentPokeSet, level);
+				
+				// Modal title
+				const mdash = "\u2014";
+				document.getElementById("modalTitle").textContent = `Set details ${mdash} ${opponentPokeSet.name}`;
+				
+				// Modal title sprite
+				setPokeIconSprite(document.getElementById("modalTitleSprite"), opponentPokeSet.species.name);
+				
+				let damageTable = document.getElementById("modalOffsensiveDamageTable");
+				
+				// Reset color coding if it was something else before
+				damageTable.classList.remove(
+					"Normal", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug",
+					"Ghost", "Steel", "Fire", "Water", "Grass", "Electric", "Psychic",
+					"Ice", "Dragon", "Dark"
+				);
+				
+				// Color the table to the poke
+				damageTable.classList.add(pokeSpeciesToColor(opponentPokeSet.species));
+				
+				// Set up damage table headers
+				const moveHeaders = [
+					document.getElementById("modalOpponentPokeMove1"),
+					document.getElementById("modalOpponentPokeMove2"),
+					document.getElementById("modalOpponentPokeMove3"),
+					document.getElementById("modalOpponentPokeMove4")
+				];
+				
+				// Fill with move names, else "---"
+				for (let m = 0; m < 4; m++) {
+					if (m >= opponentPokeSet.moves.length) {
+						moveHeaders[m].textContent = "---";
+					} else {
+						moveHeaders[m].textContent = opponentPokeSet.moves[m].name;
+					}
+				}
+				
+				
+				// Set player poke sprites
+				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite1"), prelimPanel.el.playerPokeSelect1.value);
+				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite2"), prelimPanel.el.playerPokeSelect2.value);
+				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite3"), prelimPanel.el.playerPokeSelect3.value);
+				
+				// Fill damage table cells
+				const dmgCellIds = [
+					[ "modalDamagePoke1Move1", "modalDamagePoke1Move2", "modalDamagePoke1Move3", "modalDamagePoke1Move4" ],
+					[ "modalDamagePoke2Move1", "modalDamagePoke2Move2", "modalDamagePoke2Move3", "modalDamagePoke2Move4" ],
+					[ "modalDamagePoke3Move1", "modalDamagePoke3Move2", "modalDamagePoke3Move3", "modalDamagePoke3Move4" ]
+				];
+				
+				
+				// Grab these once and cache them
+				let playerPokeSets = [
+					prelimPanel.getPlayerPokeSet(0),
+					prelimPanel.getPlayerPokeSet(1),
+					prelimPanel.getPlayerPokeSet(2)
+				];
+				
+				// Loop each player poke and fill the corresponding row's cells
+				for (let p = 0; p < playerPokeSets.length; p++) {
+					let playerPokeSet = playerPokeSets[p];
+					if (playerPokeSet === null) {
+						continue;
+					}
+					
+					let damage = calcDamageReport(playerPokeSet, opponentPokeSet);
+					
+					for (let d = 0; d < damage.length; d++) {
+						// Get table cell to populate
+						let cell = document.getElementById( dmgCellIds[p][d] );
+						
+						// Clear out cell of anything old
+						while (cell.firstChild) {
+							cell.firstChild.remove();
+						}
+						
+						// Generate and append new data to the table cell
+						let cellData = moveDamageInfoToDoc(damage[d], playerPokeSet);
+						cell.append(cellData);
+					}
+				}
+				
+				// Now on to defensive damage range tables
+				let defensiveRangeTableContainer = document.getElementById("defensiveRangesTableContainer");
+				
+				// Clear out any old tables
+				while (defensiveRangeTableContainer.firstChild) {
+					defensiveRangeTableContainer.firstChild.remove();
+				}
+				
+				// Loop over player pokes and add a table
+				for (let p = 0; p < playerPokeSets.length; p++) {
+					let playerPokeSet = playerPokeSets[p];
+					if (playerPokeSet === null) {
+						continue;
+					}
+					
+					let damage = calcDamageReport(opponentPokeSet, playerPokeSet);
+					if (!damage.some(entry => entry !== null && entry.dmgHp !== null)) {
+						// This poke knows no damaging moves (not very rare for dome strats)
+						continue;
+					}
+					
+					let table = instantiateTemplate(document.getElementById("defensiveDamageTableTemplate"));
+					
+					// Set caption and sprite
+					table.elementId["caption"].textContent = `Defensive ranges Vs ${playerPokeSet.species.name}`;
+					setPokeIconSprite(table.elementId["captionSprite"], playerPokeSet.species.name);
+					
+					// Color coding
+					table.elementId["table"].classList.add(pokeSpeciesToColor(playerPokeSet.species));
+					
+					// Set move names into headers, else "---"
+					for (let m = 0; m < 4; m++) {
+						if (m >= playerPokeSet.moves.length) {
+							table.elementGroup["moveNames"][m].textContent = "---";
+						} else {
+							table.elementGroup["moveNames"][m].textContent = playerPokeSet.moves[m].name;
+						}
+					}
+					
+					for (let d = 0; d < damage.length; d++) {
+						// Generate and append new data to the table cell
+						let cellData = moveDamageInfoToDoc(damage[d], opponentPokeSet);
+						table.elementGroup["moveCells"][d].append(cellData);
+					}
+					
+					// Append this table to the container
+					defensiveRangeTableContainer.append(table.documentFragment);
+				}
+				
+				// Text area export string
+				document.getElementById("exportSetTextArea").value = frontierPokemon_export(opponentPokeSet, opponentPokeSet.level, opponentPokeSet.ivs.hp);
+			}
+			
+			// Stop fields in the modal being tabable by getting the modal out of the DOM
+			modal.documentFragment.append(modal.container);
+		</script>
+	</body>
+</html>

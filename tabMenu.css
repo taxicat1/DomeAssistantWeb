@@ -1,0 +1,83 @@
+:root {
+	--tabMenu-border-thickness: 1px;
+	--tabMenu-border-color-active: #222;
+	--tabMenu-border-color-inactive: #666;
+	--tabMenu-border-color-hover: #555;
+	--tabMenu-border-color-clicked: #333;
+	--tabMenu-border-radius: 3px;
+	--tabMenu-background-color-active: #dededf;
+	--tabMenu-background-color-inactive: #efefef;
+	--tabMenu-background-color-hover: #e8e8e9;
+	--tabMenu-background-color-clicked: #c0c0c3;
+	--tabMenu-tab-spacing: 1ch;
+}
+
+ul.tabMenu {
+	list-style-type: none;
+	display: flex;
+	padding: 0;
+	margin-top: 1ch;
+	margin-bottom: 0;
+}
+
+li.tabItem {
+	display: contents;
+}
+
+li.tabItem > button {
+	-webkit-appearance: none;
+	appearance: none;
+	
+	color: inherit;
+	padding: 3px 4px;
+	margin: 0;
+	border: var(--tabMenu-border-thickness) solid var(--tabMenu-border-color-inactive);
+	border-top-right-radius: var(--tabMenu-border-radius);
+	border-top-left-radius: var(--tabMenu-border-radius);
+	border-bottom-color: var(--tabMenu-border-color-active);
+	background: var(--tabMenu-background-color-inactive);
+}
+
+li.tabItem:not(.active) > button:hover {
+	background: var(--tabMenu-background-color-hover);
+	border-color: var(--tabMenu-border-color-hover);
+}
+
+li.tabItem:not(.active) > button:hover:active {
+	background: var(--tabMenu-background-color-clicked);
+	border-color: var(--tabMenu-border-color-clicked);
+}
+
+li.tabItem.active > button {
+	border-color: var(--tabMenu-border-color-active);
+	border-bottom: transparent;
+	background: var(--tabMenu-background-color-active);
+}
+
+li.tabItem::before,
+li.tabItem:last-child::after {
+	display: block;
+	content: '';
+	width: calc(var(--tabMenu-tab-spacing) + (2 * var(--tabMenu-border-thickness)));
+	border-bottom: var(--tabMenu-border-thickness) solid var(--tabMenu-border-color-active);
+	position: relative;
+	margin: 0 calc(-1 * var(--tabMenu-border-thickness));
+}
+
+li.tabItem:first-child::before {
+	width: calc(var(--tabMenu-tab-spacing) + var(--tabMenu-border-thickness));
+	margin-left: 0;
+}
+
+li.tabItem:last-child::after {
+	width: calc(var(--tabMenu-tab-spacing) + var(--tabMenu-border-thickness));
+	margin-right: 0;
+	flex: 1;
+}
+
+.tabBox {
+	border: var(--tabMenu-border-thickness) solid var(--tabMenu-border-color-active);
+	border-top-width: 0;
+	background: var(--tabMenu-background-color-active);
+	padding: 1ch;
+}

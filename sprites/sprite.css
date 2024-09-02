@@ -1,0 +1,9 @@
+.spritesWithTextContainer {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5ch;
+}
+
+.spritesWithTextContainer.condensed {
+	gap: 0.2ch;
+}

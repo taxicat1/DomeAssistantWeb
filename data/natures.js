@@ -1,0 +1,28 @@
+"use strict";
+const natures = {
+	"Hardy"   : { name : "Hardy",   description : "Neutral nature",            multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1,   spe : 1   } },
+	"Lonely"  : { name : "Lonely",  description : "+Attack, -Defense",         multipliers : { atk : 1.1, def : 0.9, spa : 1,   spd : 1,   spe : 1   } },
+	"Brave"   : { name : "Brave",   description : "+Attack, -Speed",           multipliers : { atk : 1.1, def : 1,   spa : 1,   spd : 1,   spe : 0.9 } },
+	"Adamant" : { name : "Adamant", description : "+Attack, -Sp. Attack",      multipliers : { atk : 1.1, def : 1,   spa : 0.9, spd : 1,   spe : 1   } },
+	"Naughty" : { name : "Naughty", description : "+Attack, -Sp. Defense",     multipliers : { atk : 1.1, def : 1,   spa : 1,   spd : 0.9, spe : 1   } },
+	"Bold"    : { name : "Bold",    description : "+Defense, -Attack",         multipliers : { atk : 0.9, def : 1.1, spa : 1,   spd : 1,   spe : 1   } },
+	"Docile"  : { name : "Docile",  description : "Neutral nature",            multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1,   spe : 1   } },
+	"Relaxed" : { name : "Relaxed", description : "+Defense, -Speed",          multipliers : { atk : 1,   def : 1.1, spa : 1,   spd : 1,   spe : 0.9 } },
+	"Impish"  : { name : "Impish",  description : "+Defense, -Sp. Attack",     multipliers : { atk : 1,   def : 1.1, spa : 0.9, spd : 1,   spe : 1   } },
+	"Lax"     : { name : "Lax",     description : "+Defense, -Sp. Defense",    multipliers : { atk : 1,   def : 1.1, spa : 1,   spd : 0.9, spe : 1   } },
+	"Timid"   : { name : "Timid",   description : "+Speed, -Attack",           multipliers : { atk : 0.9, def : 1,   spa : 1,   spd : 1,   spe : 1.1 } },
+	"Hasty"   : { name : "Hasty",   description : "+Speed, -Defense",          multipliers : { atk : 1,   def : 0.9, spa : 1,   spd : 1,   spe : 1.1 } },
+	"Serious" : { name : "Serious", description : "Neutral nature",            multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1,   spe : 1   } },
+	"Jolly"   : { name : "Jolly",   description : "+Speed, -Sp. Attack",       multipliers : { atk : 1,   def : 1,   spa : 0.9, spd : 1,   spe : 1.1 } },
+	"Naive"   : { name : "Naive",   description : "+Speed, -Sp. Defense",      multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 0.9, spe : 1.1 } },
+	"Modest"  : { name : "Modest",  description : "+Sp. Attack, -Attack",      multipliers : { atk : 0.9, def : 1,   spa : 1.1, spd : 1,   spe : 1   } },
+	"Mild"    : { name : "Mild",    description : "+Sp. Attack, -Defense",     multipliers : { atk : 1,   def : 0.9, spa : 1.1, spd : 1,   spe : 1   } },
+	"Quiet"   : { name : "Quiet",   description : "+Sp. Attack, -Speed",       multipliers : { atk : 1,   def : 1,   spa : 1.1, spd : 1,   spe : 0.9 } },
+	"Bashful" : { name : "Bashful", description : "Neutral nature",            multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1,   spe : 1   } },
+	"Rash"    : { name : "Rash",    description : "+Sp. Attack, -Sp. Defense", multipliers : { atk : 1,   def : 1,   spa : 1.1, spd : 0.9, spe : 1   } },
+	"Calm"    : { name : "Calm",    description : "+Sp. Defense, -Attack",     multipliers : { atk : 0.9, def : 1,   spa : 1,   spd : 1.1, spe : 1   } },
+	"Gentle"  : { name : "Gentle",  description : "+Sp. Defense, -Defense",    multipliers : { atk : 1,   def : 0.9, spa : 1,   spd : 1.1, spe : 1   } },
+	"Sassy"   : { name : "Sassy",   description : "+Sp. Defense, -Speed",      multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1.1, spe : 0.9 } },
+	"Careful" : { name : "Careful", description : "+Sp. Defense, -Sp. Attack", multipliers : { atk : 1,   def : 1,   spa : 0.9, spd : 1.1, spe : 1   } },
+	"Quirky"  : { name : "Quirky",  description : "Neutral nature",            multipliers : { atk : 1,   def : 1,   spa : 1,   spd : 1,   spe : 1   } }
+};

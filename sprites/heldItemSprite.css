@@ -1,0 +1,15 @@
+.heldItemSprite {
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+	flex-shrink: 0;
+	background-image: url(heldItemSprite.png);
+	background-position: -240px -48px; /* Default */
+}
+
+.heldItemSprite.heightless {
+	--y-offset: 6px;
+	
+	margin-top: -24px;
+	transform: translateY(var(--y-offset));
+}

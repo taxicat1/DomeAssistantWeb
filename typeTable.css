@@ -1,0 +1,166 @@
+:root {
+	--typeTable-color-Bug-cell:        #DDE4A6;
+	--typeTable-color-Bug-header:      #6e791e;
+	--typeTable-color-Bug-border:      #464F06;
+	
+	--typeTable-color-Dark-cell:       #ACACAC;
+	--typeTable-color-Dark-header:     #444343;
+	--typeTable-color-Dark-border:     #262525;
+	
+	--typeTable-color-Dragon-cell:     #B0B8F7;
+	--typeTable-color-Dragon-header:   #5564DD;
+	--typeTable-color-Dragon-border:   #293280;
+	
+	--typeTable-color-Electric-cell:   #FFEBAA;
+	--typeTable-color-Electric-header: #D7A80D;
+	--typeTable-color-Electric-border: #886902;
+	
+	--typeTable-color-Fighting-cell:   #ECC2AD;
+	--typeTable-color-Fighting-header: #801D12;
+	--typeTable-color-Fighting-border: #551B04;
+	
+	--typeTable-color-Fire-cell:       #FFCFCF;
+	--typeTable-color-Fire-header:     #DB1C1D;
+	--typeTable-color-Fire-border:     #821A1B;
+	
+	--typeTable-color-Flying-cell:     #C8E4FF;
+	--typeTable-color-Flying-header:   #4C79A4;
+	--typeTable-color-Flying-border:   #375979;
+	
+	--typeTable-color-Ghost-cell:      #B6A4BB;
+	--typeTable-color-Ghost-header:    #514968;
+	--typeTable-color-Ghost-border:    #372444;
+	
+	--typeTable-color-Grass-cell:      #CAF2C1;
+	--typeTable-color-Grass-header:    #338621;
+	--typeTable-color-Grass-border:    #235318;
+	
+	--typeTable-color-Ground-cell:     #ECD3B8;
+	--typeTable-color-Ground-header:   #914d24;
+	--typeTable-color-Ground-border:   #483216;
+	
+	--typeTable-color-Ice-cell:        #CFF2FB;
+	--typeTable-color-Ice-header:      #3AB8D9;
+	--typeTable-color-Ice-border:      #287D93;
+	
+	--typeTable-color-Normal-cell:     #E6E6E6;
+	--typeTable-color-Normal-header:   #767676;
+	--typeTable-color-Normal-border:   #424444;
+	
+	--typeTable-color-Poison-cell:     #DDBFF2;
+	--typeTable-color-Poison-header:   #893FBF;
+	--typeTable-color-Poison-border:   #5E2A84;
+	
+	--typeTable-color-Psychic-cell:    #FFD1E0;
+	--typeTable-color-Psychic-header:  #E33F74;
+	--typeTable-color-Psychic-border:  #9B2A4F;
+	
+	--typeTable-color-Rock-cell:       #E3E0CB;
+	--typeTable-color-Rock-header:     #7D735A;
+	--typeTable-color-Rock-border:     #403B2A;
+	
+	--typeTable-color-Steel-cell:      #C3D2D7;
+	--typeTable-color-Steel-header:    #5C7882;
+	--typeTable-color-Steel-border:    #29424A;
+	
+	--typeTable-color-Water-cell:      #AACDFB;
+	--typeTable-color-Water-header:    #1E71D9;
+	--typeTable-color-Water-border:    #134686;
+	
+	--typeTable-color-default-cell:    #F8F8F8;
+	--typeTable-color-default-header:  #3E4346;
+	--typeTable-color-default-border:  #1C1C1C;
+}
+
+.typeTable {
+	border-collapse: collapse;
+}
+
+.typeTable th, th.typeTable { color: white; }
+.typeTable td, td.typeTable { color: #111;  }
+
+
+.typeTable, .typeTable td, .typeTable th, td.typeTable, th.typeTable { border-color: var(--typeTable-color-default-border); }
+.typeTable td, td.typeTable { background-color: var(--typeTable-color-default-cell);   }
+.typeTable th, th.typeTable { background-color: var(--typeTable-color-default-header); }
+
+
+/*
+`.typeTable.${x}, .typeTable.${x} td, .typeTable.${x} th, td.typeTable.${x}, th.typeTable.${x} { border-color: var(--typeTable-color-${x}-border); }
+.typeTable.${x} td, td.typeTable.${x} { background-color: var(--typeTable-color-${x}-cell);   }
+.typeTable.${x} th, th.typeTable.${x} { background-color: var(--typeTable-color-${x}-header); }`
+*/
+
+/* Below here auto-generated */
+
+.typeTable.Normal, .typeTable.Normal td, .typeTable.Normal th, td.typeTable.Normal, th.typeTable.Normal { border-color: var(--typeTable-color-Normal-border); }
+.typeTable.Normal td, td.typeTable.Normal { background-color: var(--typeTable-color-Normal-cell);   }
+.typeTable.Normal th, th.typeTable.Normal { background-color: var(--typeTable-color-Normal-header); }
+
+.typeTable.Fighting, .typeTable.Fighting td, .typeTable.Fighting th, td.typeTable.Fighting, th.typeTable.Fighting { border-color: var(--typeTable-color-Fighting-border); }
+.typeTable.Fighting td, td.typeTable.Fighting { background-color: var(--typeTable-color-Fighting-cell);   }
+.typeTable.Fighting th, th.typeTable.Fighting { background-color: var(--typeTable-color-Fighting-header); }
+
+.typeTable.Flying, .typeTable.Flying td, .typeTable.Flying th, td.typeTable.Flying, th.typeTable.Flying { border-color: var(--typeTable-color-Flying-border); }
+.typeTable.Flying td, td.typeTable.Flying { background-color: var(--typeTable-color-Flying-cell);   }
+.typeTable.Flying th, th.typeTable.Flying { background-color: var(--typeTable-color-Flying-header); }
+
+.typeTable.Poison, .typeTable.Poison td, .typeTable.Poison th, td.typeTable.Poison, th.typeTable.Poison { border-color: var(--typeTable-color-Poison-border); }
+.typeTable.Poison td, td.typeTable.Poison { background-color: var(--typeTable-color-Poison-cell);   }
+.typeTable.Poison th, th.typeTable.Poison { background-color: var(--typeTable-color-Poison-header); }
+
+.typeTable.Ground, .typeTable.Ground td, .typeTable.Ground th, td.typeTable.Ground, th.typeTable.Ground { border-color: var(--typeTable-color-Ground-border); }
+.typeTable.Ground td, td.typeTable.Ground { background-color: var(--typeTable-color-Ground-cell);   }
+.typeTable.Ground th, th.typeTable.Ground { background-color: var(--typeTable-color-Ground-header); }
+
+.typeTable.Rock, .typeTable.Rock td, .typeTable.Rock th, td.typeTable.Rock, th.typeTable.Rock { border-color: var(--typeTable-color-Rock-border); }
+.typeTable.Rock td, td.typeTable.Rock { background-color: var(--typeTable-color-Rock-cell);   }
+.typeTable.Rock th, th.typeTable.Rock { background-color: var(--typeTable-color-Rock-header); }
+
+.typeTable.Bug, .typeTable.Bug td, .typeTable.Bug th, td.typeTable.Bug, th.typeTable.Bug { border-color: var(--typeTable-color-Bug-border); }
+.typeTable.Bug td, td.typeTable.Bug { background-color: var(--typeTable-color-Bug-cell);   }
+.typeTable.Bug th, th.typeTable.Bug { background-color: var(--typeTable-color-Bug-header); }
+
+.typeTable.Ghost, .typeTable.Ghost td, .typeTable.Ghost th, td.typeTable.Ghost, th.typeTable.Ghost { border-color: var(--typeTable-color-Ghost-border); }
+.typeTable.Ghost td, td.typeTable.Ghost { background-color: var(--typeTable-color-Ghost-cell);   }
+.typeTable.Ghost th, th.typeTable.Ghost { background-color: var(--typeTable-color-Ghost-header); }
+
+.typeTable.Steel, .typeTable.Steel td, .typeTable.Steel th, td.typeTable.Steel, th.typeTable.Steel { border-color: var(--typeTable-color-Steel-border); }
+.typeTable.Steel td, td.typeTable.Steel { background-color: var(--typeTable-color-Steel-cell);   }
+.typeTable.Steel th, th.typeTable.Steel { background-color: var(--typeTable-color-Steel-header); }
+
+.typeTable.Fire, .typeTable.Fire td, .typeTable.Fire th, td.typeTable.Fire, th.typeTable.Fire { border-color: var(--typeTable-color-Fire-border); }
+.typeTable.Fire td, td.typeTable.Fire { background-color: var(--typeTable-color-Fire-cell);   }
+.typeTable.Fire th, th.typeTable.Fire { background-color: var(--typeTable-color-Fire-header); }
+
+.typeTable.Water, .typeTable.Water td, .typeTable.Water th, td.typeTable.Water, th.typeTable.Water { border-color: var(--typeTable-color-Water-border); }
+.typeTable.Water td, td.typeTable.Water { background-color: var(--typeTable-color-Water-cell);   }
+.typeTable.Water th, th.typeTable.Water { background-color: var(--typeTable-color-Water-header); }
+
+.typeTable.Grass, .typeTable.Grass td, .typeTable.Grass th, td.typeTable.Grass, th.typeTable.Grass { border-color: var(--typeTable-color-Grass-border); }
+.typeTable.Grass td, td.typeTable.Grass { background-color: var(--typeTable-color-Grass-cell);   }
+.typeTable.Grass th, th.typeTable.Grass { background-color: var(--typeTable-color-Grass-header); }
+
+.typeTable.Electric, .typeTable.Electric td, .typeTable.Electric th, td.typeTable.Electric, th.typeTable.Electric { border-color: var(--typeTable-color-Electric-border); }
+.typeTable.Electric td, td.typeTable.Electric { background-color: var(--typeTable-color-Electric-cell);   }
+.typeTable.Electric th, th.typeTable.Electric { background-color: var(--typeTable-color-Electric-header); }
+
+.typeTable.Psychic, .typeTable.Psychic td, .typeTable.Psychic th, td.typeTable.Psychic, th.typeTable.Psychic { border-color: var(--typeTable-color-Psychic-border); }
+.typeTable.Psychic td, td.typeTable.Psychic { background-color: var(--typeTable-color-Psychic-cell);   }
+.typeTable.Psychic th, th.typeTable.Psychic { background-color: var(--typeTable-color-Psychic-header); }
+
+.typeTable.Ice, .typeTable.Ice td, .typeTable.Ice th, td.typeTable.Ice, th.typeTable.Ice { border-color: var(--typeTable-color-Ice-border); }
+.typeTable.Ice td, td.typeTable.Ice { background-color: var(--typeTable-color-Ice-cell);   }
+.typeTable.Ice th, th.typeTable.Ice { background-color: var(--typeTable-color-Ice-header); }
+
+.typeTable.Dragon, .typeTable.Dragon td, .typeTable.Dragon th, td.typeTable.Dragon, th.typeTable.Dragon { border-color: var(--typeTable-color-Dragon-border); }
+.typeTable.Dragon td, td.typeTable.Dragon { background-color: var(--typeTable-color-Dragon-cell);   }
+.typeTable.Dragon th, th.typeTable.Dragon { background-color: var(--typeTable-color-Dragon-header); }
+
+.typeTable.Dark, .typeTable.Dark td, .typeTable.Dark th, td.typeTable.Dark, th.typeTable.Dark { border-color: var(--typeTable-color-Dark-border); }
+.typeTable.Dark td, td.typeTable.Dark { background-color: var(--typeTable-color-Dark-cell);   }
+.typeTable.Dark th, th.typeTable.Dark { background-color: var(--typeTable-color-Dark-header); }
+
+.typeTable.???, .typeTable.??? td, .typeTable.??? th, td.typeTable.???, th.typeTable.??? { border-color: var(--typeTable-color-???-border); }
+.typeTable.??? td, td.typeTable.??? { background-color: var(--typeTable-color-???-cell);   }
+.typeTable.??? th, th.typeTable.??? { background-color: var(--typeTable-color-???-header); }
