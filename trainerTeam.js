@@ -330,7 +330,7 @@ class TrainerTeam {
 		];
 	}
 	
-	appearanceTable(playerTeamSpeciesNames) {
+	appearanceLeadTable(playerTeamSpeciesNames) {
 		let possiblePicks = this.possiblePicks_real(playerTeamSpeciesNames);
 		
 		let appearances = [
@@ -339,13 +339,11 @@ class TrainerTeam {
 			[ 0, 0, 0 ] 	// If your pokes are [0,1]
 		];
 		
-		/*
 		let leads = [
 			[ 0, 0, 0 ],	// If your pokes are [1,2]
 			[ 0, 0, 0 ],	// If your pokes are [0,2]
 			[ 0, 0, 0 ] 	// If your pokes are [0,1]
 		];
-		*/
 		
 		for (let i = 0; i < 3; i++) {
 			let outcomes = possiblePicks[i].outcomes;
@@ -353,18 +351,14 @@ class TrainerTeam {
 				appearances[i][outcomes[o].pokeIdx[0]] += outcomes[o].probability;
 				appearances[i][outcomes[o].pokeIdx[1]] += outcomes[o].probability;
 				
-				//leads[i][outcomes[o].pokeIdx[0]] += outcomes[o].probability;
+				leads[i][outcomes[o].pokeIdx[0]] += outcomes[o].probability;
 			}
 		}
 		
-		return appearances;
-		
-		/*
 		return {
-			appear: appearances,
-			lead: leads
+			appear : appearances,
+			lead   : leads
 		};
-		*/
 	}
 	
 	hasMoves(moveNameList) {

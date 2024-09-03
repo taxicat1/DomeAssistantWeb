@@ -2163,7 +2163,7 @@
 							<h1>Possible Teams</h1>
 							<div class="formExtraInfo">Possible teams are listed below. Each team is equally likely, barring RNG bias.</div>
 							<div class="formExtraInfo">Click a set to view damage ranges and extra information.</div>
-							<div class="formExtraInfo">There is a 60% chance the opponent will send out their two Pokémon in order from top-to-bottom, and a 40% chance they will do so from bottom-to-top. (Except for Tucker, who always sends out his Pokémon from top-to-bottom.)</div>
+							<div class="formExtraInfo">Hover over an appearance percentage to view the chance that Pokémon will be the opponent lead.</div>
 							
 							<div id="preBattleExtraSummaryHeaderPanel" style="display:none">
 								<div class="formExtraInfo">Because there are 8 or more possible teams, here is an extra summary to help:</div>
@@ -3434,8 +3434,19 @@
 				let el = document.createElement("span");
 				el.className = "appearanceLeadPercents";
 				
-				el.textContent = fmtPct(appearProb, pctDigits);
-				el.title = `${fmtPct(leadProb, pctDigits)} to be the lead`;
+				let appearText = fmtPct(appearProb, pctDigits);
+				let leadText = `${fmtPct(leadProb, pctDigits)} to be the lead`;
+				
+				el.append(document.createTextNode(appearText));
+				
+				// SR alt for hover text
+				let sr = document.createElement("span");
+				sr.className = "srOnly";
+				sr.textContent = leadText;
+				
+				el.append(sr);
+				
+				el.dataset.daHover = leadText;
 				
 				return el;
 			}
@@ -3716,16 +3727,10 @@
 				// Produce a table for each possible team
 				for (let t = 0; t < teams.length; t++) {
 					let team = teams[t];
-					let appearanceTable = team.appearanceTable(playerTeamSpeciesNames);
+					let appearLeadTables = team.appearanceLeadTable(playerTeamSpeciesNames);
 					
-					// Compute lead table on-the-fly
-					let leadTable = [
-						[ appearanceTable[0][0] * 0.6, null, appearanceTable[0][2] * 0.4 ],
-						[ appearanceTable[1][0] * 0.6, null, appearanceTable[1][2] * 0.4 ],
-						[ appearanceTable[2][0] * 0.6, null, appearanceTable[2][2] * 0.4 ]
-					];
-					
-					leadTable.forEach(row => row[1] = (1 - row[0] - row[2]));
+					let appearanceTable = appearLeadTables.appear;
+					let leadTable       = appearLeadTables.lead;
 					
 					
 					let teamTable = instantiateTemplate(document.getElementById("possibleTeamTableTemplate"));

@@ -361,8 +361,24 @@ a.pokeSet:hover {
 
 .appearanceLeadPercents {
 	cursor: help;
+	position: relative;
 }
 
 .appearanceLeadPercents:hover {
 	text-decoration: underline;
+}
+
+.appearanceLeadPercents:hover::before {
+	display: block;
+	position: absolute;
+	top: -2.5em;
+	content: attr(data-da-hover);
+	background: #fefefe;
+	z-index: 99990;
+	border-radius: 2px;
+	border: 1px solid #333;
+	white-space: nowrap;
+	padding: 0.8ch;
+	box-shadow: 0 1px 1px 0 #0004;
+	left: -1ch;
 }
