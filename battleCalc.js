@@ -602,7 +602,7 @@ function shedinjaDangerCheck(attackerPoke, playerTeamSpeciesNames) {
 	
 	for (let m = 0; m < attackerPoke.moves.length; m++) {
 		if (moveHasFlag(attackerPoke.moves[m].name, "shedinjaStatus")) {
-			return 2;
+			return 1;
 		}
 	}
 	
