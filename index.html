@@ -2439,6 +2439,11 @@
 					</tr>
 				</table>
 			</template>
+			
+			<template id="noPossibleOutputTemplate">
+				<h1>No possible teams or Pokémon found!</h1>
+				<p>Check your input and try again.</p>
+			</template>
 		</div>
 		
 		<div id="modalContainer" class="asleep">
@@ -3451,19 +3456,6 @@
 				return el;
 			}
 			
-			function makeNoPossibleTeamsDoc() {
-				let doc = document.createDocumentFragment();
-				
-				let h = document.createElement("h1");
-				let b = document.createElement("p");
-				
-				h.textContent = "No possible teams or Pokémon found!";
-				b.textContent = "Check your input and try again.";
-				
-				doc.append(h, b);
-				return doc;
-			}
-			
 			function quickCalcDomeSpeed(frontierPoke) {
 				let iv;
 				switch (frontierPoke.instance) {
@@ -3580,14 +3572,14 @@
 				let playerTeamSpeciesNames = prelimPanel.getPlayerPokeSpecies();
 				
 				if (teams.length >= moreInfoThreshold) {
-					setOutputPanelMode("preBattleMoreInfo");
+					outputPanel.setMode("preBattleMoreInfo");
 				} else {
-					setOutputPanelMode("preBattle");
+					outputPanel.setMode("preBattle");
 				}
 				
 				// If no teams, output error and return
 				if (teams.length === 0) {
-					document.getElementById("outputEntryContainer").append(makeNoPossibleTeamsDoc());
+					outputPanel.showNoPossibleOutput();
 					return;
 				}
 				
@@ -3808,7 +3800,7 @@
 				
 				// Create output
 				
-				setOutputPanelMode("midBattle");
+				outputPanel.setMode("midBattle");
 				
 				// Sort tables by likelihood, then by first poke
 				let speciesNames = Object.keys(instanceProbabilities);
@@ -3902,7 +3894,7 @@
 				
 				// If loop found this was invalid, show error
 				if (!valid) {
-					document.getElementById("outputEntryContainer").append(makeNoPossibleTeamsDoc());
+					outputPanel.showNoPossibleOutput();
 				}
 			}
 			
@@ -3912,54 +3904,62 @@
 		<script> // Output panel control
 			"use strict";
 			
-			function setOutputPanelMode(mode) {
+			const outputPanel = {
+				el : [
+					"placeholderOutputHeader",
+					"preBattleOutputHeader",
+					"preBattleExtraSummaryHeaderPanel", "outputSummaryPanelDetails", "outputSummaryPanelContainer",
+					"midBattleOutputHeader",
+					"outputEntryContainer"
+				].reduce(gatherIdsToObject, {})
+			};
+			
+			outputPanel.setMode = function(mode) {
 				// Hide placeholder if it wasn't already
-				document.getElementById("placeholderOutputHeader").style.display = "none";
-				
-				const outputSummaryPanelContainer = document.getElementById("outputSummaryPanelContainer");
-				const outputEntryContainer        = document.getElementById("outputEntryContainer");
+				outputPanel.el.placeholderOutputHeader.style.display = "none";
 				
 				// Clear children of all output containers
-				while (outputEntryContainer.firstChild) {
-					outputEntryContainer.firstChild.remove();
+				while (outputPanel.el.outputEntryContainer.firstChild) {
+					outputPanel.el.outputEntryContainer.firstChild.remove();
 				}
 				
-				while (outputSummaryPanelContainer.firstChild) {
-					outputSummaryPanelContainer.firstChild.remove();
+				while (outputPanel.el.outputSummaryPanelContainer.firstChild) {
+					outputPanel.el.outputSummaryPanelContainer.firstChild.remove();
 				}
 				
 				// Close this if it was open before
-				document.getElementById("outputSummaryPanelDetails").open = false;
+				outputPanel.el.outputSummaryPanelDetails.open = false;
 				
 				// Scroll to the top of this if it was scrolled down before
-				outputEntryContainer.scroll({ top : 0 });
-				
-				const preBattleOutputHeader            = document.getElementById("preBattleOutputHeader");
-				const preBattleExtraSummaryHeaderPanel = document.getElementById("preBattleExtraSummaryHeaderPanel");
-				const midBattleOutputHeader            = document.getElementById("midBattleOutputHeader");
+				outputPanel.el.outputEntryContainer.scroll({ top : 0 });
 				
 				switch (mode) {
 					case "preBattle":
-						preBattleOutputHeader.style.display = "block";
+						outputPanel.el.preBattleOutputHeader.style.display = "block";
 						
-						preBattleExtraSummaryHeaderPanel.style.display = "none";
-						midBattleOutputHeader.style.display = "none";
+						outputPanel.el.preBattleExtraSummaryHeaderPanel.style.display = "none";
+						outputPanel.el.midBattleOutputHeader.style.display = "none";
 						break;
 					
 					case "preBattleMoreInfo":
-						preBattleOutputHeader.style.display = "block";
-						preBattleExtraSummaryHeaderPanel.style.display = "block";
+						outputPanel.el.preBattleOutputHeader.style.display = "block";
+						outputPanel.el.preBattleExtraSummaryHeaderPanel.style.display = "block";
 						
-						midBattleOutputHeader.style.display = "none";
+						outputPanel.el.midBattleOutputHeader.style.display = "none";
 						break;
 					
 					case "midBattle":
-						midBattleOutputHeader.style.display = "block";
+						outputPanel.el.midBattleOutputHeader.style.display = "block";
 						
-						preBattleOutputHeader.style.display = "none";
-						preBattleExtraSummaryHeaderPanel.style.display = "none";
+						outputPanel.el.preBattleOutputHeader.style.display = "none";
+						outputPanel.el.preBattleExtraSummaryHeaderPanel.style.display = "none";
 						break;
 				}
+			}
+			
+			outputPanel.showNoPossibleOutput = function() {
+				let noPossibleOutputDoc = document.getElementById("noPossibleOutputTemplate").content.cloneNode(true);
+				outputPanel.el.outputEntryContainer.append(noPossibleOutputDoc);
 			}
 		</script>
 		
