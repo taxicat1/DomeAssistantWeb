@@ -2441,7 +2441,7 @@
 			</template>
 		</div>
 		
-		<div id="modalContainer">
+		<div id="modalContainer" class="asleep">
 			<div id="modalOverlay">
 				<div id="modalPopup" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 					<a role="button" id="modalTopX" aria-label="Close" tabindex="0">
@@ -4228,8 +4228,7 @@
 				// Text area export string
 				document.getElementById("exportSetTextArea").value = frontierPokemon_export(opponentPokeSet, opponentPokeSet.level, opponentPokeSet.ivs.hp);
 			}
-			
-			// Stop fields in the modal being tabable by getting the modal out of the DOM
-			modal.documentFragment.append(modal.container);
 		</script>
 	</body>
+</html>
+

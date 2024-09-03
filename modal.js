@@ -3,24 +3,26 @@
 function modalInit() {
 	const modal = {};
 	
-	modal.documentFragment = document.createDocumentFragment();
-	
 	modal.container = document.getElementById("modalContainer");
 	modal.topX      = document.getElementById("modalTopX");
 	modal.popup     = document.getElementById("modalPopup");
 	modal.overlay   = document.getElementById("modalOverlay");
 	
-	
-	modal.container.addEventListener("transitionend", function(event) {
+	function checkAsleep(event) {
 		if (event.target === modal.container && !modal.container.classList.contains("open")) {
-			modal.documentFragment.append(modal.container);
+			modal.container.classList.add("asleep");
 		}
-	});
+	}
+	
+	modal.container.addEventListener("transitionend",    checkAsleep);
+	modal.container.addEventListener("transitioncancel", checkAsleep);
 	
 	modal.open = function() {
-		document.body.append(modal.container);
-		// BUG: in some browsers, the CSS animation doesn't trigger if the addition to the DOM
-		//      and alteration to the class attribute happen in the same repaint.
+		modal.container.classList.remove("asleep");
+		
+		// BUG: in some browsers, the CSS transition doesn't trigger if
+		//      the addition to the visible DOM and alteration to the 
+		//      transition rule happen in the same repaint.
 		setTimeout(function() {
 			modal.container.classList.add("open");
 		}, 5);

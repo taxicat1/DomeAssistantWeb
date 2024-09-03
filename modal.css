@@ -13,6 +13,10 @@
 	opacity: 1;
 }
 
+#modalContainer.asleep {
+	display: none;
+}
+
 #modalOverlay {
 	width: 100%;
 	height: 100%;
