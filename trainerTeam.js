@@ -489,6 +489,12 @@ class TrainerTeam {
 			evSum += statList[i];
 		}
 		
+		// Special case (impossible with NPC trainers)
+		if (evSum === 0) {
+			this._evStyle = new EvStyle("Neglects", ["hp", "atk"]);
+			return this._evStyle;
+		}
+		
 		// Map to floored percentages
 		statList = statList.map(x => Math.floor((x * 100) / evSum));
 		
@@ -506,7 +512,7 @@ class TrainerTeam {
 		}
 		
 		// Map to bools of which stats are emphasized
-		let eVector = statList.map(x => x >=  30);
+		let eVector = statList.map(x => x >= 30);
 		
 		// If any stat has emphasis, that takes priority
 		if (eVector.includes(true)) {
