@@ -222,8 +222,8 @@ function calculateInstanceProbabilities(possibleTeams, opponentPokesSpeciesInOrd
 					};
 				}
 				
-				// Note this assumes pick P of possiblePicks is uniformly random, and normalizes later
-				// else would have to account for the weight of the pick before adding its probability
+				// Note this assumes team T of possibleTeams is uniformly random, and normalizes later
+				// Else would have to account for the weight of the team before adding its pick probability
 				ret[species].instances[name].appear += pick.probability;
 				
 				if (i === 0) {
