@@ -1,76 +1,62 @@
 "use strict";
 
-function offensiveScore(frontierPoke, playerTeamSpeciesNames) {
-	let score = 0;
-	for (let m = 0; m < frontierPoke.moves.length; m++) {
-		if (frontierPoke.moves[m].power < 1) {
-			continue;
-		}
-		
-		for (let p = 0; p < playerTeamSpeciesNames.length; p++) {
-			let playerPoke = pokemon[ playerTeamSpeciesNames[p] ];
-			let effect;
-			
-			if (playerPoke.ability1 === "Levitate" && frontierPoke.moves[m].type.name === "Ground") {
-				effect = 1;
-			} else if (playerPoke.ability1 === "Wonder Guard") {
-				effect = 1;
-			} else {
-				effect = frontierPoke.moves[m].type.multipliers.offensive[playerPoke.type1.name];
-				if (playerPoke.type2) {
-					effect *= frontierPoke.moves[m].type.multipliers.offensive[playerPoke.type2.name];
-				}
-			}
-			
-			switch (effect) {
-				case 0:    score += 0;  break;
-				case 0.25: score += 0;  break;
-				case 0.5:  score += 0;  break;
-				case 1:    score += 2;  break;
-				case 2:    score += 4;  break;
-				case 4:    score += 8;  break;
-			}
-		}
-	}
-	
-	return score;
-}
 
-function defensiveScore(frontierPoke, playerTeamSpeciesNames) {
-	let score = 0;
-	for (let m = 0; m < frontierPoke.moves.length; m++) {
-		if (frontierPoke.moves[m].power === 0) {
-			continue;
-		}
-		
-		for (let p = 0; p < playerTeamSpeciesNames.length; p++) {
-			let playerPoke = pokemon[ playerTeamSpeciesNames[p] ];
-			let effect;
-			
-			if (playerPoke.ability1 === "Levitate" && frontierPoke.moves[m].type.name === "Ground") {
-				effect = 1;
-			} else if (playerPoke.ability1 === "Wonder Guard") {
-				effect = 1;
-			} else {
-				effect = frontierPoke.moves[m].type.multipliers.offensive[playerPoke.type1.name];
-				if (playerPoke.type2) {
-					effect *= frontierPoke.moves[m].type.multipliers.offensive[playerPoke.type2.name];
-				}
-			}
-			
-			switch (effect) {
-				case 0:    score += 8;  break;
-				case 0.25: score += 4;  break;
-				case 0.5:  score += 2;  break;
-				case 1:    score += 0;  break;
-				case 2:    score -= 2;  break;
-				case 4:    score -= 4;  break;
-			}
-		}
+const scoreMoves = (function() {
+	const pointsTables = {
+		offensive : [   0,  0,  0,  2,  4,  8 ],
+		defensive : [   8,  4,  2,  0, -2, -4 ],
+		trainer   : [ -16, -8,  0,  4, 12, 20 ]
 	}
 	
-	return score;
-}
+	return function scoreMoves(frontierPoke, opponentTeamSpeciesNames, scoreMethod) {
+		let score = 0;
+		
+		let table;
+		switch (scoreMethod) {
+			case "offensive":  table = pointsTables.offensive;  break;
+			case "defensive":  table = pointsTables.defensive;  break;
+			case "trainer":    table = pointsTables.trainer;    break;
+			
+			default:
+				throw new TypeError(`Invalid scoring method: ${scoreMethod}`);
+		}
+		
+		for (let m = 0; m < frontierPoke.moves.length; m++) {
+			let move = frontierPoke.moves[m];
+			if (move.power === 0) {
+				continue;
+			}
+			
+			for (let p = 0; p < opponentTeamSpeciesNames.length; p++) {
+				let opponentPoke = pokemon[ opponentTeamSpeciesNames[p] ];
+				
+				let effect;
+				if (opponentPoke.ability1 === "Levitate" && move.type.name === "Ground") {
+					effect = 1;
+				} else if (opponentPoke.ability1 === "Wonder Guard") {
+					effect = 1;
+				} else {
+					effect = move.type.multipliers.offensive[opponentPoke.type1.name];
+					if (opponentPoke.type2 !== null) {
+						effect *= move.type.multipliers.offensive[opponentPoke.type2.name];
+					}
+				}
+				
+				switch (effect) {
+					case 0:    score += table[0];  break;
+					case 0.25: score += table[1];  break;
+					case 0.5:  score += table[2];  break;
+					case 1:    score += table[3];  break;
+					case 2:    score += table[4];  break;
+					case 4:    score += table[5];  break;
+				}
+			}
+		}
+		
+		return score;
+	};
+	
+})();
 
 // JS String objects are copy-on-write so this is not a memory concern to just assign these around
 const battleStyles = [
@@ -154,11 +140,11 @@ class TrainerTeam {
 	}
 	
 	offensiveScores(playerTeamSpeciesNames) {
-		return this.pokes.map(poke => offensiveScore(poke, playerTeamSpeciesNames));
+		return this.pokes.map(poke => scoreMoves(poke, playerTeamSpeciesNames, "offensive"));
 	}
 	
 	defensiveScores(playerTeamSpeciesNames) {
-		return this.pokes.map(poke => defensiveScore(poke, playerTeamSpeciesNames));
+		return this.pokes.map(poke => scoreMoves(poke, playerTeamSpeciesNames, "defensive"));
 	}
 	
 	possiblePicks_wrong(playerTeamSpeciesNames) {
