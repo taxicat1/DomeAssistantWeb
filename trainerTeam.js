@@ -6,7 +6,7 @@ const scoreMoves = (function() {
 		offensive : [   0,  0,  0,  2,  4,  8 ],
 		defensive : [   8,  4,  2,  0, -2, -4 ],
 		trainer   : [ -16, -8,  0,  4, 12, 20 ]
-	}
+	};
 	
 	return function scoreMoves(frontierPoke, opponentTeamSpeciesNames, scoreMethod) {
 		let score = 0;

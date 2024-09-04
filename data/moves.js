@@ -432,15 +432,13 @@ const moveHasFlag = (function() {
 		]),
 	};
 	
-	const moveHasFlag = function(moveName, flag) {
+	return function moveHasFlag(moveName, flag) {
 		if (Object.hasOwn(flagPools, flag)) {
 			return flagPools[flag].has(moveName);
 		}
 		
 		throw new TypeError(`Unknown move flag: ${flag}`);
-	}
-	
-	return moveHasFlag;
+	};
 })();
 
 
