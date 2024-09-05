@@ -1,4 +1,4 @@
-:root {
+.typeTable {
 	--typeTable-color-Bug-cell:        #DDE4A6;
 	--typeTable-color-Bug-header:      #6e791e;
 	--typeTable-color-Bug-border:      #464F06;
@@ -160,7 +160,3 @@
 .typeTable.Dark, .typeTable.Dark td, .typeTable.Dark th, td.typeTable.Dark, th.typeTable.Dark { border-color: var(--typeTable-color-Dark-border); }
 .typeTable.Dark td, td.typeTable.Dark { background-color: var(--typeTable-color-Dark-cell);   }
 .typeTable.Dark th, th.typeTable.Dark { background-color: var(--typeTable-color-Dark-header); }
-
-.typeTable.???, .typeTable.??? td, .typeTable.??? th, td.typeTable.???, th.typeTable.??? { border-color: var(--typeTable-color-???-border); }
-.typeTable.??? td, td.typeTable.??? { background-color: var(--typeTable-color-???-cell);   }
-.typeTable.??? th, th.typeTable.??? { background-color: var(--typeTable-color-???-header); }

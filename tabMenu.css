@@ -1,4 +1,4 @@
-:root {
+li.tabItem, .tabBox {
 	--tabMenu-border-thickness: 1px;
 	--tabMenu-border-color-active: #222;
 	--tabMenu-border-color-inactive: #666;
@@ -40,12 +40,16 @@ li.tabItem > button {
 
 li.tabItem:not(.active) > button:hover {
 	background: var(--tabMenu-background-color-hover);
-	border-color: var(--tabMenu-border-color-hover);
+	border-top-color: var(--tabMenu-border-color-hover);
+	border-left-color: var(--tabMenu-border-color-hover);
+	border-right-color: var(--tabMenu-border-color-hover);
 }
 
 li.tabItem:not(.active) > button:hover:active {
 	background: var(--tabMenu-background-color-clicked);
-	border-color: var(--tabMenu-border-color-clicked);
+	border-top-color: var(--tabMenu-border-color-clicked);
+	border-left-color: var(--tabMenu-border-color-clicked);
+	border-right-color: var(--tabMenu-border-color-clicked);
 }
 
 li.tabItem.active > button {
