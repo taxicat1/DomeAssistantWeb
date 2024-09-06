@@ -16,11 +16,20 @@ html.dark #modalPopup {
 	background-color: #2c3133;
 }
 
+html.dark ::placeholder {
+	color: white;	
+}
 
 html.dark input,
 html.dark select,
 html.dark textarea {
-	filter: brightness(92%) hue-rotate(170deg) invert(100%);
+	color-scheme: dark;
+	accent-color: #0070ff;
+	filter: hue-rotate(349deg) contrast(115%) saturate(60%);
+}
+
+html.dark option:checked {
+	background: #0070ff;
 }
 
 html.dark .bannerImg {
@@ -55,7 +64,7 @@ html.dark .tabBox {
 
 
 html.dark #modalOverlay {
-	background: #0007;
+	background: #000a;
 }
 
 html.dark #modalTopX {
