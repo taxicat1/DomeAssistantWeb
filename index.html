@@ -57,6 +57,8 @@
 				padding: 2px;
 			}
 		</style>
+		
+		<link rel="stylesheet" href="darkPatch.css">
 	</head>
 	
 	<body>
@@ -64,7 +66,7 @@
 			<header style="grid-column:span 2">
 				<h1 class="banner" style="display:contents">
 					<div class="srOnly" id="bannerLabel">DomeAssistant</div>
-					<img style="height:1.3em" src="domeassistant_banner.svg" alt="DomeAssistant" aria-labelledby="bannerLabel"/>
+					<img style="height:1.3em" src="domeassistant_banner.svg" alt="DomeAssistant" class="bannerImg" aria-labelledby="bannerLabel"/>
 				</h1>
 			</header>
 			
@@ -74,7 +76,7 @@
 						<h1>Preliminary</h1>
 						
 						<fieldset>
-							<legend>Player Team</legend>
+							<legend>Player team</legend>
 							
 							<ul class="tabMenu" id="playerPokeTabMenu">
 								<li class="tabItem active" data-tab-menu-link="playerPokeTab1">
@@ -2146,6 +2148,38 @@
 							<input type="button" class="navButton" id="backToOpponentNavButton" value="&larr; Back to opponent" />
 						</div>
 					</section>
+				</div>
+				
+				<div style="margin: 0.5em; text-align: center;">
+					<input type="button" id="darkModeToggle" value="Toggle dark mode"/>
+					
+					<script> // Dark mode switching functionality
+						(function() {
+							let darkModeBtn = document.getElementById("darkModeToggle");
+							
+							const lsDarkModeKey = "THEME_prefersDarkMode";
+							const switchDarkText  = "Toggle dark mode";
+							const switchLightText = "Toggle light mode";
+							
+							// Initial set
+							if (localStorage.getItem(lsDarkModeKey) === "true") {
+								document.documentElement.classList.add("dark");
+								darkModeBtn.value = switchLightText;
+							}
+							
+							// Button click hook
+							darkModeBtn.addEventListener("click", function() {
+								if (document.documentElement.classList.toggle("dark")) {
+									// Dark enabled
+									darkModeBtn.value = switchLightText;
+									localStorage.setItem(lsDarkModeKey, "true");
+								} else {
+									darkModeBtn.value = switchDarkText;
+									localStorage.setItem(lsDarkModeKey, "false");
+								}
+							});
+						})();
+					</script>
 				</div>
 			</div>
 			

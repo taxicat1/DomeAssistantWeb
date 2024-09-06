@@ -1,0 +1,73 @@
+html.dark body {
+	color: #e8e8e8;
+	background: #0b0b0b;
+}
+
+
+html.dark details {
+	border-color: #868686;
+	background-color: #1d2224;
+}
+
+html.dark section,
+html.dark header,
+html.dark #modalPopup {
+	border-color: #828282;
+	background-color: #2c3133;
+}
+
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+	filter: brightness(92%) hue-rotate(170deg) invert(100%);
+}
+
+html.dark .bannerImg {
+	filter: brightness(120%) hue-rotate(170deg) invert(100%);
+}
+
+html.dark .navButton {
+	filter: brightness(99%) hue-rotate(205deg) invert(100%);
+}
+
+html.dark .resetButton,
+html.dark .submitButton {
+	filter: brightness(90%);
+}
+
+html.dark .navButton[disabled] {
+	opacity: 0.7;
+}
+
+
+html.dark li.tabItem,
+html.dark .tabBox {
+	--tabMenu-border-color-active: #ccc;
+	--tabMenu-border-color-inactive: #a8a8a8;
+	--tabMenu-border-color-hover: #a8a7a7;
+	--tabMenu-border-color-clicked: #828282;
+	--tabMenu-background-color-active: #43494d;
+	--tabMenu-background-color-inactive: #1e1e1e;
+	--tabMenu-background-color-hover: #343535;
+	--tabMenu-background-color-clicked: #1e1e1e;
+}
+
+
+html.dark #modalOverlay {
+	background: #0007;
+}
+
+html.dark #modalTopX {
+	color: inherit;
+}
+
+html.dark #modalTopX:hover {
+	color: #ccc;
+	background: #0007;
+}
+
+html.dark #modalTopX:hover:active {
+	color: #ddd;
+	background: #000f;
+}
