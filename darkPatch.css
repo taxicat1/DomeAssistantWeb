@@ -5,7 +5,7 @@ html.dark body {
 
 
 html.dark details {
-	border-color: #868686;
+	border-color: #cacaca;
 	background-color: #1d2224;
 }
 
@@ -13,7 +13,7 @@ html.dark section,
 html.dark header,
 html.dark #modalPopup {
 	border-color: #828282;
-	background-color: #2c3133;
+	background-color: #303337;
 }
 
 html.dark ::placeholder {
@@ -56,14 +56,14 @@ html.dark .navButton[disabled] {
 
 html.dark li.tabItem,
 html.dark .tabBox {
-	--tabMenu-border-color-active: #ccc;
-	--tabMenu-border-color-inactive: #a8a8a8;
-	--tabMenu-border-color-hover: #a8a7a7;
-	--tabMenu-border-color-clicked: #828282;
-	--tabMenu-background-color-active: #43494d;
+	--tabMenu-border-color-active:       #cccccc;
+	--tabMenu-border-color-inactive:     #a8a8a8;
+	--tabMenu-border-color-hover:        #a8a7a7;
+	--tabMenu-border-color-clicked:      #828282;
+	--tabMenu-background-color-active:   #43484d;
 	--tabMenu-background-color-inactive: #1e1e1e;
-	--tabMenu-background-color-hover: #343535;
-	--tabMenu-background-color-clicked: #1e1e1e;
+	--tabMenu-background-color-hover:    #343535;
+	--tabMenu-background-color-clicked:  #171717;
 }
 
 
