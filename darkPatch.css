@@ -28,6 +28,10 @@ html.dark textarea {
 	filter: hue-rotate(349deg) contrast(115%) saturate(60%);
 }
 
+html.dark select {
+	filter: hue-rotate(349deg) contrast(99%) saturate(70%);
+}
+
 html.dark option:checked {
 	background: #0070ff;
 }
