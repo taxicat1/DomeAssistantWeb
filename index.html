@@ -1334,6 +1334,7 @@
 									id="challengeLevel50"
 									name="challengeLevelRadio"
 									checked
+									data-da-save-local-storage="true"
 								/>
 								
 								<label for="challengeLevel50">Level 50</label>
@@ -1344,11 +1345,21 @@
 									type="radio"
 									id="challengeLevelOpen"
 									name="challengeLevelRadio"
+									data-da-save-local-storage="true"
 								/>
 								
 								<label for="challengeLevelOpen">Open Level:</label>
 								
-								<input id="challengeLevelNumber" type="number" inputmode="numeric" class="statInput" min="60" max="100" value="100" disabled />
+								<input
+									id="challengeLevelNumber"
+									type="number"
+									inputmode="numeric"
+									class="statInput"
+									min="60" max="100"
+									value="100"
+									disabled
+									data-da-save-local-storage="true"
+								/>
 								
 								<label for="challengeLevelNumber"><span class="srOnly">Open level value</span></label>
 							</div>
@@ -2174,6 +2185,7 @@
 									darkModeBtn.value = switchLightText;
 									localStorage.setItem(lsDarkModeKey, "true");
 								} else {
+									// Light enabled
 									darkModeBtn.value = switchDarkText;
 									localStorage.setItem(lsDarkModeKey, "false");
 								}

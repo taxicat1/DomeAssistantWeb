@@ -152,8 +152,21 @@ function loadLocalStorage(el) {
 	
 	let val = localStorage.getItem("FORM_" + el.id);
 	if (val) {
-		el.value = val;
-		el.dispatchEvent(new Event("change"));
+		switch (el.type) {
+			case "checkbox":
+			case "radio":
+				el.checked = val === "true";
+				break;
+			
+			default:
+				el.value = val;
+				break;
+		}
+		
+		if (el.dispatchEvent) {
+			el.dispatchEvent(new Event("change"));
+			el.dispatchEvent(new Event("input"));
+		}
 	}
 }
 
@@ -162,7 +175,46 @@ function saveLocalStorage(el) {
 		return;
 	}
 	
-	localStorage.setItem("FORM_" + el.id, el.value);
+	let val;
+	switch (el.type) {
+		case "checkbox":
+		case "radio":
+			val = el.checked;
+			
+			// Special processing of radio buttons that uncheck each other.
+			// A radio button being unchecked by another radio button in the same
+			// form with the same name does NOT fire a change event.
+			// Here, the radio button being checked (triggering the event) uses querySelectorAll
+			// to gather all possible others in its group (there is no better way to do that) and
+			// save them in localStorage as well.
+			if (el.type === "radio" && el.name !== "" && val === true) {
+				let parentForm = document;
+				if (el.form) {
+					parentForm = el.form;
+				}
+				
+				let othersInGroup = parentForm.querySelectorAll(`input[type="radio"][name="${el.name}"]`);
+				othersInGroup.forEach(radioEl => {
+					if (radioEl === el) {
+						return;
+					}
+					
+					if (radioEl.form !== el.form) {
+						return;
+					}
+					
+					saveLocalStorage(radioEl)
+				});
+			}
+			
+			break;
+		
+		default:
+			val = el.value;
+			break;
+	}
+	
+	localStorage.setItem("FORM_" + el.id, val);
 }
 
 function removeInvalid(x) {
