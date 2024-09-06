@@ -165,7 +165,6 @@ function loadLocalStorage(el) {
 		
 		if (el.dispatchEvent) {
 			el.dispatchEvent(new Event("change"));
-			el.dispatchEvent(new Event("input"));
 		}
 	}
 }
