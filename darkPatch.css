@@ -67,8 +67,8 @@ html.dark .tabBox {
 }
 
 
-html.dark .appearanceLeadPercents:hover::before,
-html.dark .appearanceLeadPercents.touched::before {
+html.dark [data-da-hover]:hover::before,
+html.dark [data-da-hover].touched::before {
 	background-color: #111;
 	border-color: #ccc;
 	color: #eee;

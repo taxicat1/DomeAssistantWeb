@@ -294,8 +294,6 @@ input[type="radio"] {
 }
 
 .submitButton[disabled] {
-/*	background: #5c5c99;
-	color: #efefef; */
 	background: #ababd9;
 	color: #353535;
 }
@@ -321,11 +319,6 @@ input[type="radio"] {
 .resetButton:not([disabled]):active {
 	background: #cc3535;
 }
-
-/*
-.resetButton[disabled] {
-}
-*/
 
 .navButton {
 	background: #d5dce3;
@@ -359,34 +352,40 @@ a.pokeSet:hover {
 	opacity: 0.71;
 }
 
-.appearanceLeadPercents {
+
+[data-da-hover] {
 	cursor: help;
 	position: relative;
 }
 
-.appearanceLeadPercents:hover,
-.appearanceLeadPercents.touched {
+[data-da-hover]:hover,
+[data-da-hover].touched {
 	text-decoration: underline;
 }
 
-.appearanceLeadPercents:hover::before,
-.appearanceLeadPercents.touched::before {
+[data-da-hover]:hover::before,
+[data-da-hover].touched::before {
 	font-weight: normal;
+	color: #222;
+	background: #fefefe;
+	
 	display: block;
 	position: absolute;
 	top: -2.5em;
+	left: -1ch;
+	z-index: 99991;
+	
 	content: attr(data-da-hover);
-	background: #fefefe;
-	z-index: 99990;
+	
 	border-radius: 2px;
 	border: 1px solid #333;
 	white-space: nowrap;
 	padding: 0.8ch;
 	box-shadow: 0 1px 1px 0 #0004;
-	left: -1ch;
 }
 
-.appearanceLeadPercents.lefty:hover::before,
-.appearanceLeadPercents.lefty.touched::before {
-	left: -12ch;
+[data-da-hover].lefty:hover::before,
+[data-da-hover].lefty.touched::before {
+	left: unset;
+	right: -1ch;
 }
