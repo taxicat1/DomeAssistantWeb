@@ -2506,13 +2506,16 @@
 					
 					<div class="subLegend">Damage ranges (unboosted)</div>
 					
-					<div>Power-boosting held items are taken into account.</div>
-					<div>Player Pokémon abilities are taken into account, opponent's are not; except for <strong>Wonder Guard</strong> and <strong>Levitate</strong>.</div>
 					<div>Multi-hit moves are shown per hit. Moves that depend on current HP assume 100%.</div>
 					<div>Odds to KO or break substitutes are factoring in critical hits.</div>
 					
+					<div>
+						Show with ability:
+						<select id="modalAbilitySelect"></select>
+					</div>
+					
 					<table class="outputTable damageTable typeTable" id="modalOffsensiveDamageTable">
-						<caption>Offensive Ranges</caption>
+						<caption>Offensive ranges</caption>
 						
 						<tr>
 							<th class="minColumn">Target</th>
@@ -2556,7 +2559,7 @@
 					
 					<div id="defensiveRangesTableContainer" style="display:contents"></div>
 					
-					<div class="subLegend" id="exportSetLabel">Export set</div>
+					<div class="subLegend" id="exportSetLabel">Full set as paste</div>
 					
 					<textarea
 						id="exportSetTextArea"
@@ -2564,7 +2567,7 @@
 						autocomplete="off"
 						aria-labelledby="exportSetLabel"
 						onclick="this.select()"
-						rows="6"
+						rows="5"
 						readonly="true"
 						style="resize:none"
 					></textarea>
@@ -3476,7 +3479,7 @@
 				a.ariaLabel = `Show more information about ${pokeSet.name}`;
 				
 				a.dataset.daSetName = pokeSet.name;
-				a.addEventListener("click", pokeSetOpenModal);
+				a.addEventListener("click", modalOpenPokeSet);
 				
 				return a;
 			}
@@ -4126,7 +4129,7 @@
 				return ret;
 			}
 			
-			function pokeSetOpenModal(clickEvent) {
+			function modalOpenPokeSet(clickEvent) {
 				// Reject invalid trigger
 				if (!(clickEvent?.target?.dataset?.daSetName)) {
 					return;
@@ -4146,6 +4149,43 @@
 				let level = prelimPanel.getChallengeLevel();
 				initDomePoke(opponentPokeSet, level);
 				
+				modalPopulatePokeSetBasic(opponentPokeSet);
+				modalPopulatePokeSetDamage(opponentPokeSet);
+				
+				let abilitySelect = document.getElementById("modalAbilitySelect");
+				
+				while (abilitySelect.firstChild) {
+					abilitySelect.firstChild.remove();
+				}
+				
+				abilitySelect.append(makeOptionEl(opponentPokeSet.species.ability1));
+				
+				if (opponentPokeSet.species.ability2 !== null) {
+					abilitySelect.append(makeOptionEl(opponentPokeSet.species.ability2));
+					abilitySelect.disabled = false;
+					
+					// This is probably the only time I've found a use for the on<event> properties.
+					// We want this to be replaced with a new function every time the modal is opened.
+					// So, we can't just use addEventListener because we have no way of accessing
+					// the original reference to the function which was assigned to it. onchange solves
+					// that by only allowing a single function to be attached at a time. The previous
+					// function just gets garbage collected after the element no longer has a reference to it.
+					abilitySelect.onchange = function() {
+						// opponentPokeSet and level here are both taken from upper block
+						opponentPokeSet.ability = this.value;
+						initDomePoke(opponentPokeSet, level);
+						modalPopulatePokeSetDamage(opponentPokeSet);
+						
+						// Reset this so nothing else reads the ability when it shouldn't
+						delete opponentPokeSet.ability;
+					};
+				} else {
+					abilitySelect.onchange = null;
+					abilitySelect.disabled = true;
+				}
+			}
+			
+			function modalPopulatePokeSetBasic(opponentPokeSet) {
 				// Modal title
 				const mdash = "\u2014";
 				document.getElementById("modalTitle").textContent = `Set details ${mdash} ${opponentPokeSet.name}`;
@@ -4182,19 +4222,22 @@
 					}
 				}
 				
-				
 				// Set player poke sprites
 				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite1"), prelimPanel.el.playerPokeSelect1.value);
 				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite2"), prelimPanel.el.playerPokeSelect2.value);
 				setPokeIconSprite(document.getElementById("modalPlayerPokeSprite3"), prelimPanel.el.playerPokeSelect3.value);
 				
+				// Text area export string
+				document.getElementById("exportSetTextArea").value = frontierPokemon_export(opponentPokeSet, opponentPokeSet.level, opponentPokeSet.ivs.hp);
+			}
+			
+			function modalPopulatePokeSetDamage(opponentPokeSet) {
 				// Fill damage table cells
 				const dmgCellIds = [
 					[ "modalDamagePoke1Move1", "modalDamagePoke1Move2", "modalDamagePoke1Move3", "modalDamagePoke1Move4" ],
 					[ "modalDamagePoke2Move1", "modalDamagePoke2Move2", "modalDamagePoke2Move3", "modalDamagePoke2Move4" ],
 					[ "modalDamagePoke3Move1", "modalDamagePoke3Move2", "modalDamagePoke3Move3", "modalDamagePoke3Move4" ]
 				];
-				
 				
 				// Grab these once and cache them
 				let playerPokeSets = [
@@ -4275,9 +4318,6 @@
 					// Append this table to the container
 					defensiveRangeTableContainer.append(table.documentFragment);
 				}
-				
-				// Text area export string
-				document.getElementById("exportSetTextArea").value = frontierPokemon_export(opponentPokeSet, opponentPokeSet.level, opponentPokeSet.ivs.hp);
 			}
 		</script>
 	</body>

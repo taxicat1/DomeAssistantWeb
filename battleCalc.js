@@ -163,17 +163,9 @@ function initDomePoke(frontierPoke, level) {
 		}
 	}
 	
-	// Ignore ability, EXCEPT in cases of Wonder Guard and Levitate
-	const significantAbilities = [
-		"Wonder Guard", "Levitate"
-	];
-	
+	// Assume ability 1 unless manually set otherwise
 	if (!Object.hasOwn(frontierPoke, "ability")) {
-		if (significantAbilities.includes(frontierPoke.species.ability1)) {
-			frontierPoke.ability = frontierPoke.species.ability1;
-		} else {
-			frontierPoke.ability = "Unknown ability";
-		}
+		frontierPoke.ability = frontierPoke.species.ability1;
 	}
 	
 	// Correct the level if it mismatches with the supplied level
