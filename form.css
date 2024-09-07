@@ -371,6 +371,7 @@ a.pokeSet:hover {
 
 .appearanceLeadPercents:hover::before,
 .appearanceLeadPercents.touched::before {
+	font-weight: normal;
 	display: block;
 	position: absolute;
 	top: -2.5em;
