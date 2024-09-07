@@ -2529,7 +2529,7 @@
 					<div class="subLegend">Damage ranges (unboosted)</div>
 					
 					<div>Multi-hit moves are shown per hit. Moves that depend on current HP assume 100%.</div>
-					<div>Odds to KO or break substitutes are factoring in critical hits.</div>
+					<div>Likelihoods to KO or break substitutes are including critical hits.</div>
 					
 					<div>
 						Show with ability:
@@ -3548,7 +3548,7 @@
 				);
 			}
 			
-			function fmtPct(n, digits) {
+			function fmtPct(n, digits, omitPctSymbol) {
 				digits = digits ?? 2;
 				let pct = (n * 100).toFixed(digits);
 				
@@ -3568,7 +3568,11 @@
 					}
 				}
 				
-				return `${pct}%`;
+				if (omitPctSymbol) {
+					return pct;
+				} else {
+					return pct + "%";
+				}
 			}
 			
 			function runTeamSearch(processMidBattleInfo) {
@@ -4051,16 +4055,16 @@
 			});
 			
 			function moveDamageInfoToDoc(moveDamage, defenderPoke) {
-				let ret = document.createDocumentFragment();
+				let doc = document.createDocumentFragment();
 				
 				// Skip empty move slot
 				if (moveDamage === null) {
-					return ret;
+					return doc;
 				}
 				
 				// Nondamaging or unsupported move
 				if (moveDamage.dmgHp === null) {
-					return ret;
+					return doc;
 				}
 				
 				// Replace 0s in the range with 1
@@ -4075,83 +4079,95 @@
 				
 				// Skip cell for immunity
 				if (hpMax === 0) {
-					return ret;
+					return doc;
 				}
 				
 				// After 3200% write 'OHKO'
 				// -6 atk, +6 def, and a screen cannot save you
 				// OHKO moves specifically generate this out at damage calc
 				if (pctMin >= 32) {
-					let d1 = document.createElement("div");
-					d1.className = "damageLine highDanger";
-					d1.textContent = "OHKO";
-					ret.append(d1);
+					let line = document.createElement("div");
+					line.classList.add("damageLine", "highDanger");
+					line.textContent = "OHKO";
+					doc.append(line);
 					
-					return ret;
-				}
-				
-				// Fill with two divs showing damage
-				// Show either a range or a single value for HP and percentage, if neccessary
-				let hpText;
-				if (hpMin !== hpMax) {
-					hpText = `${hpMin} - ${hpMax} HP`;
-				} else {
-					hpText = `${hpMin} HP`;
-				}
-				
-				let pctText;
-				if (pctMin !== pctMax) {
-					pctText = `${fmtPct(pctMin, 1)} - ${fmtPct(pctMax, 1)}`;
-				} else {
-					pctText = `${fmtPct(pctMin, 1)}`;
+					return doc;
 				}
 				
 				
+				// Check danger level
 				let highDangerThreshold = 1/2;
 				if (defenderPoke.item === "Leftovers") {
 					highDangerThreshold += 1/16;
 				}
 				
-				// Classes for text lines in this cell
-				let lineClass = "damageLine";
-				if (pctMin >= highDangerThreshold) {
-					lineClass = "damageLine highDanger";
+				let highDanger = (pctMin >= highDangerThreshold);
+				
+				// Prepare lines of text
+				let textLines = [];
+				let subLines = [];
+				
+				// Create main text lines
+				// HP values, either a range or a fixed amount
+				if (hpMin !== hpMax) {
+					textLines.push(`${hpMin} - ${hpMax} HP`);
+				} else {
+					textLines.push(`${hpMin} HP`);
 				}
 				
-				let d1 = document.createElement("div");
-				d1.className = lineClass;
-				d1.textContent = hpText;
+				// HP percents, either a range or a fixed amount
+				if (pctMin !== pctMax) {
+					textLines.push(`${fmtPct(pctMin, 1)} - ${fmtPct(pctMax, 1)}`);
+				} else {
+					textLines.push(`(${fmtPct(pctMin, 1)})`);
+				}
 				
-				let d2 = document.createElement("div");
-				d2.className = lineClass;
-				d2.textContent = pctText;
 				
-				ret.append(d1, d2);
-				
+				// Create sub text lines (conditionally)
 				let defenderPokeHasSub = defenderPoke.moves.some(move => move.name === "Substitute");
 				if (defenderPokeHasSub) {
 					let subHealth = defenderPoke.stats.hp >>> 2;
 					let subBreakProb = subBreakAnalysis(moveDamage, subHealth);
 					
 					if (subBreakProb !== 1 && subBreakProb !== 0) {
-						let d3 = document.createElement("div");
-						d3.className = lineClass;
-						d3.classList.add("subBreak");
-						d3.textContent = `${fmtPct(subBreakProb, 1)} to break Sub.`;
-						ret.append(d3);
+						subLines.push(`${fmtPct(subBreakProb, 1)} to break Sub.`);
 					}
 				}
 				
 				let koProb = subBreakAnalysis(moveDamage, defenderPoke.stats.hp);
 				if (koProb !== 0 && koProb !== 1) {
-					let d3 = document.createElement("div");
-					d3.className = lineClass;
-					d3.classList.add("subBreak");
-					d3.textContent = `${fmtPct(koProb, 1)} KO`;
-					ret.append(d3);
+					subLines.push(`${fmtPct(koProb, 1)} to KO`);
 				}
 				
-				return ret;
+				
+				// Add main text lines to return document
+				for (let l = 0; l < textLines.length; l++) {
+					let lineEl = document.createElement("div");
+					
+					lineEl.classList.add("damageLine");
+					if (highDanger) {
+						lineEl.classList.add("highDanger");
+					}
+					
+					lineEl.textContent = textLines[l];
+					doc.append(lineEl);
+				}
+				
+				// Add sub text lines to return document
+				for (let l = 0; l < subLines.length; l++) {
+					let lineEl = document.createElement("div");
+					
+					lineEl.classList.add("damageLine", "subBreak");
+					if (highDanger) {
+						lineEl.classList.add("highDanger");
+					}
+					
+					lineEl.textContent = subLines[l];
+					doc.append(lineEl);
+				}
+				
+				
+				return doc;
 			}
 			
 			function modalOpenPokeSet(clickEvent) {
