@@ -10,6 +10,22 @@
 		
 		<meta name="viewport" content="width=1500, user-scalable=yes">
 		
+		<style>
+			body {
+				font: 400 13px   arial, sans-serif;
+				font: 400 9.75pt arial, sans-serif;
+				line-height: 1.1;
+				color: #222;
+				background: #888;
+				margin: 0;
+				padding: 0.7em;
+			}
+			
+			table td, table th {
+				padding: 2px;
+			}
+		</style>
+		
 		<link rel="stylesheet" href="sprites/sprite.css">
 		<link rel="stylesheet" href="sprites/pokeIconSprite.css">
 		<link rel="stylesheet" href="sprites/heldItemSprite.css">
@@ -42,21 +58,6 @@
 		<link rel="stylesheet" href="typeTable.css">
 		<link rel="stylesheet" href="tabMenu.css">
 		<link rel="stylesheet" href="modal.css">
-		<style>
-			body {
-				font: 400 13px   arial, sans-serif;
-				font: 400 9.75pt arial, sans-serif;
-				line-height: 1.1;
-				color: #222;
-				background: #888;
-				margin: 0;
-				padding: 0.7em;
-			}
-			
-			table td, table th {
-				padding: 2px;
-			}
-		</style>
 		
 		<link rel="stylesheet" href="darkPatch.css">
 		
@@ -67,16 +68,28 @@
 				const activationClass = "touched";
 				const availabilityClass = "touchToHover";
 				
-				window.addEventListener("touchstart", function(event) {
+				function clearTouchActivation() {
 					if (lastTouchTriggerEl) {
 						lastTouchTriggerEl.classList.remove(activationClass);
+						lastTouchTriggerEl = null;
 					}
+					
+					// Done this rather than using { once: true }
+					// because a touch event may also run this function
+					// Removing the event listener at all is purely a performance concern
+					window.removeEventListener("mouseover", clearTouchActivation);
+				}
+				
+				window.addEventListener("touchstart", function(event) {
+					clearTouchActivation();
 					
 					if (event.target.classList.contains(availabilityClass)) {
 						lastTouchTriggerEl = event.target;
 						lastTouchTriggerEl.classList.add(activationClass);
-					} else {
-						lastTouchTriggerEl = null;
+						
+						// Listen for mouse movement that will also exit the pseudo-hover state
+						// Useful for systems with both mouse and touch pointing
+						window.addEventListener("mouseover", clearTouchActivation);
 					}
 				});
 			})();
