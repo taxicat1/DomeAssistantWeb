@@ -59,6 +59,28 @@
 		</style>
 		
 		<link rel="stylesheet" href="darkPatch.css">
+		
+		<script> // Support for tap-to-hover on touch screens
+			(function() {
+				let lastTouchTriggerEl = null;
+				
+				const activationClass = "touched";
+				const availabilityClass = "touchToHover";
+				
+				window.addEventListener("touchstart", function(event) {
+					if (lastTouchTriggerEl) {
+						lastTouchTriggerEl.classList.remove(activationClass);
+					}
+					
+					if (event.target.classList.contains(availabilityClass)) {
+						lastTouchTriggerEl = event.target;
+						lastTouchTriggerEl.classList.add(activationClass);
+					} else {
+						lastTouchTriggerEl = null;
+					}
+				});
+			})();
+		</script>
 	</head>
 	
 	<body>
@@ -3484,9 +3506,12 @@
 				return a;
 			}
 			
-			function makeProbabilityEl(appearProb, leadProb, pctDigits) {
+			function makeProbabilityEl(appearProb, leadProb, pctDigits, isLefty) {
 				let el = document.createElement("span");
-				el.className = "appearanceLeadPercents";
+				el.classList.add("appearanceLeadPercents", "touchToHover");
+				if (isLefty) {
+					el.classList.add("lefty");
+				}
 				
 				let appearText = fmtPct(appearProb, pctDigits);
 				let leadText = `${fmtPct(leadProb, pctDigits)} to be the lead`;
@@ -3495,7 +3520,7 @@
 				
 				// SR alt for hover text
 				let sr = document.createElement("span");
-				sr.className = "srOnly";
+				sr.classList.add("srOnly");
 				sr.textContent = leadText;
 				
 				el.append(sr);
@@ -3753,7 +3778,7 @@
 							}
 							
 							// Fill in row totals
-							let probTotalEl = makeProbabilityEl(speciesTotal, speciesLeadTotal, 1);
+							let probTotalEl = makeProbabilityEl(speciesTotal, speciesLeadTotal, 1, true);
 							tableRow.elementId["probTotal"].append(probTotalEl);
 							
 							// Append row to table body

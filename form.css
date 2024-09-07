@@ -364,11 +364,13 @@ a.pokeSet:hover {
 	position: relative;
 }
 
-.appearanceLeadPercents:hover {
+.appearanceLeadPercents:hover,
+.appearanceLeadPercents.touched {
 	text-decoration: underline;
 }
 
-.appearanceLeadPercents:hover::before {
+.appearanceLeadPercents:hover::before,
+.appearanceLeadPercents.touched::before {
 	display: block;
 	position: absolute;
 	top: -2.5em;
@@ -381,4 +383,9 @@ a.pokeSet:hover {
 	padding: 0.8ch;
 	box-shadow: 0 1px 1px 0 #0004;
 	left: -1ch;
+}
+
+.appearanceLeadPercents.lefty:hover::before,
+.appearanceLeadPercents.lefty.touched::before {
+	left: -12ch;
 }
