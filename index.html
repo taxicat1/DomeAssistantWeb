@@ -3519,28 +3519,33 @@
 				return a;
 			}
 			
-			function makeProbabilityEl(appearProb, leadProb, pctDigits, isLefty) {
+			function makeHoverTextEl(visibleText, hoverText, isLefty) {
 				let el = document.createElement("span");
-				el.classList.add("appearanceLeadPercents", "touchToHover");
+				el.classList.add("touchToHover");
 				if (isLefty) {
 					el.classList.add("lefty");
 				}
 				
+				// Visible text node
+				let textNode = document.createTextNode(visibleText);
+				
+				// SR alt for hover text
+				let srNode = document.createElement("span");
+				srNode.classList.add("srOnly");
+				srNode.textContent = hoverText;
+				
+				el.append(textNode, srNode);
+				
+				el.dataset.daHover = hoverText;
+				
+				return el;
+			}
+			
+			function makeProbabilityEl(appearProb, leadProb, pctDigits, isLefty) {
 				let appearText = fmtPct(appearProb, pctDigits);
 				let leadText = `${fmtPct(leadProb, pctDigits)} to be the lead`;
 				
-				el.append(document.createTextNode(appearText));
-				
-				// SR alt for hover text
-				let sr = document.createElement("span");
-				sr.classList.add("srOnly");
-				sr.textContent = leadText;
-				
-				el.append(sr);
-				
-				el.dataset.daHover = leadText;
-				
-				return el;
+				return makeHoverTextEl(appearText, leadText, isLefty);
 			}
 			
 			function quickCalcDomeSpeed(frontierPoke) {
