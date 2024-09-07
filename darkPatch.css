@@ -3,6 +3,10 @@ html.dark body {
 	background-color: #0b0b0b;
 }
 
+html.dark a[href],
+html.dark a[href]:visited {
+	color: #6da3f9;
+}
 
 html.dark details {
 	border-color: #cacaca;
@@ -17,7 +21,8 @@ html.dark #modalPopup {
 }
 
 html.dark ::placeholder {
-	color: white;	
+	color: white;
+	opacity: 0.55;
 }
 
 html.dark input,
