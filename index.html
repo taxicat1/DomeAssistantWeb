@@ -2625,15 +2625,126 @@
 			formBoilerPlate();
 		</script>
 		
-		<script> // Basic form functionality; validation, buttons, and navigation
+		<script> // DOM manipulation helpers and element creators
 			"use strict";
-			
-			const panelContainer = document.getElementById("formPanelContainer");
 			
 			function gatherIdsToObject(obj, id) {
 				obj[id] = document.getElementById(id);
 				return obj;
 			}
+			
+			function pokeSpeciesToColor(species) {
+				// This is the only way to ever see the Flying type!
+				// Also applies to Girafarig
+				if (species.type1.name === "Normal" && species.type2 !== null) {
+					return species.type2.name;
+				}
+				
+				return species.type1.name;
+			}
+			
+			function fmtPct(n, digits, omitPctSymbol) {
+				digits = digits ?? 2;
+				let pct = (n * 100).toFixed(digits);
+				
+				// Tested: doing string manipulation by hand is SIGNIFICANTLY faster than toLocaleString()
+				// The docs warned of that, and they were right. Shame, toLocaleString() is better
+				if (digits > 0) {
+					// Strip trailing 0s
+					while (pct.endsWith("0")) {
+						pct = pct.slice(0, -1);
+					}
+					
+					// Strip decimal separator if no more decimal digits
+					// Note no locale variance here, it is always a "." decimal sep char.
+					// EMCA 262 spec 15.7.4.5
+					if (pct.endsWith(".")) {
+						pct = pct.slice(0, -1);
+					}
+				}
+				
+				if (omitPctSymbol) {
+					return pct;
+				} else {
+					return pct + "%";
+				}
+			}
+			
+			function makeSrOnlyEl(srText) {
+				let srNode = document.createElement("span");
+				srNode.classList.add("srOnly");
+				srNode.textContent = srText;
+				
+				return srNode;
+			}
+			
+			function makeHoverTextEl(visibleText, hoverText, isLefty) {
+				let hoverTextEl = document.createElement("span");
+				hoverTextEl.classList.add("touchToHover");
+				if (isLefty) {
+					hoverTextEl.classList.add("lefty");
+				}
+				
+				// Visible text node
+				hoverTextEl.append(document.createTextNode(visibleText));
+				
+				// SR alt for hover text
+				hoverTextEl.append(makeSrOnlyEl(hoverText));
+				
+				hoverTextEl.dataset.daHover = hoverText;
+				
+				return hoverTextEl;
+			}
+			
+			function makeShedinjaDangerEl(dangerLevel) {
+				let alarmText;
+				let description;
+				
+				switch (dangerLevel) {
+					case 1:
+						alarmText = "!";
+						description = "Able to damage Shedinja";
+						break;
+					
+					case 2:
+						alarmText = "!!";
+						description = "Able to attack Shedinja";
+						break;
+				}
+				
+				let dangerEl = makeHoverTextEl(alarmText, description);
+				dangerEl.classList.add("shedAlarm");
+				
+				return dangerEl;
+			}
+			
+			function makeSetEl(pokeSet) {
+				let setNode = document.createElement("a");
+				setNode.className = "pokeSet";
+				setNode.textContent = pokeSet.name;
+				
+				setNode.tabIndex = 0;
+				setNode.role = "button";
+				setNode.ariaLabel = `Show more information about ${pokeSet.name}`;
+				
+				setNode.dataset.daSetName = pokeSet.name;
+				setNode.addEventListener("click", modalOpenPokeSet);
+				
+				return setNode;
+			}
+			
+			function makeProbabilityEl(appearProb, leadProb, pctDigits, isLefty) {
+				let appearText = fmtPct(appearProb, pctDigits);
+				let leadText = `${fmtPct(leadProb, pctDigits)} to be the lead`;
+				
+				return makeHoverTextEl(appearText, leadText, isLefty);
+			}
+		</script>
+		
+		<script> // Basic form functionality; validation, buttons, and navigation
+			"use strict";
+			
+			const panelContainer = document.getElementById("formPanelContainer");
 			
 			// List all important elements
 			
@@ -3079,14 +3190,6 @@
 		<script> // Advanced and higher order form functionality
 			"use strict";
 			
-			function pokeSpeciesToColor(species) {
-				if (species.type1.name === "Normal" && species.type2 !== null) {
-					return species.type2.name;
-				}
-				
-				return species.type1.name;
-			}
-			
 			prelimPanel.getPlayerPokeSpecies = function() {
 				return [
 					prelimPanel.el.playerPokeSelect1.value,
@@ -3488,72 +3591,6 @@
 		<script> // Submit buttons functionality + helpers
 			"use strict";
 			
-			function makeShedinjaDangerEl(dangerLevel) {
-				let dangerEl = document.createElement("span");
-				dangerEl.className = "shedAlarm";
-				
-				switch (dangerLevel) {
-					// TODO: Modify this maybe with its own sprite or something?
-					case 1:
-						dangerEl.textContent = '!';
-						dangerEl.title = "Able to damage Shedinja";
-						dangerEl.ariaLabel = dangerEl.title;
-						break;
-					
-					case 2:
-						dangerEl.textContent = '!!';
-						dangerEl.title = "Able to attack Shedinja";
-						dangerEl.ariaLabel = dangerEl.title;
-						break;
-				}
-				
-				return dangerEl;
-			}
-			
-			function makeSetEl(pokeSet) {
-				let a = document.createElement("a");
-				a.className = "pokeSet";
-				a.textContent = pokeSet.name;
-				
-				a.tabIndex = 0;
-				a.role = "button";
-				a.ariaLabel = `Show more information about ${pokeSet.name}`;
-				
-				a.dataset.daSetName = pokeSet.name;
-				a.addEventListener("click", modalOpenPokeSet);
-				
-				return a;
-			}
-			
-			function makeHoverTextEl(visibleText, hoverText, isLefty) {
-				let el = document.createElement("span");
-				el.classList.add("touchToHover");
-				if (isLefty) {
-					el.classList.add("lefty");
-				}
-				
-				// Visible text node
-				let textNode = document.createTextNode(visibleText);
-				
-				// SR alt for hover text
-				let srNode = document.createElement("span");
-				srNode.classList.add("srOnly");
-				srNode.textContent = hoverText;
-				
-				el.append(textNode, srNode);
-				
-				el.dataset.daHover = hoverText;
-				
-				return el;
-			}
-			
-			function makeProbabilityEl(appearProb, leadProb, pctDigits, isLefty) {
-				let appearText = fmtPct(appearProb, pctDigits);
-				let leadText = `${fmtPct(leadProb, pctDigits)} to be the lead`;
-				
-				return makeHoverTextEl(appearText, leadText, isLefty);
-			}
-			
 			function quickCalcDomeSpeed(frontierPoke) {
 				let iv;
 				switch (frontierPoke.instance) {
@@ -3570,33 +3607,6 @@
 					frontierPoke.evs.spe,
 					iv
 				);
-			}
-			
-			function fmtPct(n, digits, omitPctSymbol) {
-				digits = digits ?? 2;
-				let pct = (n * 100).toFixed(digits);
-				
-				// Tested: doing string manipulation by hand is SIGNIFICANTLY faster than toLocaleString()
-				// The docs warned of that, and they were right. Shame, toLocaleString() is better
-				if (digits > 0) {
-					// Strip trailing 0s
-					while (pct.endsWith("0")) {
-						pct = pct.slice(0, -1);
-					}
-					
-					// Strip decimal separator if no more decimal digits
-					// Note no locale variance here, it is always a "." decimal sep char.
-					// EMCA 262 spec 15.7.4.5
-					if (pct.endsWith(".")) {
-						pct = pct.slice(0, -1);
-					}
-				}
-				
-				if (omitPctSymbol) {
-					return pct;
-				} else {
-					return pct + "%";
-				}
 			}
 			
 			function runTeamSearch(processMidBattleInfo) {
