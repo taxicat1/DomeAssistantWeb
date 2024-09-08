@@ -164,6 +164,7 @@ th.minColumn {
 	color: #a00000;
 	position: relative;
 	bottom: 0.4ch;
+	padding: 0 1px;
 }
 
 details {
