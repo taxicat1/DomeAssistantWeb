@@ -2670,6 +2670,12 @@
 				}
 			}
 			
+			function removeAllChildren(parentEl) {
+				while (parentEl.firstChild) {
+					parentEl.firstChild.remove();
+				}
+			}
+			
 			function makeSrOnlyEl(srText) {
 				let srNode = document.createElement("span");
 				srNode.classList.add("srOnly");
@@ -4031,13 +4037,8 @@
 				outputPanel.el.placeholderOutputHeader.style.display = "none";
 				
 				// Clear children of all output containers
-				while (outputPanel.el.outputEntryContainer.firstChild) {
-					outputPanel.el.outputEntryContainer.firstChild.remove();
-				}
-				
-				while (outputPanel.el.outputSummaryPanelContainer.firstChild) {
-					outputPanel.el.outputSummaryPanelContainer.firstChild.remove();
-				}
+				removeAllChildren(outputPanel.el.outputEntryContainer);
+				removeAllChildren(outputPanel.el.outputSummaryPanelContainer);
 				
 				// Close this if it was open before
 				outputPanel.el.outputSummaryPanelDetails.open = false;
@@ -4229,9 +4230,7 @@
 				
 				let abilitySelect = document.getElementById("modalAbilitySelect");
 				
-				while (abilitySelect.firstChild) {
-					abilitySelect.firstChild.remove();
-				}
+				removeAllChildren(abilitySelect);
 				
 				abilitySelect.append(makeOptionEl(opponentPokeSet.species.ability1));
 				
@@ -4334,9 +4333,7 @@
 						let cell = document.getElementById( dmgCellIds[p][d] );
 						
 						// Clear out cell of anything old
-						while (cell.firstChild) {
-							cell.firstChild.remove();
-						}
+						removeAllChildren(cell);
 						
 						// Generate and append new data to the table cell
 						let cellData = moveDamageInfoToDoc(damage[d], playerPokeSet);
@@ -4348,9 +4345,7 @@
 				let defensiveRangeTableContainer = document.getElementById("defensiveRangesTableContainer");
 				
 				// Clear out any old tables
-				while (defensiveRangeTableContainer.firstChild) {
-					defensiveRangeTableContainer.firstChild.remove();
-				}
+				removeAllChildren(defensiveRangeTableContainer);
 				
 				// Loop over player pokes and add a table
 				for (let p = 0; p < playerPokeSets.length; p++) {
