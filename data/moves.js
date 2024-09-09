@@ -393,6 +393,25 @@ const moveHasFlag = (function() {
 			"Poison Tail", "Volt Tackle", "Leaf Blade", "Wake-Up Slap", "Hammer Arm"
 		]),
 		
+		"kingsRock" : new Set([
+			"Absorb", "Aeroblast", "Barrage", "Beat Up", "Bide", "Bone Rush",
+			"Bonemerang", "Comet Punch", "Counter", "Crabhammer", "Cross Chop",
+			"Cut", "Dig", "Double Kick", "DoubleSlap", "Double-Edge", "Drill Peck",
+			"Egg Bomb", "Explosion", "ExtremeSpeed", "False Swipe", "Faint Attack",
+			"Flail", "Fly", "Frustration", "Fury Attack", "Fury Cutter", "Fury Swipes",
+			"Giga Drain", "Hidden Power", "Hi-Jump Kick", "Horn Attack", "Hydro Pump",
+			"Jump Kick", "Karate Chop", "Leech Life", "Mach Punch", "Magnitude",
+			"Mega Drain", "Mega Kick", "Mega Punch", "Megahorn", "Mirror Coat",
+			"Night Shade", "Outrage", "Pay Day", "Peck", "Petal Dance", "Pin Missile",
+			"Pound", "Present", "Psywave", "Pursuit", "Quick Attack", "Rage", "Rapid Spin",
+			"Razor Leaf", "Razor Wind", "Return", "Reversal", "Rock Throw", "Rollout",
+			"Scratch", "Seismic Toss", "Selfdestruct", "Skull Bash", "Sky Attack", "Slam",
+			"Slash", "Snore", "SolarBeam", "Sonicboom", "Spike Cannon", "Strength",
+			"Struggle", "Submission", "Super Fang", "Surf", "Swift", "Tackle", "Take Down",
+			"Thief", "Thrash", "Triple Kick", "Twineedle", "ViceGrip", "Vine Whip",
+			"Vital Throw", "Water Gun", "Waterfall", "Wing Attack"
+		]),
+		
 		"soundBased" : new Set([
 			"GrassWhistle", "Growl", "Heal Bell", "Howl", "Metal Sound", "Roar",
 			"Screech", "Sing", "Snore", "Supersonic", "Uproar"
