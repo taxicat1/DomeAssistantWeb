@@ -2660,13 +2660,11 @@
 		<script> // Basic form functionality; validation, buttons, and navigation
 			"use strict";
 			
-			const panelContainer = document.getElementById("formPanelContainer");
-			
 			// List all important elements
-			
 			const prelimPanel = {
 				self : document.getElementById("prelimPanel"),
 				form : document.getElementById("prelimForm"),
+				panelNumber : 0,
 				el : [
 					"playerPokeTabButton1", "playerPokeTabButton2", "playerPokeTabButton3",
 					"playerPokeSelect1",
@@ -2705,6 +2703,7 @@
 			const preBattlePanel = {
 				self : document.getElementById("preBattlePanel"),
 				form : document.getElementById("preBattleForm"),
+				panelNumber : 1,
 				el : [
 					"preBattleResetButton",
 					
@@ -2733,6 +2732,7 @@
 			const midBattlePanel = {
 				self : document.getElementById("midBattlePanel"),
 				form : document.getElementById("midBattleForm"),
+				panelNumber : 2,
 				el : [
 					"midBattleResetButton",
 					
@@ -2759,374 +2759,323 @@
 				].reduce(gatherIdsToObject, {})
 			};
 			
-			
-			// ========== Preliminary panel functionality ========== //
-			
-			
-			// Valid checking-- 3 species + EV sets + IV sets + nature
-			prelimPanel.isValid = function() {
-				if (prelimPanel.el.playerPokeSelect1.selectedIndex === -1 ||
-				    prelimPanel.el.playerPokeSelect2.selectedIndex === -1 ||
-				    prelimPanel.el.playerPokeSelect3.selectedIndex === -1
-				) {
-					return false;
-				}
+			// Scope panel setup
+			(function panelSetup() {
+				const panelContainer = document.getElementById("formPanelContainer");
 				
-				if (prelimPanel.el.playerPokeNatureSelect1.selectedIndex === -1 ||
-				    prelimPanel.el.playerPokeNatureSelect2.selectedIndex === -1 ||
-				    prelimPanel.el.playerPokeNatureSelect3.selectedIndex === -1
-				) {
-					return false;
-				}
-				
-				let evIvEls = [
-					prelimPanel.el.playerPokeHpEv1, 
-					prelimPanel.el.playerPokeAtkEv1,
-					prelimPanel.el.playerPokeDefEv1,
-					prelimPanel.el.playerPokeSpAEv1,
-					prelimPanel.el.playerPokeSpDEv1,
-					prelimPanel.el.playerPokeSpeEv1,
-					
-					prelimPanel.el.playerPokeHpIv1, 
-					prelimPanel.el.playerPokeAtkIv1,
-					prelimPanel.el.playerPokeDefIv1,
-					prelimPanel.el.playerPokeSpAIv1,
-					prelimPanel.el.playerPokeSpDIv1,
-					prelimPanel.el.playerPokeSpeIv1,
-					
-					prelimPanel.el.playerPokeHpEv2, 
-					prelimPanel.el.playerPokeAtkEv2,
-					prelimPanel.el.playerPokeDefEv2,
-					prelimPanel.el.playerPokeSpAEv2,
-					prelimPanel.el.playerPokeSpDEv2,
-					prelimPanel.el.playerPokeSpeEv2,
-					
-					prelimPanel.el.playerPokeHpIv2, 
-					prelimPanel.el.playerPokeAtkIv2,
-					prelimPanel.el.playerPokeDefIv2,
-					prelimPanel.el.playerPokeSpAIv2,
-					prelimPanel.el.playerPokeSpDIv2,
-					prelimPanel.el.playerPokeSpeIv2,
-					
-					prelimPanel.el.playerPokeHpEv3, 
-					prelimPanel.el.playerPokeAtkEv3,
-					prelimPanel.el.playerPokeDefEv3,
-					prelimPanel.el.playerPokeSpAEv3,
-					prelimPanel.el.playerPokeSpDEv3,
-					prelimPanel.el.playerPokeSpeEv3,
-					
-					prelimPanel.el.playerPokeHpIv3, 
-					prelimPanel.el.playerPokeAtkIv3,
-					prelimPanel.el.playerPokeDefIv3,
-					prelimPanel.el.playerPokeSpAIv3,
-					prelimPanel.el.playerPokeSpDIv3,
-					prelimPanel.el.playerPokeSpeIv3
-				];
-				
-				for (let i = 0; i < evIvEls.length; i++) {
-					if (evIvEls[i].validity.valid !== true) {
-						return false;
+				// Freeze all elements of the form, disabling it
+				const panelFreezeFunc = function() {
+					for (let el of Object.values(this.el)) {
+						freezeFormEl(el);
 					}
-				}
+					this.self.ariaHidden = true;
+				};
 				
-				if (prelimPanel.el.challengeLevelOpen.checked && 
-				    prelimPanel.el.challengeLevelNumber.validity.valid !== true
-				) {
-					return false;
-				}
+				// Unfreeze all elements of the form
+				const panelUnfreezeFunc = function() {
+					for (let el of Object.values(this.el)) {
+						unfreezeFormEl(el);
+					}
+					this.self.ariaHidden = false;
+					this.update();
+				};
 				
-				return true;
-			};
-			
-			// Update-- enable/disable the nav button
-			prelimPanel.update = function() {
-				if (prelimPanel.isValid()) {
-					unfreezeFormEl(prelimPanel.el.toOpponentNavButton);
-				} else {
-					freezeFormEl(prelimPanel.el.toOpponentNavButton);
-				}
+				// Slide this panel to active
+				const panelSwitchToFunc = function() {
+					this.unfreeze();
+					panelContainer.dataset.daActivePanel = this.panelNumber;
+				};
 				
-				if (prelimPanel.el.challengeLevelOpen.checked) {
-					unfreezeFormEl(prelimPanel.el.challengeLevelNumber);
-				} else {
-					freezeFormEl(prelimPanel.el.challengeLevelNumber);
-				}
-			};
-			
-			// Freeze all elements of the form, disabling it
-			prelimPanel.freeze = function() {
-				for (let el of Object.values(prelimPanel.el)) {
-					freezeFormEl(el);
-				}
-				prelimPanel.self.ariaHidden = true;
-			};
-			
-			// Unfreeze all elements of the form
-			prelimPanel.unfreeze = function() {
-				for (let el of Object.values(prelimPanel.el)) {
-					unfreezeFormEl(el);
-				}
-				prelimPanel.self.ariaHidden = false;
-				prelimPanel.update();
-			};
-			
-			// Slide this panel to active
-			prelimPanel.switchTo = function() {
-				prelimPanel.unfreeze();
-				panelContainer.dataset.daActivePanel = 0;
-			};
-			
-			// Hook all inputs to update
-			for (let el of Object.values(prelimPanel.el)) {
-				el.addEventListener("input", prelimPanel.update);
-				el.addEventListener("change", prelimPanel.update);
-			};
-			
-			// Call update now too
-			prelimPanel.update();
-			
-			// Add functionality to nav button
-			prelimPanel.el.toOpponentNavButton.addEventListener("click", function() {
-				prelimPanel.freeze();
-				preBattlePanel.switchTo();
-			});
-			
-			
-			// ========== Pre-battle panel functionality ========== //
-			
-			
-			// Valid checking-- must have trainer name, 3 pokemon, and battle style filled out
-			//                  if stat emphasis is not "well-balanced", must have at least one stat filled out
-			preBattlePanel.isValid = function() {
-				if (preBattlePanel.el.opponentNameSelect.selectedIndex === -1) {
-					return false;
-				}
+				// Clear all elements of the form, resetting them
+				const panelClearFunc = function() {
+					for (let el of Object.values(this.el)) {
+						clearFormEl(el);
+					}
+					
+					this.update();
+				};
 				
-				if (preBattlePanel.el.opponentPokeSelect1.selectedIndex === -1 ||
-				    preBattlePanel.el.opponentPokeSelect2.selectedIndex === -1 ||
-				    preBattlePanel.el.opponentPokeSelect3.selectedIndex === -1
-				) {
-					return false;
-				}
+				// ========== Preliminary panel functionality ========== //
+				prelimPanel.freeze   = panelFreezeFunc.bind(prelimPanel);
+				prelimPanel.unfreeze = panelUnfreezeFunc.bind(prelimPanel);
+				prelimPanel.switchTo = panelSwitchToFunc.bind(prelimPanel);
 				
-				if (preBattlePanel.el.opponentBattleStyleSelect.selectedIndex === -1) {
-					return false;
-				}
-				
-				if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
-				    preBattlePanel.el.statEmphasisNeglects.checked
-				) {
-					if (preBattlePanel.el.statEmphasisSelect1.selectedIndex === -1 &&
-					    preBattlePanel.el.statEmphasisSelect2.selectedIndex === -1
+				// Valid checking-- 3 species + EV sets + IV sets + nature
+				prelimPanel.isValid = function() {
+					if (this.el.playerPokeSelect1.selectedIndex === -1 ||
+						this.el.playerPokeSelect2.selectedIndex === -1 ||
+						this.el.playerPokeSelect3.selectedIndex === -1
 					) {
 						return false;
 					}
-				} else if (!preBattlePanel.el.statEmphasisBalanced.checked) {
-					// If none of the three radio buttons are checked
-					return false;
-				}
+					
+					if (this.el.playerPokeNatureSelect1.selectedIndex === -1 ||
+						this.el.playerPokeNatureSelect2.selectedIndex === -1 ||
+						this.el.playerPokeNatureSelect3.selectedIndex === -1
+					) {
+						return false;
+					}
+					
+					let evIvEls = [
+						this.el.playerPokeHpEv1, 
+						this.el.playerPokeAtkEv1,
+						this.el.playerPokeDefEv1,
+						this.el.playerPokeSpAEv1,
+						this.el.playerPokeSpDEv1,
+						this.el.playerPokeSpeEv1,
+						
+						this.el.playerPokeHpIv1, 
+						this.el.playerPokeAtkIv1,
+						this.el.playerPokeDefIv1,
+						this.el.playerPokeSpAIv1,
+						this.el.playerPokeSpDIv1,
+						this.el.playerPokeSpeIv1,
+						
+						this.el.playerPokeHpEv2, 
+						this.el.playerPokeAtkEv2,
+						this.el.playerPokeDefEv2,
+						this.el.playerPokeSpAEv2,
+						this.el.playerPokeSpDEv2,
+						this.el.playerPokeSpeEv2,
+						
+						this.el.playerPokeHpIv2, 
+						this.el.playerPokeAtkIv2,
+						this.el.playerPokeDefIv2,
+						this.el.playerPokeSpAIv2,
+						this.el.playerPokeSpDIv2,
+						this.el.playerPokeSpeIv2,
+						
+						this.el.playerPokeHpEv3, 
+						this.el.playerPokeAtkEv3,
+						this.el.playerPokeDefEv3,
+						this.el.playerPokeSpAEv3,
+						this.el.playerPokeSpDEv3,
+						this.el.playerPokeSpeEv3,
+						
+						this.el.playerPokeHpIv3, 
+						this.el.playerPokeAtkIv3,
+						this.el.playerPokeDefIv3,
+						this.el.playerPokeSpAIv3,
+						this.el.playerPokeSpDIv3,
+						this.el.playerPokeSpeIv3
+					];
+					
+					for (let i = 0; i < evIvEls.length; i++) {
+						if (evIvEls[i].validity.valid !== true) {
+							return false;
+						}
+					}
+					
+					if (this.el.challengeLevelOpen.checked && 
+						this.el.challengeLevelNumber.validity.valid !== true
+					) {
+						return false;
+					}
+					
+					return true;
+				};
 				
-				return true;
-			};
-			
-			// Update-- enabled/disable the "calculate" button and the "on to battle" nav,
-			//          also enable/disable stat selection if "well-balanced" or emphasize/neglect
-			preBattlePanel.update = function() {
-				if (preBattlePanel.isValid()) {
-					unfreezeFormEl(preBattlePanel.el.preBattleSubmitButton);
-					unfreezeFormEl(preBattlePanel.el.onToBattleNavButton);
-				} else {
-					freezeFormEl(preBattlePanel.el.preBattleSubmitButton);
-					freezeFormEl(preBattlePanel.el.onToBattleNavButton);
-				}
+				// Update-- enable/disable the nav button
+				prelimPanel.update = function() {
+					if (this.isValid()) {
+						unfreezeFormEl(this.el.toOpponentNavButton);
+					} else {
+						freezeFormEl(this.el.toOpponentNavButton);
+					}
+					
+					if (this.el.challengeLevelOpen.checked) {
+						unfreezeFormEl(this.el.challengeLevelNumber);
+					} else {
+						freezeFormEl(this.el.challengeLevelNumber);
+					}
+				};
 				
-				if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
-				    preBattlePanel.el.statEmphasisNeglects.checked
-				) {
-					unfreezeFormEl(preBattlePanel.el.statEmphasisSelect1);
-					unfreezeFormEl(preBattlePanel.el.statEmphasisSelect2);
-				} else {
-					freezeFormEl(preBattlePanel.el.statEmphasisSelect1);
-					freezeFormEl(preBattlePanel.el.statEmphasisSelect2);
-				}
-			};
-			
-			// Freeze all elements of the form, disabling it
-			preBattlePanel.freeze = function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					freezeFormEl(el);
-				}
-				preBattlePanel.self.ariaHidden = true;
-			};
-			
-			// Unfreeze all elements of the form
-			preBattlePanel.unfreeze = function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					unfreezeFormEl(el);
-				}
-				preBattlePanel.self.ariaHidden = false;
-				preBattlePanel.update();
-			};
-			
-			// Clear all elements of the form, resetting them
-			preBattlePanel.clear = function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					clearFormEl(el);
-				}
+				// Hook all inputs to update
+				for (let el of Object.values(prelimPanel.el)) {
+					el.addEventListener("input", prelimPanel.update);
+					el.addEventListener("change", prelimPanel.update);
+				};
 				
-				preBattlePanel.update();
-			};
-			
-			// Slide this panel to active
-			preBattlePanel.switchTo = function() {
-				preBattlePanel.unfreeze();
-				panelContainer.dataset.daActivePanel = 1;
-			};
-			
-			// This panel starts frozen
-			preBattlePanel.freeze();
-			
-			// Hook all inputs to update
-			for (let el of Object.values(preBattlePanel.el)) {
-				el.addEventListener("input", preBattlePanel.update);
-				el.addEventListener("change", preBattlePanel.update);
-			};
-			
-			// Call update now too
-			preBattlePanel.update();
-			
-			// Add functionality to nav buttons
-			preBattlePanel.el.backToTeamNavButton.addEventListener("click", function() {
+				// Call update now too
+				prelimPanel.update();
+				
+				// Add functionality to nav button
+				prelimPanel.el.toOpponentNavButton.addEventListener("click", function() {
+					prelimPanel.freeze();
+					preBattlePanel.switchTo();
+				});
+				
+				
+				// ========== Pre-battle panel functionality ========== //
+				preBattlePanel.freeze   = panelFreezeFunc.bind(preBattlePanel);
+				preBattlePanel.unfreeze = panelUnfreezeFunc.bind(preBattlePanel);
+				preBattlePanel.switchTo = panelSwitchToFunc.bind(preBattlePanel);
+				preBattlePanel.clear    = panelClearFunc.bind(preBattlePanel);
+				
+				// Valid checking-- must have trainer name, 3 pokemon, and battle style filled out
+				//                  if stat emphasis is not "well-balanced", must have at least one stat filled out
+				preBattlePanel.isValid = function() {
+					if (preBattlePanel.el.opponentNameSelect.selectedIndex === -1) {
+						return false;
+					}
+					
+					if (preBattlePanel.el.opponentPokeSelect1.selectedIndex === -1 ||
+						preBattlePanel.el.opponentPokeSelect2.selectedIndex === -1 ||
+						preBattlePanel.el.opponentPokeSelect3.selectedIndex === -1
+					) {
+						return false;
+					}
+					
+					if (preBattlePanel.el.opponentBattleStyleSelect.selectedIndex === -1) {
+						return false;
+					}
+					
+					if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
+						preBattlePanel.el.statEmphasisNeglects.checked
+					) {
+						if (preBattlePanel.el.statEmphasisSelect1.selectedIndex === -1 &&
+							preBattlePanel.el.statEmphasisSelect2.selectedIndex === -1
+						) {
+							return false;
+						}
+					} else if (!preBattlePanel.el.statEmphasisBalanced.checked) {
+						// If none of the three radio buttons are checked
+						return false;
+					}
+					
+					return true;
+				};
+				
+				// Update-- enabled/disable the "calculate" button and the "on to battle" nav,
+				//          also enable/disable stat selection if "well-balanced" or emphasize/neglect
+				preBattlePanel.update = function() {
+					if (preBattlePanel.isValid()) {
+						unfreezeFormEl(preBattlePanel.el.preBattleSubmitButton);
+						unfreezeFormEl(preBattlePanel.el.onToBattleNavButton);
+					} else {
+						freezeFormEl(preBattlePanel.el.preBattleSubmitButton);
+						freezeFormEl(preBattlePanel.el.onToBattleNavButton);
+					}
+					
+					if (preBattlePanel.el.statEmphasisEmphasizes.checked ||
+						preBattlePanel.el.statEmphasisNeglects.checked
+					) {
+						unfreezeFormEl(preBattlePanel.el.statEmphasisSelect1);
+						unfreezeFormEl(preBattlePanel.el.statEmphasisSelect2);
+					} else {
+						freezeFormEl(preBattlePanel.el.statEmphasisSelect1);
+						freezeFormEl(preBattlePanel.el.statEmphasisSelect2);
+					}
+				};
+				
+				// This panel starts frozen
 				preBattlePanel.freeze();
-				prelimPanel.switchTo();
-			});
-			
-			preBattlePanel.el.onToBattleNavButton.addEventListener("click", function() {
-				preBattlePanel.freeze();
-				midBattlePanel.switchTo();
-			});
-			
-			// Add functionality to reset button
-			preBattlePanel.el.preBattleResetButton.addEventListener("click", preBattlePanel.clear);
-			
-			// Extra QOL feature: changing the opponent pokemon resets the mid-battle panel
-			(function() {
-				function _clearMidBattlePanel() {
-					for (let el of Object.values(midBattlePanel.el)) {
-						clearFormEl(el);
+				
+				// Hook all inputs to update
+				for (let el of Object.values(preBattlePanel.el)) {
+					el.addEventListener("input", preBattlePanel.update);
+					el.addEventListener("change", preBattlePanel.update);
+				};
+				
+				// Call update now too
+				preBattlePanel.update();
+				
+				// Add functionality to nav buttons
+				preBattlePanel.el.backToTeamNavButton.addEventListener("click", function() {
+					preBattlePanel.freeze();
+					prelimPanel.switchTo();
+				});
+				
+				preBattlePanel.el.onToBattleNavButton.addEventListener("click", function() {
+					preBattlePanel.freeze();
+					midBattlePanel.switchTo();
+				});
+				
+				// Add functionality to reset button
+				preBattlePanel.el.preBattleResetButton.addEventListener("click", preBattlePanel.clear);
+				
+				
+				// ========== Mid-battle panel functionality ========== //
+				midBattlePanel.freeze   = panelFreezeFunc.bind(midBattlePanel);
+				midBattlePanel.unfreeze = panelUnfreezeFunc.bind(midBattlePanel);
+				midBattlePanel.switchTo = panelSwitchToFunc.bind(midBattlePanel);
+				midBattlePanel.clear    = panelClearFunc.bind(midBattlePanel);
+				
+				// Valid checking-- radio fields for player team and opponent lead must have a selection
+				midBattlePanel.isValid = function() {
+					if (!midBattlePanel.el.playerTeam1.checked &&
+						!midBattlePanel.el.playerTeam2.checked &&
+						!midBattlePanel.el.playerTeam3.checked
+					) {
+						return false;
 					}
-				}
-				
-				preBattlePanel.el.opponentPokeSelect1.addEventListener("change", _clearMidBattlePanel);
-				preBattlePanel.el.opponentPokeSelect2.addEventListener("change", _clearMidBattlePanel);
-				preBattlePanel.el.opponentPokeSelect3.addEventListener("change", _clearMidBattlePanel);
-			})();
-			
-			
-			// ========== Mid-battle panel functionality ========== //
-			
-			
-			// Valid checking-- radio fields for player team and opponent lead must have a selection
-			midBattlePanel.isValid = function() {
-				if (!midBattlePanel.el.playerTeam1.checked &&
-				    !midBattlePanel.el.playerTeam2.checked &&
-				    !midBattlePanel.el.playerTeam3.checked
-				) {
-					return false;
-				}
-				
-				if (!midBattlePanel.el.opponentFirstPoke1.checked &&
-				    !midBattlePanel.el.opponentFirstPoke2.checked &&
-				    !midBattlePanel.el.opponentFirstPoke3.checked
-				) {
-					return false;
-				}
-				
-				return true;
-			};
-			
-			// Update-- controls the 'calculate' button and disables the second poke fields if it's unknown
-			midBattlePanel.update = function() {
-				if (midBattlePanel.isValid()) {
-					unfreezeFormEl(midBattlePanel.el.midBattleSubmitButton);
-				} else {
-					freezeFormEl(midBattlePanel.el.midBattleSubmitButton);
-				}
-				
-				const secondPokeFields = [
-					midBattlePanel.el.opponentSecondPokeMovesSelect1,
-					midBattlePanel.el.opponentSecondPokeMovesSelect2,
-					midBattlePanel.el.opponentSecondPokeMovesSelect3,
-					midBattlePanel.el.opponentSecondPokeMovesSelect4,
-					midBattlePanel.el.opponentSecondPokeHeldItemSelect
-				];
-				
-				if (!midBattlePanel.el.opponentSecondPoke1.checked &&
-				    !midBattlePanel.el.opponentSecondPoke2.checked &&
-				    !midBattlePanel.el.opponentSecondPoke3.checked
-				) {
-					for (let i = 0; i < secondPokeFields.length; i++) {
-						freezeFormEl(secondPokeFields[i]);
+					
+					if (!midBattlePanel.el.opponentFirstPoke1.checked &&
+						!midBattlePanel.el.opponentFirstPoke2.checked &&
+						!midBattlePanel.el.opponentFirstPoke3.checked
+					) {
+						return false;
 					}
-				} else {
-					for (let i = 0; i < secondPokeFields.length; i++) {
-						unfreezeFormEl(secondPokeFields[i]);
-					}
-				}
-			};
-			
-			// Freeze all elements of the form, disabling it
-			midBattlePanel.freeze = function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					freezeFormEl(el);
-				}
-				midBattlePanel.self.ariaHidden = true;
-			};
-			
-			// Unfreeze all elements of the form
-			midBattlePanel.unfreeze = function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					unfreezeFormEl(el);
-				}
-				midBattlePanel.self.ariaHidden = false;
-				midBattlePanel.update();
-			};
-			
-			// Clear all elements of the form, resetting them
-			midBattlePanel.clear = function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					clearFormEl(el);
-				}
+					
+					return true;
+				};
 				
-				midBattlePanel.update();
-			};
-			
-			// Slide this panel to active
-			midBattlePanel.switchTo = function() {
-				midBattlePanel.unfreeze();
-				panelContainer.dataset.daActivePanel = 2;
-			};
-			
-			// This panel starts frozen
-			midBattlePanel.freeze();
-			
-			// Hook all inputs to update
-			for (let el of Object.values(midBattlePanel.el)) {
-				el.addEventListener("input", midBattlePanel.update);
-				el.addEventListener("change", midBattlePanel.update);
-			};
-			
-			// Call update now too
-			midBattlePanel.update();
-			
-			// Add functionality to nav buttons
-			midBattlePanel.el.backToOpponentNavButton.addEventListener("click", function() {
+				// Update-- controls the 'calculate' button and disables the second poke fields if it's unknown
+				midBattlePanel.update = function() {
+					if (midBattlePanel.isValid()) {
+						unfreezeFormEl(midBattlePanel.el.midBattleSubmitButton);
+					} else {
+						freezeFormEl(midBattlePanel.el.midBattleSubmitButton);
+					}
+					
+					const secondPokeFields = [
+						midBattlePanel.el.opponentSecondPokeMovesSelect1,
+						midBattlePanel.el.opponentSecondPokeMovesSelect2,
+						midBattlePanel.el.opponentSecondPokeMovesSelect3,
+						midBattlePanel.el.opponentSecondPokeMovesSelect4,
+						midBattlePanel.el.opponentSecondPokeHeldItemSelect
+					];
+					
+					if (!midBattlePanel.el.opponentSecondPoke1.checked &&
+						!midBattlePanel.el.opponentSecondPoke2.checked &&
+						!midBattlePanel.el.opponentSecondPoke3.checked
+					) {
+						for (let i = 0; i < secondPokeFields.length; i++) {
+							freezeFormEl(secondPokeFields[i]);
+						}
+					} else {
+						for (let i = 0; i < secondPokeFields.length; i++) {
+							unfreezeFormEl(secondPokeFields[i]);
+						}
+					}
+				};
+				
+				// This panel starts frozen
 				midBattlePanel.freeze();
-				preBattlePanel.switchTo();
-			});
-			
-			// Add functionality to reset button
-			midBattlePanel.el.midBattleResetButton.addEventListener("click", midBattlePanel.clear);
+				
+				// Hook all inputs to update
+				for (let el of Object.values(midBattlePanel.el)) {
+					el.addEventListener("input", midBattlePanel.update);
+					el.addEventListener("change", midBattlePanel.update);
+				};
+				
+				// Call update now too
+				midBattlePanel.update();
+				
+				// Add functionality to nav buttons
+				midBattlePanel.el.backToOpponentNavButton.addEventListener("click", function() {
+					midBattlePanel.freeze();
+					preBattlePanel.switchTo();
+				});
+				
+				// Add functionality to reset button
+				midBattlePanel.el.midBattleResetButton.addEventListener("click", midBattlePanel.clear);
+				
+				// Extra QOL feature: changing the opponent Pokemon in pre-battle resets the mid-battle panel
+				preBattlePanel.el.opponentPokeSelect1.addEventListener("change", midBattlePanel.clear);
+				preBattlePanel.el.opponentPokeSelect2.addEventListener("change", midBattlePanel.clear);
+				preBattlePanel.el.opponentPokeSelect3.addEventListener("change", midBattlePanel.clear);
+			})();
 		</script>
 		
 		<script> // Advanced and higher order form functionality
