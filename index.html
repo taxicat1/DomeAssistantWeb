@@ -3145,7 +3145,7 @@
 					return 50;
 				}
 				
-				let level = parseInt(prelimPanel.el.challengeLevelNumber.value);
+				let level = prelimPanel.el.challengeLevelNumber.valueAsNumber;
 				if (isNaN(level) || level > 100 || level < 60) {
 					return 50;
 				}
@@ -3163,21 +3163,21 @@
 					case 0:
 						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect1.value ];
 						playerPokeSet.evs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpEv1.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkEv1.value),
-							def : parseInt(prelimPanel.el.playerPokeDefEv1.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAEv1.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDEv1.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeEv1.value)
+							hp  : prelimPanel.el.playerPokeHpEv1.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkEv1.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefEv1.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAEv1.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDEv1.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeEv1.valueAsNumber
 						};
 						
 						playerPokeSet.ivs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpIv1.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkIv1.value),
-							def : parseInt(prelimPanel.el.playerPokeDefIv1.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAIv1.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDIv1.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeIv1.value)
+							hp  : prelimPanel.el.playerPokeHpIv1.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkIv1.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefIv1.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAIv1.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDIv1.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeIv1.valueAsNumber
 						};
 						
 						playerPokeSet.nature  = natures[ prelimPanel.el.playerPokeNatureSelect1.value ];
@@ -3195,21 +3195,21 @@
 					case 1:
 						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect2.value ];
 						playerPokeSet.evs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpEv2.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkEv2.value),
-							def : parseInt(prelimPanel.el.playerPokeDefEv2.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAEv2.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDEv2.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeEv2.value)
+							hp  : prelimPanel.el.playerPokeHpEv2.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkEv2.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefEv2.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAEv2.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDEv2.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeEv2.valueAsNumber
 						};
 						
 						playerPokeSet.ivs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpIv2.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkIv2.value),
-							def : parseInt(prelimPanel.el.playerPokeDefIv2.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAIv2.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDIv2.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeIv2.value)
+							hp  : prelimPanel.el.playerPokeHpIv2.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkIv2.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefIv2.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAIv2.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDIv2.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeIv2.valueAsNumber
 						};
 						
 						playerPokeSet.nature = natures[ prelimPanel.el.playerPokeNatureSelect2.value ];
@@ -3227,21 +3227,21 @@
 					case 2:
 						playerPokeSet.species = pokemon[ prelimPanel.el.playerPokeSelect3.value ];
 						playerPokeSet.evs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpEv3.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkEv3.value),
-							def : parseInt(prelimPanel.el.playerPokeDefEv3.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAEv3.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDEv3.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeEv3.value)
+							hp  : prelimPanel.el.playerPokeHpEv3.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkEv3.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefEv3.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAEv3.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDEv3.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeEv3.valueAsNumber
 						};
 						
 						playerPokeSet.ivs = {
-							hp  : parseInt( prelimPanel.el.playerPokeHpIv3.value),
-							atk : parseInt(prelimPanel.el.playerPokeAtkIv3.value),
-							def : parseInt(prelimPanel.el.playerPokeDefIv3.value),
-							spa : parseInt(prelimPanel.el.playerPokeSpAIv3.value),
-							spd : parseInt(prelimPanel.el.playerPokeSpDIv3.value),
-							spe : parseInt(prelimPanel.el.playerPokeSpeIv3.value)
+							hp  : prelimPanel.el.playerPokeHpIv3.valueAsNumber,
+							atk : prelimPanel.el.playerPokeAtkIv3.valueAsNumber,
+							def : prelimPanel.el.playerPokeDefIv3.valueAsNumber,
+							spa : prelimPanel.el.playerPokeSpAIv3.valueAsNumber,
+							spd : prelimPanel.el.playerPokeSpDIv3.valueAsNumber,
+							spe : prelimPanel.el.playerPokeSpeIv3.valueAsNumber
 						};
 						
 						playerPokeSet.nature = natures[ prelimPanel.el.playerPokeNatureSelect3.value ];
