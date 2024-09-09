@@ -2836,7 +2836,7 @@
 				}
 				
 				return true;
-			}
+			};
 			
 			// Update-- enable/disable the nav button
 			prelimPanel.update = function() {
@@ -2851,7 +2851,30 @@
 				} else {
 					freezeFormEl(prelimPanel.el.challengeLevelNumber);
 				}
-			}
+			};
+			
+			// Freeze all elements of the form, disabling it
+			prelimPanel.freeze = function() {
+				for (let el of Object.values(prelimPanel.el)) {
+					freezeFormEl(el);
+				}
+				prelimPanel.self.ariaHidden = true;
+			};
+			
+			// Unfreeze all elements of the form
+			prelimPanel.unfreeze = function() {
+				for (let el of Object.values(prelimPanel.el)) {
+					unfreezeFormEl(el);
+				}
+				prelimPanel.self.ariaHidden = false;
+				prelimPanel.update();
+			};
+			
+			// Slide this panel to active
+			prelimPanel.switchTo = function() {
+				prelimPanel.unfreeze();
+				panelContainer.dataset.daActivePanel = 0;
+			};
 			
 			// Hook all inputs to update
 			for (let el of Object.values(prelimPanel.el)) {
@@ -2862,24 +2885,9 @@
 			// Call update now too
 			prelimPanel.update();
 			
-			// Slide this panel to active
-			prelimPanel.switchTo = function() {
-				for (let el of Object.values(prelimPanel.el)) {
-					unfreezeFormEl(el);
-				}
-				prelimPanel.self.ariaHidden = false;
-				
-				prelimPanel.update();
-				panelContainer.dataset.daActivePanel = 0;
-			}
-			
 			// Add functionality to nav button
 			prelimPanel.el.toOpponentNavButton.addEventListener("click", function() {
-				for (let el of Object.values(prelimPanel.el)) {
-					freezeFormEl(el);
-				}
-				prelimPanel.self.ariaHidden = true;
-				
+				prelimPanel.freeze();
 				preBattlePanel.switchTo();
 			});
 			
@@ -2919,7 +2927,7 @@
 				}
 				
 				return true;
-			}
+			};
 			
 			// Update-- enabled/disable the "calculate" button and the "on to battle" nav,
 			//          also enable/disable stat selection if "well-balanced" or emphasize/neglect
@@ -2941,7 +2949,42 @@
 					freezeFormEl(preBattlePanel.el.statEmphasisSelect1);
 					freezeFormEl(preBattlePanel.el.statEmphasisSelect2);
 				}
-			}
+			};
+			
+			// Freeze all elements of the form, disabling it
+			preBattlePanel.freeze = function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					freezeFormEl(el);
+				}
+				preBattlePanel.self.ariaHidden = true;
+			};
+			
+			// Unfreeze all elements of the form
+			preBattlePanel.unfreeze = function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					unfreezeFormEl(el);
+				}
+				preBattlePanel.self.ariaHidden = false;
+				preBattlePanel.update();
+			};
+			
+			// Clear all elements of the form, resetting them
+			preBattlePanel.clear = function() {
+				for (let el of Object.values(preBattlePanel.el)) {
+					clearFormEl(el);
+				}
+				
+				preBattlePanel.update();
+			};
+			
+			// Slide this panel to active
+			preBattlePanel.switchTo = function() {
+				preBattlePanel.unfreeze();
+				panelContainer.dataset.daActivePanel = 1;
+			};
+			
+			// This panel starts frozen
+			preBattlePanel.freeze();
 			
 			// Hook all inputs to update
 			for (let el of Object.values(preBattlePanel.el)) {
@@ -2952,50 +2995,19 @@
 			// Call update now too
 			preBattlePanel.update();
 			
-			// Slide this panel to active
-			preBattlePanel.switchTo = function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					unfreezeFormEl(el);
-				}
-				preBattlePanel.self.ariaHidden = false;
-				
-				preBattlePanel.update();
-				panelContainer.dataset.daActivePanel = 1;
-			}
-			
-			// This panel starts frozen
-			for (let el of Object.values(preBattlePanel.el)) {
-				freezeFormEl(el);
-			}
-			preBattlePanel.self.ariaHidden = true;
-			
 			// Add functionality to nav buttons
 			preBattlePanel.el.backToTeamNavButton.addEventListener("click", function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					freezeFormEl(el);
-				}
-				preBattlePanel.self.ariaHidden = true;
-				
+				preBattlePanel.freeze();
 				prelimPanel.switchTo();
 			});
 			
 			preBattlePanel.el.onToBattleNavButton.addEventListener("click", function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					freezeFormEl(el);
-				}
-				preBattlePanel.self.ariaHidden = true;
-				
+				preBattlePanel.freeze();
 				midBattlePanel.switchTo();
 			});
 			
 			// Add functionality to reset button
-			preBattlePanel.el.preBattleResetButton.addEventListener("click", function() {
-				for (let el of Object.values(preBattlePanel.el)) {
-					clearFormEl(el);
-				}
-				
-				preBattlePanel.update();
-			});
+			preBattlePanel.el.preBattleResetButton.addEventListener("click", preBattlePanel.clear);
 			
 			// Extra QOL feature: changing the opponent pokemon resets the mid-battle panel
 			(function() {
@@ -3031,7 +3043,7 @@
 				}
 				
 				return true;
-			}
+			};
 			
 			// Update-- controls the 'calculate' button and disables the second poke fields if it's unknown
 			midBattlePanel.update = function() {
@@ -3061,7 +3073,42 @@
 						unfreezeFormEl(secondPokeFields[i]);
 					}
 				}
-			}
+			};
+			
+			// Freeze all elements of the form, disabling it
+			midBattlePanel.freeze = function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					freezeFormEl(el);
+				}
+				midBattlePanel.self.ariaHidden = true;
+			};
+			
+			// Unfreeze all elements of the form
+			midBattlePanel.unfreeze = function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					unfreezeFormEl(el);
+				}
+				midBattlePanel.self.ariaHidden = false;
+				midBattlePanel.update();
+			};
+			
+			// Clear all elements of the form, resetting them
+			midBattlePanel.clear = function() {
+				for (let el of Object.values(midBattlePanel.el)) {
+					clearFormEl(el);
+				}
+				
+				midBattlePanel.update();
+			};
+			
+			// Slide this panel to active
+			midBattlePanel.switchTo = function() {
+				midBattlePanel.unfreeze();
+				panelContainer.dataset.daActivePanel = 2;
+			};
+			
+			// This panel starts frozen
+			midBattlePanel.freeze();
 			
 			// Hook all inputs to update
 			for (let el of Object.values(midBattlePanel.el)) {
@@ -3072,41 +3119,14 @@
 			// Call update now too
 			midBattlePanel.update();
 			
-			// Slide this panel to active
-			midBattlePanel.switchTo = function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					unfreezeFormEl(el);
-				}
-				midBattlePanel.self.ariaHidden = false;
-				
-				midBattlePanel.update();
-				panelContainer.dataset.daActivePanel = 2;
-			}
-			
-			// This panel starts frozen
-			for (let el of Object.values(midBattlePanel.el)) {
-				freezeFormEl(el);
-			}
-			midBattlePanel.self.ariaHidden = true;
-			
 			// Add functionality to nav buttons
 			midBattlePanel.el.backToOpponentNavButton.addEventListener("click", function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					freezeFormEl(el);
-				}
-				midBattlePanel.self.ariaHidden = true;
-				
+				midBattlePanel.freeze();
 				preBattlePanel.switchTo();
 			});
 			
 			// Add functionality to reset button
-			midBattlePanel.el.midBattleResetButton.addEventListener("click", function() {
-				for (let el of Object.values(midBattlePanel.el)) {
-					clearFormEl(el);
-				}
-				
-				midBattlePanel.update();
-			});
+			midBattlePanel.el.midBattleResetButton.addEventListener("click", midBattlePanel.clear);
 		</script>
 		
 		<script> // Advanced and higher order form functionality
