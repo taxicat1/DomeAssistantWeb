@@ -3995,9 +3995,6 @@
 					return doc;
 				}
 				
-				// Replace 0s in the range with 1
-				// Note: It is important to leave the 0s in place, because crit x2 happens BEFORE rounding up to 1 if 0
-				//       Therefore, a crit can still do 1 damage rather than a minimum of 2
 				let hpRange = moveDamage.dmgHp.base;
 				let hpMin = hpRange[0];
 				let hpMax = hpRange[hpRange.length - 1];
