@@ -4135,8 +4135,12 @@
 					// that by only allowing a single function to be attached at a time. The previous
 					// function just gets garbage collected after the element no longer has a reference to it.
 					abilitySelect.onchange = function() {
-						// opponentPokeSet here taken from upper block
+						// level and opponentPokeSet here taken from upper block
+						// This is why the function must be replaced.
+						// Always init a frontier poke before using it
+						initDomePoke(opponentPokeSet, level);
 						opponentPokeSet.ability = this.value;
+						
 						modalPopulatePokeSetDamage(opponentPokeSet);
 						
 						// Reset this so nothing else reads the ability when it shouldn't
