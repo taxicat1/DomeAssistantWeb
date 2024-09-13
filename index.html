@@ -2802,62 +2802,62 @@
 				
 				// Valid checking-- 3 species + EV sets + IV sets + nature
 				prelimPanel.isValid = function() {
-					if (this.el.playerPokeSelect1.selectedIndex === -1 ||
-						this.el.playerPokeSelect2.selectedIndex === -1 ||
-						this.el.playerPokeSelect3.selectedIndex === -1
+					if (prelimPanel.el.playerPokeSelect1.selectedIndex === -1 ||
+						prelimPanel.el.playerPokeSelect2.selectedIndex === -1 ||
+						prelimPanel.el.playerPokeSelect3.selectedIndex === -1
 					) {
 						return false;
 					}
 					
-					if (this.el.playerPokeNatureSelect1.selectedIndex === -1 ||
-						this.el.playerPokeNatureSelect2.selectedIndex === -1 ||
-						this.el.playerPokeNatureSelect3.selectedIndex === -1
+					if (prelimPanel.el.playerPokeNatureSelect1.selectedIndex === -1 ||
+						prelimPanel.el.playerPokeNatureSelect2.selectedIndex === -1 ||
+						prelimPanel.el.playerPokeNatureSelect3.selectedIndex === -1
 					) {
 						return false;
 					}
 					
 					let evIvEls = [
-						this.el.playerPokeHpEv1, 
-						this.el.playerPokeAtkEv1,
-						this.el.playerPokeDefEv1,
-						this.el.playerPokeSpAEv1,
-						this.el.playerPokeSpDEv1,
-						this.el.playerPokeSpeEv1,
+						prelimPanel.el.playerPokeHpEv1, 
+						prelimPanel.el.playerPokeAtkEv1,
+						prelimPanel.el.playerPokeDefEv1,
+						prelimPanel.el.playerPokeSpAEv1,
+						prelimPanel.el.playerPokeSpDEv1,
+						prelimPanel.el.playerPokeSpeEv1,
 						
-						this.el.playerPokeHpIv1, 
-						this.el.playerPokeAtkIv1,
-						this.el.playerPokeDefIv1,
-						this.el.playerPokeSpAIv1,
-						this.el.playerPokeSpDIv1,
-						this.el.playerPokeSpeIv1,
+						prelimPanel.el.playerPokeHpIv1, 
+						prelimPanel.el.playerPokeAtkIv1,
+						prelimPanel.el.playerPokeDefIv1,
+						prelimPanel.el.playerPokeSpAIv1,
+						prelimPanel.el.playerPokeSpDIv1,
+						prelimPanel.el.playerPokeSpeIv1,
 						
-						this.el.playerPokeHpEv2, 
-						this.el.playerPokeAtkEv2,
-						this.el.playerPokeDefEv2,
-						this.el.playerPokeSpAEv2,
-						this.el.playerPokeSpDEv2,
-						this.el.playerPokeSpeEv2,
+						prelimPanel.el.playerPokeHpEv2, 
+						prelimPanel.el.playerPokeAtkEv2,
+						prelimPanel.el.playerPokeDefEv2,
+						prelimPanel.el.playerPokeSpAEv2,
+						prelimPanel.el.playerPokeSpDEv2,
+						prelimPanel.el.playerPokeSpeEv2,
 						
-						this.el.playerPokeHpIv2, 
-						this.el.playerPokeAtkIv2,
-						this.el.playerPokeDefIv2,
-						this.el.playerPokeSpAIv2,
-						this.el.playerPokeSpDIv2,
-						this.el.playerPokeSpeIv2,
+						prelimPanel.el.playerPokeHpIv2, 
+						prelimPanel.el.playerPokeAtkIv2,
+						prelimPanel.el.playerPokeDefIv2,
+						prelimPanel.el.playerPokeSpAIv2,
+						prelimPanel.el.playerPokeSpDIv2,
+						prelimPanel.el.playerPokeSpeIv2,
 						
-						this.el.playerPokeHpEv3, 
-						this.el.playerPokeAtkEv3,
-						this.el.playerPokeDefEv3,
-						this.el.playerPokeSpAEv3,
-						this.el.playerPokeSpDEv3,
-						this.el.playerPokeSpeEv3,
+						prelimPanel.el.playerPokeHpEv3, 
+						prelimPanel.el.playerPokeAtkEv3,
+						prelimPanel.el.playerPokeDefEv3,
+						prelimPanel.el.playerPokeSpAEv3,
+						prelimPanel.el.playerPokeSpDEv3,
+						prelimPanel.el.playerPokeSpeEv3,
 						
-						this.el.playerPokeHpIv3, 
-						this.el.playerPokeAtkIv3,
-						this.el.playerPokeDefIv3,
-						this.el.playerPokeSpAIv3,
-						this.el.playerPokeSpDIv3,
-						this.el.playerPokeSpeIv3
+						prelimPanel.el.playerPokeHpIv3, 
+						prelimPanel.el.playerPokeAtkIv3,
+						prelimPanel.el.playerPokeDefIv3,
+						prelimPanel.el.playerPokeSpAIv3,
+						prelimPanel.el.playerPokeSpDIv3,
+						prelimPanel.el.playerPokeSpeIv3
 					];
 					
 					for (let i = 0; i < evIvEls.length; i++) {
@@ -2866,8 +2866,8 @@
 						}
 					}
 					
-					if (this.el.challengeLevelOpen.checked && 
-						this.el.challengeLevelNumber.validity.valid !== true
+					if (prelimPanel.el.challengeLevelOpen.checked && 
+						prelimPanel.el.challengeLevelNumber.validity.valid !== true
 					) {
 						return false;
 					}
@@ -2877,16 +2877,16 @@
 				
 				// Update-- enable/disable the nav button
 				prelimPanel.update = function() {
-					if (this.isValid()) {
-						unfreezeFormEl(this.el.toOpponentNavButton);
+					if (prelimPanel.isValid()) {
+						unfreezeFormEl(prelimPanel.el.toOpponentNavButton);
 					} else {
-						freezeFormEl(this.el.toOpponentNavButton);
+						freezeFormEl(prelimPanel.el.toOpponentNavButton);
 					}
 					
-					if (this.el.challengeLevelOpen.checked) {
-						unfreezeFormEl(this.el.challengeLevelNumber);
+					if (prelimPanel.el.challengeLevelOpen.checked) {
+						unfreezeFormEl(prelimPanel.el.challengeLevelNumber);
 					} else {
-						freezeFormEl(this.el.challengeLevelNumber);
+						freezeFormEl(prelimPanel.el.challengeLevelNumber);
 					}
 				};
 				
