@@ -60,48 +60,14 @@
 		<script src="DAcore.js"></script>
 		<script src="battleCalc.js"></script>
 		
+		<script async src="touchToHover.js"></script>
+		
 		<link rel="stylesheet" href="form.css">
 		<link rel="stylesheet" href="typeTable.css">
 		<link rel="stylesheet" href="tabMenu.css">
 		<link rel="stylesheet" href="modal.css">
 		
 		<link rel="stylesheet" href="darkPatch.css">
-		
-		<script> // Support for tap-to-hover on touch screens
-			"use strict";
-			
-			(function() {
-				let lastTouchTriggerEl = null;
-				
-				const activationClass = "touched";
-				const availabilityClass = "touchToHover";
-				
-				function clearTouchActivation() {
-					if (lastTouchTriggerEl) {
-						lastTouchTriggerEl.classList.remove(activationClass);
-						lastTouchTriggerEl = null;
-					}
-					
-					// Done this rather than using { once: true }
-					// because a touch event may also run this function
-					// Removing the event listener at all is purely a performance concern
-					window.removeEventListener("mouseover", clearTouchActivation);
-				}
-				
-				window.addEventListener("touchstart", function(event) {
-					clearTouchActivation();
-					
-					if (event.target.classList.contains(availabilityClass)) {
-						lastTouchTriggerEl = event.target;
-						lastTouchTriggerEl.classList.add(activationClass);
-						
-						// Listen for mouse movement that will also exit the pseudo-hover state
-						// Useful for systems with both mouse and touch pointing
-						window.addEventListener("mouseover", clearTouchActivation);
-					}
-				});
-			})();
-		</script>
 	</head>
 	
 	<body>
